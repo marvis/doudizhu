@@ -97,6 +97,44 @@ void loadAllTemplates()
 	file = "ddz_mycards_red_joker.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
 	file = "ddz_mycards_black_joker.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
 
+	// play cards
+	file = "ddz_play_num_b3.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
+	file = "ddz_play_num_b4.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
+	file = "ddz_play_num_b5.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
+	file = "ddz_play_num_b6.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
+	file = "ddz_play_num_b7.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
+	file = "ddz_play_num_b8.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
+	file = "ddz_play_num_b9.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
+	file = "ddz_play_num_b10.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
+	file = "ddz_play_num_bJ.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
+	file = "ddz_play_num_bQ.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
+	file = "ddz_play_num_bK.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
+	file = "ddz_play_num_bA.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
+	file = "ddz_play_num_b2.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
+
+	file = "ddz_play_num_r3.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
+	file = "ddz_play_num_r4.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
+	file = "ddz_play_num_r5.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
+	file = "ddz_play_num_r6.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
+	file = "ddz_play_num_r7.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
+	file = "ddz_play_num_r8.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
+	file = "ddz_play_num_r9.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
+	file = "ddz_play_num_r10.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
+	file = "ddz_play_num_rJ.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
+	file = "ddz_play_num_rQ.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
+	file = "ddz_play_num_rK.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
+	file = "ddz_play_num_rA.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
+	file = "ddz_play_num_r2.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
+
+	file = "ddz_play_type_spade.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
+	file = "ddz_play_type_heart.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
+	file = "ddz_play_type_club.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
+	file = "ddz_play_type_diamond.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
+
+	file = "ddz_play_red_joker.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
+	file = "ddz_play_black_joker.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
+
+
 	for(map<string, IplImage*>::iterator it = map_allImgs.begin(); it != map_allImgs.end(); it++)
 	{
 		string file = it->first;
@@ -158,7 +196,35 @@ bool isPixelSame(IplImage * image, int x1, int y1, CvScalar rgb, double thresh =
 	return (diff < thresh);
 }
 
-bool isImageSame_shifty(IplImage * bigImage, int x0, int y0, string filename,  double thresh = 20)
+double avgImageDiff(IplImage * bigImage, int x0, int y0, string filename)
+{
+	IplImage * smallImage = getImage(filename);// cvLoadImage(filename.c_str(), 1);
+	if(!smallImage) return false;
+	assert(bigImage);
+	assert(bigImage->width >= smallImage->width && bigImage->height >= smallImage->height && bigImage->nChannels == smallImage->nChannels);
+	int width = smallImage->width;
+	int height = smallImage->height;
+	int nchannels = bigImage->nChannels;
+	assert(x0 >= 0 && y0 >= 0 && x0 + width <= bigImage->width && y0 + height <= bigImage->height);
+
+	double sumdiff = 0;
+	for(int y = 0; y < height; y++)
+	{
+		for(int x = 0; x < width; x++)
+		{
+			int by = y0 + y ;
+			int bx = x0 + x;
+			for(int c = 0; c < nchannels; c++)
+			{
+				double val1 = CV_IMAGE_ELEM(smallImage, unsigned char, y, x*nchannels + c);
+				double val2 = CV_IMAGE_ELEM(bigImage, unsigned char, by, bx*nchannels + c);
+				sumdiff += ABS(val1-val2);
+			}
+		}
+	}
+	return sumdiff/(width*height);
+}
+bool isImageSame_shifty(IplImage * bigImage, int x0, int y0, string filename,  double thresh = 20, int shiftnum = 2)
 {
 	//filename = DDZTMPLPATH + filename;
 	IplImage * smallImage = getImage(filename);// cvLoadImage(filename.c_str(), 1);
@@ -169,56 +235,47 @@ bool isImageSame_shifty(IplImage * bigImage, int x0, int y0, string filename,  d
 	int height = smallImage->height;
 	int nchannels = bigImage->nChannels;
 	assert(x0 >= 0 && y0 >= 0 && x0 + width <= bigImage->width && y0 + height <= bigImage->height);
+
 	double sumdiff = 0;
-	for(int y = 0; y < height; y++)
+	for(int s = 0; s < shiftnum; s++)
 	{
-		for(int x = 0; x < width; x++)
+		sumdiff = 0;
+		for(int y = s; y < height; y++)
 		{
-			int by = y0 + y;
-			int bx = x0 + x;
-			for(int c = 0; c < nchannels; c++)
+			for(int x = 0; x < width; x++)
 			{
-				double val1 = CV_IMAGE_ELEM(smallImage, unsigned char, y, x*nchannels + c);
-				double val2 = CV_IMAGE_ELEM(bigImage, unsigned char, by, bx*nchannels + c);
-				sumdiff += ABS(val1-val2);
+				int by = y0 + y - s;
+				int bx = x0 + x;
+				for(int c = 0; c < nchannels; c++)
+				{
+					double val1 = CV_IMAGE_ELEM(smallImage, unsigned char, y, x*nchannels + c);
+					double val2 = CV_IMAGE_ELEM(bigImage, unsigned char, by, bx*nchannels + c);
+					sumdiff += ABS(val1-val2);
+				}
 			}
 		}
-	}
-	if (sumdiff/(width*height) < thresh) return true;
+		if (sumdiff/(width*(height-s)) < thresh) return true;
 
-	sumdiff = 0;
-	for(int y = 1; y < height; y++)
-	{
-		for(int x = 0; x < width; x++)
+		if(s != 0)
 		{
-			int by = y0 + y - 1;
-			int bx = x0 + x;
-			for(int c = 0; c < nchannels; c++)
+			sumdiff = 0;
+			for(int y = 0; y < height - s; y++)
 			{
-				double val1 = CV_IMAGE_ELEM(smallImage, unsigned char, y, x*nchannels + c);
-				double val2 = CV_IMAGE_ELEM(bigImage, unsigned char, by, bx*nchannels + c);
-				sumdiff += ABS(val1-val2);
+				for(int x = 0; x < width; x++)
+				{
+					int by = y0 + y + s;
+					int bx = x0 + x;
+					for(int c = 0; c < nchannels; c++)
+					{
+						double val1 = CV_IMAGE_ELEM(smallImage, unsigned char, y, x*nchannels + c);
+						double val2 = CV_IMAGE_ELEM(bigImage, unsigned char, by, bx*nchannels + c);
+						sumdiff += ABS(val1-val2);
+					}
+				}
 			}
+			if (sumdiff/(width*(height-s)) < thresh) return true;
 		}
 	}
-	if (sumdiff/(width*(height-1)) < thresh) return true;
-
-	sumdiff = 0;
-	for(int y = 0; y < height-1; y++)
-	{
-		for(int x = 0; x < width; x++)
-		{
-			int by = y0 + y + 1;
-			int bx = x0 + x;
-			for(int c = 0; c < nchannels; c++)
-			{
-				double val1 = CV_IMAGE_ELEM(smallImage, unsigned char, y, x*nchannels + c);
-				double val2 = CV_IMAGE_ELEM(bigImage, unsigned char, by, bx*nchannels + c);
-				sumdiff += ABS(val1-val2);
-			}
-		}
-	}
-	if (sumdiff/(width*(height-1)) < thresh) return true;
 	return false;
 }
 
@@ -251,7 +308,7 @@ bool isImageSame(IplImage * bigImage, int x0, int y0, string filename,  double t
 	return (sumdiff/(width*height) < thresh);
 }
 
-bool recog_my_cards_bbox(IplImage * image, vector<CvRect> &numBBox, vector<CvRect> &typeBBox)
+bool recog_mycards_bbox(IplImage * image, vector<CvRect> &numBBox, vector<CvRect> &typeBBox)
 {
 	int i0 = 138;
 	int top = -1;
@@ -353,16 +410,16 @@ bool isred(int type)
 	return (type == TYPE_HEART || type == TYPE_DIAMOND);
 }
 
-vector<Card> recog_my_cards(IplImage * image)
+vector<Card> recog_mycards(IplImage * image)
 {
 	vector<CvRect> numBBox;
 	vector<CvRect> typeBBox;
-	recog_my_cards_bbox(image, numBBox, typeBBox);
+	recog_mycards_bbox(image, numBBox, typeBBox);
 	vector<Card> cards(numBBox.size());
 	for(int i = 0; i < typeBBox.size(); i++)
 	{
 		CvRect rect = typeBBox[i];
-		if(isImageSame(image, rect.x, rect.y, "ddz_mycards_type_spade.png")) cards[i].type = TYPE_SPADE;
+		if(isImageSame_shifty(image, rect.x, rect.y, "ddz_mycards_type_spade.png")) cards[i].type = TYPE_SPADE;
 		else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_mycards_type_heart.png")) cards[i].type = TYPE_HEART;
 		else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_mycards_type_club.png")) cards[i].type = TYPE_CLUB;
 		else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_mycards_type_diamond.png")) cards[i].type = TYPE_DIAMOND;
@@ -381,7 +438,7 @@ vector<Card> recog_my_cards(IplImage * image)
 			else
 			{
 				IplImage * unknownImage = cropImage(image, rect.x, rect.y, rect.width, rect.height);
-				cvSaveImage((infile + ".unknown_type" + num2str(i) + ".png").c_str(), unknownImage);
+				cvSaveImage((infile + ".ddz_mycards_type_unknown" + num2str(i) + ".png").c_str(), unknownImage);
 				cvReleaseImage(&unknownImage);
 			}
 		}
@@ -405,7 +462,7 @@ vector<Card> recog_my_cards(IplImage * image)
 			else
 			{
 				IplImage * unknownImage = cropImage(image, rect.x, rect.y, rect.width, rect.height);
-				cvSaveImage((infile + ".unknown_num_b" + num2str(i) + ".png").c_str(), unknownImage);
+				cvSaveImage((infile + ".ddz_mycards_num_unknown" + num2str(i) + ".png").c_str(), unknownImage);
 				cvReleaseImage(&unknownImage);
 			}
 		}
@@ -427,7 +484,7 @@ vector<Card> recog_my_cards(IplImage * image)
 			else
 			{
 				IplImage * unknownImage = cropImage(image, rect.x, rect.y, rect.width, rect.height);
-				cvSaveImage((infile + ".unknown_num_r" + num2str(i) + ".png").c_str(), unknownImage);
+				cvSaveImage((infile + ".ddz_mycards_num_unknown" + num2str(i) + ".png").c_str(), unknownImage);
 				cvReleaseImage(&unknownImage);
 			}
 		}
@@ -435,10 +492,208 @@ vector<Card> recog_my_cards(IplImage * image)
 	return cards;
 }
 
-//set<int> recog_my_play(IplImage * image);
-//set<int> recog_left_play(IplImage * image);
-//set<int> recog_right_play(IplImage * image);
+struct PlayPara
+{
+	int play_leftx;
+	int play_rightx;
+	int play_top_most;
+	int play_bot_most;
+	int play_midx;
+	int play_step;
+	int play_card_height;
+	int play_num_gap;
+	int play_num_leftx;
+	int play_num_width;
+	int play_num_height;
+	int play_type_gap;
+	int play_type_leftx;
+	int play_type_width;
+	int play_type_height;
+};
 
+PlayPara myplay_para = {258, 336, 270, 994, 283, 40, 68, 1, 305, 27, 32, 6, 285, 19, 22};
+PlayPara leftplay_para = {391, 469, 285, 640, 437, 40, 68, 1, 438, 27, 32, 6, 418, 19, 22};
+PlayPara rightplay_para = {258, 336, 270, 994, 283, 40, 68, 1, 305, 27, 32, 6, 285, 19, 22};
+
+bool recog_play_bbox(IplImage * image, PlayPara para, vector<CvRect> &numBBox, vector<CvRect> &typeBBox)
+{
+	int top = -1;
+	int bot = -1;
+	int i0 = para.play_midx;
+	for(int j = para.play_top_most; j < para.play_bot_most; j++)
+	{
+		int R = CV_IMAGE_ELEM(image, unsigned char, j, 3*i0+2);
+		int G = CV_IMAGE_ELEM(image, unsigned char, j, 3*i0+1);
+		int B = CV_IMAGE_ELEM(image, unsigned char, j, 3*i0+0);
+		double dist = sqrt((R - 239)*(R-239) + (G-239)*(G-239) + (B-239)*(B-239));
+		if(dist < 30) 
+		{
+			double sumR = 0.0, sumG = 0.0, sumB = 0.0;
+			for(int i = para.play_leftx; i <= para.play_rightx; i++)
+			{
+				sumR += CV_IMAGE_ELEM(image, unsigned char, j, 3*i+2);
+				sumG += CV_IMAGE_ELEM(image, unsigned char, j, 3*i+1);
+				sumB += CV_IMAGE_ELEM(image, unsigned char, j, 3*i);
+			}
+			double avgR = sumR/(para.play_rightx - para.play_leftx + 1);
+			double avgG = sumG/(para.play_rightx - para.play_leftx + 1);
+			double avgB = sumB/(para.play_rightx - para.play_leftx + 1);
+			double dist2 = sqrt((avgR - 239)*(avgR-239) + (avgG-239)*(avgG-239) + (avgB-239)*(avgB-239));
+			if(dist2 < 30)
+			{
+				top = j;
+				break;
+			}
+		}
+	}
+	for(int j = para.play_bot_most-1; j >= para.play_top_most; j--)
+	{
+		int R = CV_IMAGE_ELEM(image, unsigned char, j, 3*i0+2);
+		int G = CV_IMAGE_ELEM(image, unsigned char, j, 3*i0+1);
+		int B = CV_IMAGE_ELEM(image, unsigned char, j, 3*i0+0);
+		double dist = sqrt((R - 239)*(R-239) + (G-239)*(G-239) + (B-239)*(B-239));
+		if(dist < 30) 
+		{
+			double sumR = 0.0, sumG = 0.0, sumB = 0.0;
+			for(int i = para.play_leftx; i <= para.play_rightx; i++)
+			{
+				sumR += CV_IMAGE_ELEM(image, unsigned char, j, 3*i+2);
+				sumG += CV_IMAGE_ELEM(image, unsigned char, j, 3*i+1);
+				sumB += CV_IMAGE_ELEM(image, unsigned char, j, 3*i);
+			}
+			double avgR = sumR/(para.play_rightx - para.play_leftx + 1);
+			double avgG = sumG/(para.play_rightx - para.play_leftx + 1);
+			double avgB = sumB/(para.play_rightx - para.play_leftx + 1);
+			double dist2 = sqrt((avgR - 239)*(avgR-239) + (avgG-239)*(avgG-239) + (avgB-239)*(avgB-239));
+			if(dist2 < 30)
+			{
+				bot = j;
+				break;
+			}
+		}
+	}
+
+	int step = para.play_step;
+	int ncards = (bot - top - para.play_card_height + 2)/step + 1;
+	for(int n = 0; n < ncards; n++)
+	{
+		int x1 = para.play_num_leftx;//438;
+		int y1 = top + n * step + para.play_num_gap;
+		int width1 = para.play_num_width;//27;
+		int height1 = para.play_num_height;//34;
+		numBBox.push_back(cvRect(x1, y1, width1, height1));
+		int x2 = para.play_type_leftx;//418;
+		int y2 = top + n * step + para.play_type_gap;
+		int width2 = para.play_type_width;//19;
+		int height2 = para.play_type_height;//23;
+		typeBBox.push_back(cvRect(x2, y2, width2, height2));
+	}
+	return true;
+}
+
+vector<Card> recog_play(IplImage * image, vector<CvRect> numBBox, vector<CvRect> typeBBox)
+{
+	IplImage * drawImage = cvCreateImage(cvGetSize(image), image->depth, image->nChannels);
+	cvCopy(image, drawImage);
+	vector<Card> cards(numBBox.size());
+	for(int i = 0; i < typeBBox.size(); i++)
+	{
+		CvRect rect = typeBBox[i];
+		cvRectangle(drawImage, cvPoint(rect.x, rect.y), cvPoint(rect.x+rect.width, rect.y + rect.height), CV_RGB(0, 255, 0), 1);
+		if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_type_spade.png")) cards[i].type = TYPE_SPADE;
+		else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_type_heart.png")) cards[i].type = TYPE_HEART;
+		else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_type_club.png")) cards[i].type = TYPE_CLUB;
+		else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_type_diamond.png")) cards[i].type = TYPE_DIAMOND;
+		else
+		{
+			if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_red_joker.png"))
+			{
+				cards[i].type = TYPE_RED_JOKER;
+				cards[i].num = NUM_JOKER;
+			}
+			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_black_joker.png"))
+			{
+				cards[i].type = TYPE_BLACK_JOKER;
+				cards[i].num = NUM_JOKER;
+			}
+			else
+			{
+				IplImage * unknownImage = cropImage(image, rect.x, rect.y, rect.width, rect.height);
+				cvSaveImage((infile + ".ddz_play_type_unknown" + num2str(i) + ".png").c_str(), unknownImage);
+				cvReleaseImage(&unknownImage);
+			}
+		}
+
+		rect = numBBox[i];
+		cvRectangle(drawImage, cvPoint(rect.x, rect.y), cvPoint(rect.x+rect.width, rect.y + rect.height), CV_RGB(0, 0, 255), 1);
+		if(isblack(cards[i].type))
+		{
+			if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_num_b3.png")) cards[i].num = NUM_3;
+			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_num_b4.png")) cards[i].num = NUM_4;
+			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_num_b5.png")) cards[i].num = NUM_5;
+			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_num_b6.png")) cards[i].num = NUM_6;
+			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_num_b7.png")) cards[i].num = NUM_7;
+			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_num_b8.png")) cards[i].num = NUM_8;
+			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_num_b9.png")) cards[i].num = NUM_9;
+			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_num_b10.png")) cards[i].num = NUM_10;
+			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_num_bJ.png")) cards[i].num = NUM_J;
+			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_num_bQ.png")) cards[i].num = NUM_Q;
+			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_num_bK.png")) cards[i].num = NUM_K;
+			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_num_bA.png")) cards[i].num = NUM_A;
+			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_num_b2.png")) cards[i].num = NUM_2;
+			else
+			{
+				IplImage * unknownImage = cropImage(image, rect.x, rect.y, rect.width, rect.height);
+				cvSaveImage((infile + ".ddz_play_num_unknown" + num2str(i) + ".png").c_str(), unknownImage);
+				cvReleaseImage(&unknownImage);
+			}
+		}
+		else if(isred(cards[i].type))
+		{
+			if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_num_r3.png")) cards[i].num = NUM_3;
+			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_num_r4.png")) cards[i].num = NUM_4;
+			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_num_r5.png")) cards[i].num = NUM_5;
+			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_num_r6.png")) cards[i].num = NUM_6;
+			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_num_r7.png")) cards[i].num = NUM_7;
+			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_num_r8.png")) cards[i].num = NUM_8;
+			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_num_r9.png")) cards[i].num = NUM_9;
+			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_num_r10.png")) cards[i].num = NUM_10;
+			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_num_rJ.png")) cards[i].num = NUM_J;
+			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_num_rQ.png")) cards[i].num = NUM_Q;
+			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_num_rK.png")) cards[i].num = NUM_K;
+			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_num_rA.png")) cards[i].num = NUM_A;
+			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_num_r2.png")) cards[i].num = NUM_2;
+			else
+			{
+				IplImage * unknownImage = cropImage(image, rect.x, rect.y, rect.width, rect.height);
+				cvSaveImage((infile + ".ddz_play_num_unknown" + num2str(i) + ".png").c_str(), unknownImage);
+				cvReleaseImage(&unknownImage);
+			}
+		}
+	}
+	cvSaveImage("out.png", drawImage);
+	cvReleaseImage(&drawImage);
+	return cards;
+}
+
+vector<Card> recog_myplay(IplImage * image)
+{
+	vector<CvRect> numBBox, typeBBox;
+	recog_play_bbox(image, myplay_para, numBBox, typeBBox);
+	return recog_play(image, numBBox, typeBBox);
+}
+vector<Card> recog_leftplay(IplImage * image)
+{
+	vector<CvRect> numBBox, typeBBox;
+	recog_play_bbox(image, leftplay_para, numBBox, typeBBox);
+	return recog_play(image, numBBox, typeBBox);
+}
+vector<Card> recog_rightplay(IplImage * image)
+{
+	vector<CvRect> numBBox, typeBBox;
+	recog_play_bbox(image, rightplay_para, numBBox, typeBBox);
+	return recog_play(image, numBBox, typeBBox);
+}
 class Play 
 {
 	public:
@@ -531,7 +786,25 @@ int main(int argc, char ** argv)
 	loadAllTemplates();
 
 	IplImage * image = cvLoadImage(argv[1], 1);
-	vector<Card> cards = recog_my_cards(image);
-	for(int i = 0; i < cards.size(); i++) cout<<cards[i].str()<<endl;
+
+	cout<<"mycards: ";
+	vector<Card> mycards = recog_mycards(image);
+	for(int i = 0; i < mycards.size(); i++) cout<<mycards[i].str();
+	cout<<endl;
+	
+	cout<<"myplay: ";
+	vector<Card> myplay = recog_myplay(image);
+	for(int i = 0; i < myplay.size(); i++) cout<<myplay[i].str();
+	cout<<endl;
+
+	cout<<"leftplay: ";
+	vector<Card> leftplay = recog_leftplay(image);
+	for(int i = 0; i < leftplay.size(); i++) cout<<leftplay[i].str();
+	cout<<endl;
+/*
+	vector<Card> rightplay = recog_rightplay(image);
+	for(int i = 0; i < rightplay.size(); i++) cout<<rightplay[i].str();
+	cout<<endl;
+	*/
 	return 0;
 }
