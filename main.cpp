@@ -10,10 +10,54 @@ using namespace cv;
 #define ABS(x) ((x) > 0 ? (x) : (-(x)))
 
 string infile;
+IplImage * drawImage;
 enum {PLAYER_ME = 0, PLAYER_LEFT, PLAYER_RIGHT, PLAYER_UNKNOWN,
 	TYPE_SPADE , TYPE_HEART, TYPE_CLUB, TYPE_DIAMOND, TYPE_RED_JOKER, TYPE_BLACK_JOKER, TYPE_UNKNOWN,
 	NUM_3, NUM_4, NUM_5, NUM_6, NUM_7, NUM_8, NUM_9, NUM_10, NUM_J, NUM_Q, NUM_K, NUM_A, NUM_2, NUM_JOKER, NUM_UNKNOWN,
 };
+
+struct PlayPara
+{
+	int play_leftx;
+	int play_rightx;
+	int play_top_most;
+	int play_bot_most;
+
+	int play_midx;
+	int play_step;
+	int play_card_height;
+
+	int play_num_gap;
+	int play_num_leftx;
+	int play_num_width;
+	int play_num_height;
+	
+	int play_type_gap;
+	int play_type_leftx;
+	int play_type_width;
+	int play_type_height;
+};
+
+PlayPara myplay_para = {
+	258, 336, 270, 994,
+	283, 40, 68,
+	2, 305, 27, 32,
+	7, 285, 19, 22
+};
+
+PlayPara leftplay_para = {
+	391, 469, 285, 640,
+	437, 40, 68, 
+	2, 438, 27, 32, 
+	7, 418, 19, 22
+};
+PlayPara rightplay_para = {
+	391, 469, 640, 1000,
+	437, 40, 68,
+	2, 438, 27, 32,
+	7, 418, 19, 22
+};
+
 
 class Card
 {
@@ -224,7 +268,7 @@ double avgImageDiff(IplImage * bigImage, int x0, int y0, string filename)
 	}
 	return sumdiff/(width*height);
 }
-bool isImageSame_shifty(IplImage * bigImage, int x0, int y0, string filename,  double thresh = 20, int shiftnum = 2)
+bool isImageSame_shifty(IplImage * bigImage, int x0, int y0, string filename,  double thresh = 30, int shiftnum = 2)
 {
 	//filename = DDZTMPLPATH + filename;
 	IplImage * smallImage = getImage(filename);// cvLoadImage(filename.c_str(), 1);
@@ -389,7 +433,7 @@ bool recog_mycards_bbox(IplImage * image, vector<CvRect> &numBBox, vector<CvRect
 
 		int x1 = 180 + shift;
 		int y1 = top + n * step + 2;
-		int width1 = 51;
+		int width1 = 46;
 		int height1 = 51;
 		numBBox.push_back(cvRect(x1, y1, width1 , height1));
 		int x2 = 149 + shift;
@@ -419,6 +463,7 @@ vector<Card> recog_mycards(IplImage * image)
 	for(int i = 0; i < typeBBox.size(); i++)
 	{
 		CvRect rect = typeBBox[i];
+		cvRectangle(drawImage, cvPoint(rect.x, rect.y), cvPoint(rect.x+rect.width, rect.y + rect.height), CV_RGB(0, 0, 255), 1);
 		if(isImageSame_shifty(image, rect.x, rect.y, "ddz_mycards_type_spade.png")) cards[i].type = TYPE_SPADE;
 		else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_mycards_type_heart.png")) cards[i].type = TYPE_HEART;
 		else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_mycards_type_club.png")) cards[i].type = TYPE_CLUB;
@@ -444,6 +489,7 @@ vector<Card> recog_mycards(IplImage * image)
 		}
 
 		rect = numBBox[i];
+		cvRectangle(drawImage, cvPoint(rect.x, rect.y), cvPoint(rect.x+rect.width, rect.y + rect.height), CV_RGB(0, 255, 0), 1);
 		if(isblack(cards[i].type))
 		{
 			if(isImageSame_shifty(image, rect.x, rect.y, "ddz_mycards_num_b3.png")) cards[i].num = NUM_3;
@@ -491,29 +537,6 @@ vector<Card> recog_mycards(IplImage * image)
 	}
 	return cards;
 }
-
-struct PlayPara
-{
-	int play_leftx;
-	int play_rightx;
-	int play_top_most;
-	int play_bot_most;
-	int play_midx;
-	int play_step;
-	int play_card_height;
-	int play_num_gap;
-	int play_num_leftx;
-	int play_num_width;
-	int play_num_height;
-	int play_type_gap;
-	int play_type_leftx;
-	int play_type_width;
-	int play_type_height;
-};
-
-PlayPara myplay_para = {258, 336, 270, 994, 283, 40, 68, 1, 305, 27, 32, 6, 285, 19, 22};
-PlayPara leftplay_para = {391, 469, 285, 640, 437, 40, 68, 1, 438, 27, 32, 6, 418, 19, 22};
-PlayPara rightplay_para = {258, 336, 270, 994, 283, 40, 68, 1, 305, 27, 32, 6, 285, 19, 22};
 
 bool recog_play_bbox(IplImage * image, PlayPara para, vector<CvRect> &numBBox, vector<CvRect> &typeBBox)
 {
@@ -591,15 +614,23 @@ bool recog_play_bbox(IplImage * image, PlayPara para, vector<CvRect> &numBBox, v
 	return true;
 }
 
-vector<Card> recog_play(IplImage * image, vector<CvRect> numBBox, vector<CvRect> typeBBox)
+vector<Card> recog_play(string who, IplImage * image)
 {
-	IplImage * drawImage = cvCreateImage(cvGetSize(image), image->depth, image->nChannels);
-	cvCopy(image, drawImage);
+	vector<CvRect> numBBox;
+	vector<CvRect> typeBBox;
+	if(who == "me") recog_play_bbox(image, myplay_para, numBBox, typeBBox);
+	else if(who == "left") recog_play_bbox(image, leftplay_para, numBBox, typeBBox);
+	else if(who == "right") recog_play_bbox(image, rightplay_para, numBBox, typeBBox);
+	else
+	{
+		cerr<<"who is who"<<endl;
+		return vector<Card>();
+	}
 	vector<Card> cards(numBBox.size());
 	for(int i = 0; i < typeBBox.size(); i++)
 	{
 		CvRect rect = typeBBox[i];
-		cvRectangle(drawImage, cvPoint(rect.x, rect.y), cvPoint(rect.x+rect.width, rect.y + rect.height), CV_RGB(0, 255, 0), 1);
+		cvRectangle(drawImage, cvPoint(rect.x, rect.y), cvPoint(rect.x+rect.width, rect.y + rect.height), CV_RGB(0, 0, 255), 1);
 		if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_type_spade.png")) cards[i].type = TYPE_SPADE;
 		else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_type_heart.png")) cards[i].type = TYPE_HEART;
 		else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_type_club.png")) cards[i].type = TYPE_CLUB;
@@ -619,13 +650,13 @@ vector<Card> recog_play(IplImage * image, vector<CvRect> numBBox, vector<CvRect>
 			else
 			{
 				IplImage * unknownImage = cropImage(image, rect.x, rect.y, rect.width, rect.height);
-				cvSaveImage((infile + ".ddz_play_type_unknown" + num2str(i) + ".png").c_str(), unknownImage);
+				cvSaveImage((infile + "." + who + ".ddz_play_type_unknown" + num2str(i) + ".png").c_str(), unknownImage);
 				cvReleaseImage(&unknownImage);
 			}
 		}
 
 		rect = numBBox[i];
-		cvRectangle(drawImage, cvPoint(rect.x, rect.y), cvPoint(rect.x+rect.width, rect.y + rect.height), CV_RGB(0, 0, 255), 1);
+		cvRectangle(drawImage, cvPoint(rect.x, rect.y), cvPoint(rect.x+rect.width, rect.y + rect.height), CV_RGB(0, 255, 0), 1);
 		if(isblack(cards[i].type))
 		{
 			if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_num_b3.png")) cards[i].num = NUM_3;
@@ -644,7 +675,7 @@ vector<Card> recog_play(IplImage * image, vector<CvRect> numBBox, vector<CvRect>
 			else
 			{
 				IplImage * unknownImage = cropImage(image, rect.x, rect.y, rect.width, rect.height);
-				cvSaveImage((infile + ".ddz_play_num_unknown" + num2str(i) + ".png").c_str(), unknownImage);
+				cvSaveImage((infile + "." + who + ".ddz_play_num_unknown" + num2str(i) + ".png").c_str(), unknownImage);
 				cvReleaseImage(&unknownImage);
 			}
 		}
@@ -666,34 +697,14 @@ vector<Card> recog_play(IplImage * image, vector<CvRect> numBBox, vector<CvRect>
 			else
 			{
 				IplImage * unknownImage = cropImage(image, rect.x, rect.y, rect.width, rect.height);
-				cvSaveImage((infile + ".ddz_play_num_unknown" + num2str(i) + ".png").c_str(), unknownImage);
+				cvSaveImage((infile + "." + who + ".ddz_play_num_unknown" + num2str(i) + ".png").c_str(), unknownImage);
 				cvReleaseImage(&unknownImage);
 			}
 		}
 	}
-	cvSaveImage("out.png", drawImage);
-	cvReleaseImage(&drawImage);
 	return cards;
 }
 
-vector<Card> recog_myplay(IplImage * image)
-{
-	vector<CvRect> numBBox, typeBBox;
-	recog_play_bbox(image, myplay_para, numBBox, typeBBox);
-	return recog_play(image, numBBox, typeBBox);
-}
-vector<Card> recog_leftplay(IplImage * image)
-{
-	vector<CvRect> numBBox, typeBBox;
-	recog_play_bbox(image, leftplay_para, numBBox, typeBBox);
-	return recog_play(image, numBBox, typeBBox);
-}
-vector<Card> recog_rightplay(IplImage * image)
-{
-	vector<CvRect> numBBox, typeBBox;
-	recog_play_bbox(image, rightplay_para, numBBox, typeBBox);
-	return recog_play(image, numBBox, typeBBox);
-}
 class Play 
 {
 	public:
@@ -786,25 +797,30 @@ int main(int argc, char ** argv)
 	loadAllTemplates();
 
 	IplImage * image = cvLoadImage(argv[1], 1);
+	drawImage = cvLoadImage(argv[1], 1);
 
-	cout<<"mycards: ";
+	cout<<"  mycards: ";
 	vector<Card> mycards = recog_mycards(image);
 	for(int i = 0; i < mycards.size(); i++) cout<<mycards[i].str();
 	cout<<endl;
 	
-	cout<<"myplay: ";
-	vector<Card> myplay = recog_myplay(image);
+	cout<<"   myplay: ";
+	vector<Card> myplay = recog_play("me", image);
 	for(int i = 0; i < myplay.size(); i++) cout<<myplay[i].str();
 	cout<<endl;
 
-	cout<<"leftplay: ";
-	vector<Card> leftplay = recog_leftplay(image);
+	cout<<" leftplay: ";
+	vector<Card> leftplay = recog_play("left", image);
 	for(int i = 0; i < leftplay.size(); i++) cout<<leftplay[i].str();
 	cout<<endl;
-/*
-	vector<Card> rightplay = recog_rightplay(image);
+
+	cout<<"rightplay: ";
+	vector<Card> rightplay = recog_play("right", image);
 	for(int i = 0; i < rightplay.size(); i++) cout<<rightplay[i].str();
 	cout<<endl;
-	*/
+
+	cvSaveImage((infile + ".out.png").c_str(), drawImage);
+	cvReleaseImage(&drawImage);
+
 	return 0;
 }
