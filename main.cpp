@@ -3,6 +3,7 @@
 #include <string>
 #include <cassert>
 #include <map>
+#include <algorithm>
 #include "path.h"
 
 using namespace std;
@@ -11,6 +12,10 @@ using namespace cv;
 
 string infile;
 IplImage * drawImage;
+map<string, IplImage *> map_allImgs;
+map<string, IplImage *> map_maskImgs;
+typedef map<string, IplImage*> FileMap;
+
 enum {PLAYER_ME = 0, PLAYER_LEFT, PLAYER_RIGHT, PLAYER_UNKNOWN,
 	TYPE_SPADE , TYPE_HEART, TYPE_CLUB, TYPE_DIAMOND, TYPE_RED_JOKER, TYPE_BLACK_JOKER, TYPE_UNKNOWN,
 	NUM_3, NUM_4, NUM_5, NUM_6, NUM_7, NUM_8, NUM_9, NUM_10, NUM_J, NUM_Q, NUM_K, NUM_A, NUM_2, NUM_JOKER, NUM_UNKNOWN,
@@ -100,8 +105,6 @@ class Card
 		}
 };
 
-map<string, IplImage *> map_allImgs;
-typedef pair<string, IplImage *> PAIR;
 void loadAllTemplates()
 {
 	string file;
@@ -184,15 +187,42 @@ void loadAllTemplates()
 		string file = it->first;
 		IplImage * image = it->second;
 		if(!image) cerr<<"unable to load template "<<file<<endl;
+		////////////////////////////////////////////////////////////////////////
+		if(0)
+		{
+			IplImage * maskImage = cvCreateImage(cvGetSize(image), image->depth, 1);
+			cvCvtColor(image, maskImage, CV_BGR2GRAY);
+			cvThreshold(maskImage, maskImage, 0, 255, CV_THRESH_OTSU | CV_THRESH_BINARY_INV);
+			cvSaveImage((DDZTMPLPATH + string("mask/") + file).c_str(), maskImage);
+			cvReleaseImage(&maskImage);
+		}
+		else
+		{
+			IplImage * maskImage = cvLoadImage((DDZTMPLPATH + string("mask/") + file).c_str(), 0);
+			assert(maskImage->nChannels == 1);
+			map_maskImgs[file] = maskImage;
+		}
 	}
 }
-
 IplImage * getImage(string file)
 {
 	if(map_allImgs.find(file) != map_allImgs.end()) return map_allImgs[file];
 	cerr<<"image "<<file<<" is not loaded as template"<<endl;
 
 	IplImage * image = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
+	if(!image)
+	{
+		cerr<<"unable to load \""<<file<<"\""<<endl;
+		return 0;
+	}
+	return image;
+}
+IplImage * getMaskImage(string file)
+{
+	if(map_maskImgs.find(file) != map_maskImgs.end()) return map_maskImgs[file];
+	cerr<<"image "<<file<<" is not loaded as template"<<endl;
+
+	IplImage * image = cvLoadImage((DDZTMPLPATH + string("mask/")+ file).c_str(), 1);
 	if(!image)
 	{
 		cerr<<"unable to load \""<<file<<"\""<<endl;
@@ -268,10 +298,71 @@ double avgImageDiff(IplImage * bigImage, int x0, int y0, string filename)
 	}
 	return sumdiff/(width*height);
 }
+
+bool isImageSame_shifty2(IplImage * bigImage, int x0, int y0, string filename, double & diffval, double thresh = 30, int shiftnum = 2)
+{
+	IplImage * smallImage = getImage(filename);
+	if(!smallImage) return false;
+	assert(bigImage);
+	assert(bigImage->width >= smallImage->width && bigImage->height >= smallImage->height && bigImage->nChannels == smallImage->nChannels);
+	int width = smallImage->width;
+	int height = smallImage->height;
+	int nchannels = bigImage->nChannels;
+	assert(x0 >= 0 && y0 >= 0 && x0 + width <= bigImage->width && y0 + height <= bigImage->height);
+
+	double sumdiff = 0;
+	diffval = 100000;
+	for(int s = 0; s < shiftnum; s++)
+	{
+		sumdiff = 0;
+		for(int y = s; y < height; y++)
+		{
+			for(int x = 0; x < width; x++)
+			{
+				int by = y0 + y - s;
+				int bx = x0 + x;
+				for(int c = 0; c < nchannels; c++)
+				{
+					double val1 = CV_IMAGE_ELEM(smallImage, unsigned char, y, x*nchannels + c);
+					double val2 = CV_IMAGE_ELEM(bigImage, unsigned char, by, bx*nchannels + c);
+					sumdiff += ABS(val1-val2);
+				}
+			}
+		}
+		double avgdiff = sumdiff/((height - s) * width);
+		if(avgdiff < diffval) diffval = avgdiff;
+
+		if (diffval < thresh) return true;
+
+		if(s != 0)
+		{
+			sumdiff = 0;
+			for(int y = 0; y < height - s; y++)
+			{
+				for(int x = 0; x < width; x++)
+				{
+					int by = y0 + y + s;
+					int bx = x0 + x;
+					for(int c = 0; c < nchannels; c++)
+					{
+						double val1 = CV_IMAGE_ELEM(smallImage, unsigned char, y, x*nchannels + c);
+						double val2 = CV_IMAGE_ELEM(bigImage, unsigned char, by, bx*nchannels + c);
+						sumdiff += ABS(val1-val2);
+					}
+				}
+			}
+			double avgdiff = sumdiff/((height - s) * width);
+			if(avgdiff < diffval) diffval = avgdiff;
+
+			if (diffval < thresh) return true;
+		}
+	}
+	return false;
+}
+
 bool isImageSame_shifty(IplImage * bigImage, int x0, int y0, string filename,  double thresh = 30, int shiftnum = 2)
 {
-	//filename = DDZTMPLPATH + filename;
-	IplImage * smallImage = getImage(filename);// cvLoadImage(filename.c_str(), 1);
+	IplImage * smallImage = getImage(filename);
 	if(!smallImage) return false;
 	assert(bigImage);
 	assert(bigImage->width >= smallImage->width && bigImage->height >= smallImage->height && bigImage->nChannels == smallImage->nChannels);
@@ -298,7 +389,7 @@ bool isImageSame_shifty(IplImage * bigImage, int x0, int y0, string filename,  d
 				}
 			}
 		}
-		if (sumdiff/(width*(height-s)) < thresh) return true;
+		if (sumdiff/((height - s) * width) < thresh) return true;
 
 		if(s != 0)
 		{
@@ -317,7 +408,7 @@ bool isImageSame_shifty(IplImage * bigImage, int x0, int y0, string filename,  d
 					}
 				}
 			}
-			if (sumdiff/(width*(height-s)) < thresh) return true;
+			if (sumdiff/((height-s)*width) < thresh) return true;
 		}
 	}
 	return false;
@@ -464,22 +555,18 @@ vector<Card> recog_mycards(IplImage * image)
 	{
 		CvRect rect = typeBBox[i];
 		cvRectangle(drawImage, cvPoint(rect.x, rect.y), cvPoint(rect.x+rect.width, rect.y + rect.height), CV_RGB(0, 0, 255), 1);
-		if(isImageSame_shifty(image, rect.x, rect.y, "ddz_mycards_type_spade.png")) cards[i].type = TYPE_SPADE;
-		else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_mycards_type_heart.png")) cards[i].type = TYPE_HEART;
-		else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_mycards_type_club.png")) cards[i].type = TYPE_CLUB;
-		else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_mycards_type_diamond.png")) cards[i].type = TYPE_DIAMOND;
-		else
+		if(1)
 		{
-			if(isImageSame_shifty(image, rect.x, rect.y, "ddz_mycards_red_joker.png"))
-			{
-				cards[i].type = TYPE_RED_JOKER;
-				cards[i].num = NUM_JOKER;
-			}
-			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_mycards_black_joker.png"))
-			{
-				cards[i].type = TYPE_BLACK_JOKER;
-				cards[i].num = NUM_JOKER;
-			}
+			vector<double> diffvals;
+			double diffval;
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_mycards_type_spade.png", diffval)) {cards[i].type = TYPE_SPADE; goto out;} diffvals.push_back(diffval);
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_mycards_type_heart.png", diffval)) {cards[i].type = TYPE_HEART; goto out;} diffvals.push_back(diffval);
+		    if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_mycards_type_club.png", diffval)) {cards[i].type = TYPE_CLUB; goto out;} diffvals.push_back(diffval);
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_mycards_type_diamond.png", diffval)) {cards[i].type = TYPE_DIAMOND; goto out;} diffvals.push_back(diffval);
+			if(isImageSame_shifty(image, rect.x, rect.y, "ddz_mycards_red_joker.png")) {cards[i].type = TYPE_RED_JOKER; cards[i].num = NUM_JOKER; goto out;} diffvals.push_back(diffval);
+			if(isImageSame_shifty(image, rect.x, rect.y, "ddz_mycards_black_joker.png")) {cards[i].type = TYPE_BLACK_JOKER; cards[i].num = NUM_JOKER; goto out;} diffvals.push_back(diffval);
+			vector<double>::iterator min_elem =  min_element(diffvals.begin(), diffvals.end());
+			if(*min_elem < 60) cards[i].type = (int)(min_elem - diffvals.begin()) + TYPE_SPADE;
 			else
 			{
 				IplImage * unknownImage = cropImage(image, rect.x, rect.y, rect.width, rect.height);
@@ -487,51 +574,61 @@ vector<Card> recog_mycards(IplImage * image)
 				cvReleaseImage(&unknownImage);
 			}
 		}
+out:
 
 		rect = numBBox[i];
 		cvRectangle(drawImage, cvPoint(rect.x, rect.y), cvPoint(rect.x+rect.width, rect.y + rect.height), CV_RGB(0, 255, 0), 1);
 		if(isblack(cards[i].type))
 		{
-			if(isImageSame_shifty(image, rect.x, rect.y, "ddz_mycards_num_b3.png")) cards[i].num = NUM_3;
-			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_mycards_num_b4.png")) cards[i].num = NUM_4;
-			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_mycards_num_b5.png")) cards[i].num = NUM_5;
-			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_mycards_num_b6.png")) cards[i].num = NUM_6;
-			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_mycards_num_b7.png")) cards[i].num = NUM_7;
-			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_mycards_num_b8.png")) cards[i].num = NUM_8;
-			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_mycards_num_b9.png")) cards[i].num = NUM_9;
-			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_mycards_num_b10.png")) cards[i].num = NUM_10;
-			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_mycards_num_bJ.png")) cards[i].num = NUM_J;
-			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_mycards_num_bQ.png")) cards[i].num = NUM_Q;
-			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_mycards_num_bK.png")) cards[i].num = NUM_K;
-			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_mycards_num_bA.png")) cards[i].num = NUM_A;
-			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_mycards_num_b2.png")) cards[i].num = NUM_2;
+			vector<double> diffvals;
+			double diffval;
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_mycards_num_b3.png", diffval)) { cards[i].num = NUM_3; continue;} diffvals.push_back(diffval);
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_mycards_num_b4.png", diffval)) { cards[i].num = NUM_4; continue;} diffvals.push_back(diffval);
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_mycards_num_b5.png", diffval)) { cards[i].num = NUM_5; continue;} diffvals.push_back(diffval);
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_mycards_num_b6.png", diffval)) { cards[i].num = NUM_6; continue;} diffvals.push_back(diffval);
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_mycards_num_b7.png", diffval)) { cards[i].num = NUM_7; continue;} diffvals.push_back(diffval);
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_mycards_num_b8.png", diffval)) { cards[i].num = NUM_8; continue;} diffvals.push_back(diffval);
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_mycards_num_b9.png", diffval)) { cards[i].num = NUM_9; continue;} diffvals.push_back(diffval);
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_mycards_num_b10.png", diffval)) { cards[i].num = NUM_10; continue;} diffvals.push_back(diffval);
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_mycards_num_bJ.png", diffval)) { cards[i].num = NUM_J; continue;} diffvals.push_back(diffval);
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_mycards_num_bQ.png", diffval)) { cards[i].num = NUM_Q; continue;} diffvals.push_back(diffval);
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_mycards_num_bK.png", diffval)) { cards[i].num = NUM_K; continue;} diffvals.push_back(diffval);
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_mycards_num_bA.png", diffval)) { cards[i].num = NUM_A; continue;} diffvals.push_back(diffval);
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_mycards_num_b2.png", diffval)) { cards[i].num = NUM_2; continue;} diffvals.push_back(diffval);
+			vector<double>::iterator min_elem =  min_element(diffvals.begin(), diffvals.end());
+			if(*min_elem < 60) cards[i].num = (int)(min_elem - diffvals.begin()) + NUM_3;
 			else
 			{
 				IplImage * unknownImage = cropImage(image, rect.x, rect.y, rect.width, rect.height);
-				cvSaveImage((infile + ".ddz_mycards_num_unknown" + num2str(i) + ".png").c_str(), unknownImage);
-				cvReleaseImage(&unknownImage);
+				cvSaveImage((infile + ".ddz_mycards_num_unknown" + num2str(i) + ".png").c_str(), unknownImage); 
+				cvReleaseImage(&unknownImage); 
 			}
 		}
-		else if(isred(cards[i].type))
+		else if(isred(cards[i].type)) 
 		{
-			if(isImageSame_shifty(image, rect.x, rect.y, "ddz_mycards_num_r3.png")) cards[i].num = NUM_3;
-			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_mycards_num_r4.png")) cards[i].num = NUM_4;
-			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_mycards_num_r5.png")) cards[i].num = NUM_5;
-			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_mycards_num_r6.png")) cards[i].num = NUM_6;
-			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_mycards_num_r7.png")) cards[i].num = NUM_7;
-			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_mycards_num_r8.png")) cards[i].num = NUM_8;
-			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_mycards_num_r9.png")) cards[i].num = NUM_9;
-			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_mycards_num_r10.png")) cards[i].num = NUM_10;
-			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_mycards_num_rJ.png")) cards[i].num = NUM_J;
-			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_mycards_num_rQ.png")) cards[i].num = NUM_Q;
-			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_mycards_num_rK.png")) cards[i].num = NUM_K;
-			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_mycards_num_rA.png")) cards[i].num = NUM_A;
-			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_mycards_num_r2.png")) cards[i].num = NUM_2;
+			
+			vector<double> diffvals;
+			double diffval;
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_mycards_num_r3.png", diffval)) { cards[i].num = NUM_3; continue;} diffvals.push_back(diffval);
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_mycards_num_r4.png", diffval)) { cards[i].num = NUM_4; continue;} diffvals.push_back(diffval);
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_mycards_num_r5.png", diffval)) { cards[i].num = NUM_5; continue;} diffvals.push_back(diffval);
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_mycards_num_r6.png", diffval)) { cards[i].num = NUM_6; continue;} diffvals.push_back(diffval);
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_mycards_num_r7.png", diffval)) { cards[i].num = NUM_7; continue;} diffvals.push_back(diffval);
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_mycards_num_r8.png", diffval)) { cards[i].num = NUM_8; continue;} diffvals.push_back(diffval);
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_mycards_num_r9.png", diffval)) { cards[i].num = NUM_9; continue;} diffvals.push_back(diffval);
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_mycards_num_r10.png", diffval)) { cards[i].num = NUM_10; continue;} diffvals.push_back(diffval);
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_mycards_num_rJ.png", diffval)) { cards[i].num = NUM_J; continue;} diffvals.push_back(diffval);
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_mycards_num_rQ.png", diffval)) { cards[i].num = NUM_Q; continue;} diffvals.push_back(diffval);
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_mycards_num_rK.png", diffval)) { cards[i].num = NUM_K; continue;} diffvals.push_back(diffval);
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_mycards_num_rA.png", diffval)) { cards[i].num = NUM_A; continue;} diffvals.push_back(diffval);
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_mycards_num_r2.png", diffval)) { cards[i].num = NUM_2; continue;} diffvals.push_back(diffval);
+			vector<double>::iterator min_elem =  min_element(diffvals.begin(), diffvals.end());
+			if(*min_elem < 60) cards[i].num = (int)(min_elem - diffvals.begin()) + NUM_3;
 			else
 			{
 				IplImage * unknownImage = cropImage(image, rect.x, rect.y, rect.width, rect.height);
-				cvSaveImage((infile + ".ddz_mycards_num_unknown" + num2str(i) + ".png").c_str(), unknownImage);
-				cvReleaseImage(&unknownImage);
+				cvSaveImage((infile + ".ddz_mycards_num_unknown" + num2str(i) + ".png").c_str(), unknownImage); 
+				cvReleaseImage(&unknownImage); 
 			}
 		}
 	}
@@ -631,74 +728,80 @@ vector<Card> recog_play(string who, IplImage * image)
 	{
 		CvRect rect = typeBBox[i];
 		cvRectangle(drawImage, cvPoint(rect.x, rect.y), cvPoint(rect.x+rect.width, rect.y + rect.height), CV_RGB(0, 0, 255), 1);
-		if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_type_spade.png")) cards[i].type = TYPE_SPADE;
-		else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_type_heart.png")) cards[i].type = TYPE_HEART;
-		else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_type_club.png")) cards[i].type = TYPE_CLUB;
-		else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_type_diamond.png")) cards[i].type = TYPE_DIAMOND;
-		else
+		if(1)
 		{
-			if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_red_joker.png"))
-			{
-				cards[i].type = TYPE_RED_JOKER;
-				cards[i].num = NUM_JOKER;
-			}
-			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_black_joker.png"))
-			{
-				cards[i].type = TYPE_BLACK_JOKER;
-				cards[i].num = NUM_JOKER;
-			}
+			vector<double> diffvals;
+			double diffval;
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_play_type_spade.png", diffval)) {cards[i].type = TYPE_SPADE; goto out;} diffvals.push_back(diffval);
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_play_type_heart.png", diffval)) {cards[i].type = TYPE_HEART; goto out;} diffvals.push_back(diffval);
+		    if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_play_type_club.png", diffval)) {cards[i].type = TYPE_CLUB; goto out;} diffvals.push_back(diffval);
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_play_type_diamond.png", diffval)) {cards[i].type = TYPE_DIAMOND; goto out;} diffvals.push_back(diffval);
+			if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_red_joker.png")) {cards[i].type = TYPE_RED_JOKER; cards[i].num = NUM_JOKER; goto out;} diffvals.push_back(diffval);
+			if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_black_joker.png")) {cards[i].type = TYPE_BLACK_JOKER; cards[i].num = NUM_JOKER; goto out;} diffvals.push_back(diffval);
+			vector<double>::iterator min_elem =  min_element(diffvals.begin(), diffvals.end());
+			if(*min_elem < 60) cards[i].type = (int)(min_elem - diffvals.begin()) + TYPE_SPADE;
 			else
 			{
 				IplImage * unknownImage = cropImage(image, rect.x, rect.y, rect.width, rect.height);
-				cvSaveImage((infile + "." + who + ".ddz_play_type_unknown" + num2str(i) + ".png").c_str(), unknownImage);
+				cvSaveImage((infile + ".ddz_play_type_unknown" + num2str(i) + ".png").c_str(), unknownImage);
 				cvReleaseImage(&unknownImage);
 			}
 		}
+out:
 
 		rect = numBBox[i];
 		cvRectangle(drawImage, cvPoint(rect.x, rect.y), cvPoint(rect.x+rect.width, rect.y + rect.height), CV_RGB(0, 255, 0), 1);
 		if(isblack(cards[i].type))
 		{
-			if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_num_b3.png")) cards[i].num = NUM_3;
-			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_num_b4.png")) cards[i].num = NUM_4;
-			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_num_b5.png")) cards[i].num = NUM_5;
-			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_num_b6.png")) cards[i].num = NUM_6;
-			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_num_b7.png")) cards[i].num = NUM_7;
-			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_num_b8.png")) cards[i].num = NUM_8;
-			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_num_b9.png")) cards[i].num = NUM_9;
-			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_num_b10.png")) cards[i].num = NUM_10;
-			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_num_bJ.png")) cards[i].num = NUM_J;
-			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_num_bQ.png")) cards[i].num = NUM_Q;
-			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_num_bK.png")) cards[i].num = NUM_K;
-			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_num_bA.png")) cards[i].num = NUM_A;
-			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_num_b2.png")) cards[i].num = NUM_2;
+			vector<double> diffvals;
+			double diffval;
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_play_num_b3.png", diffval)) { cards[i].num = NUM_3; continue;} diffvals.push_back(diffval);
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_play_num_b4.png", diffval)) { cards[i].num = NUM_4; continue;} diffvals.push_back(diffval);
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_play_num_b5.png", diffval)) { cards[i].num = NUM_5; continue;} diffvals.push_back(diffval);
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_play_num_b6.png", diffval)) { cards[i].num = NUM_6; continue;} diffvals.push_back(diffval);
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_play_num_b7.png", diffval)) { cards[i].num = NUM_7; continue;} diffvals.push_back(diffval);
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_play_num_b8.png", diffval)) { cards[i].num = NUM_8; continue;} diffvals.push_back(diffval);
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_play_num_b9.png", diffval)) { cards[i].num = NUM_9; continue;} diffvals.push_back(diffval);
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_play_num_b10.png", diffval)) { cards[i].num = NUM_10; continue;} diffvals.push_back(diffval);
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_play_num_bJ.png", diffval)) { cards[i].num = NUM_J; continue;} diffvals.push_back(diffval);
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_play_num_bQ.png", diffval)) { cards[i].num = NUM_Q; continue;} diffvals.push_back(diffval);
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_play_num_bK.png", diffval)) { cards[i].num = NUM_K; continue;} diffvals.push_back(diffval);
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_play_num_bA.png", diffval)) { cards[i].num = NUM_A; continue;} diffvals.push_back(diffval);
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_play_num_b2.png", diffval)) { cards[i].num = NUM_2; continue;} diffvals.push_back(diffval);
+			vector<double>::iterator min_elem =  min_element(diffvals.begin(), diffvals.end());
+			if(*min_elem < 60) cards[i].num = (int)(min_elem - diffvals.begin()) + NUM_3;
 			else
 			{
 				IplImage * unknownImage = cropImage(image, rect.x, rect.y, rect.width, rect.height);
-				cvSaveImage((infile + "." + who + ".ddz_play_num_unknown" + num2str(i) + ".png").c_str(), unknownImage);
-				cvReleaseImage(&unknownImage);
+				cvSaveImage((infile + ".ddz_play_num_unknown" + num2str(i) + ".png").c_str(), unknownImage); 
+				cvReleaseImage(&unknownImage); 
 			}
 		}
-		else if(isred(cards[i].type))
+		else if(isred(cards[i].type)) 
 		{
-			if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_num_r3.png")) cards[i].num = NUM_3;
-			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_num_r4.png")) cards[i].num = NUM_4;
-			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_num_r5.png")) cards[i].num = NUM_5;
-			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_num_r6.png")) cards[i].num = NUM_6;
-			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_num_r7.png")) cards[i].num = NUM_7;
-			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_num_r8.png")) cards[i].num = NUM_8;
-			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_num_r9.png")) cards[i].num = NUM_9;
-			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_num_r10.png")) cards[i].num = NUM_10;
-			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_num_rJ.png")) cards[i].num = NUM_J;
-			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_num_rQ.png")) cards[i].num = NUM_Q;
-			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_num_rK.png")) cards[i].num = NUM_K;
-			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_num_rA.png")) cards[i].num = NUM_A;
-			else if(isImageSame_shifty(image, rect.x, rect.y, "ddz_play_num_r2.png")) cards[i].num = NUM_2;
+			
+			vector<double> diffvals;
+			double diffval;
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_play_num_r3.png", diffval)) { cards[i].num = NUM_3; continue;} diffvals.push_back(diffval);
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_play_num_r4.png", diffval)) { cards[i].num = NUM_4; continue;} diffvals.push_back(diffval);
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_play_num_r5.png", diffval)) { cards[i].num = NUM_5; continue;} diffvals.push_back(diffval);
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_play_num_r6.png", diffval)) { cards[i].num = NUM_6; continue;} diffvals.push_back(diffval);
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_play_num_r7.png", diffval)) { cards[i].num = NUM_7; continue;} diffvals.push_back(diffval);
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_play_num_r8.png", diffval)) { cards[i].num = NUM_8; continue;} diffvals.push_back(diffval);
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_play_num_r9.png", diffval)) { cards[i].num = NUM_9; continue;} diffvals.push_back(diffval);
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_play_num_r10.png", diffval)) { cards[i].num = NUM_10; continue;} diffvals.push_back(diffval);
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_play_num_rJ.png", diffval)) { cards[i].num = NUM_J; continue;} diffvals.push_back(diffval);
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_play_num_rQ.png", diffval)) { cards[i].num = NUM_Q; continue;} diffvals.push_back(diffval);
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_play_num_rK.png", diffval)) { cards[i].num = NUM_K; continue;} diffvals.push_back(diffval);
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_play_num_rA.png", diffval)) { cards[i].num = NUM_A; continue;} diffvals.push_back(diffval);
+			if(isImageSame_shifty2(image, rect.x, rect.y, "ddz_play_num_r2.png", diffval)) { cards[i].num = NUM_2; continue;} diffvals.push_back(diffval);
+			vector<double>::iterator min_elem =  min_element(diffvals.begin(), diffvals.end());
+			if(*min_elem < 60) cards[i].num = (int)(min_elem - diffvals.begin()) + NUM_3;
 			else
 			{
 				IplImage * unknownImage = cropImage(image, rect.x, rect.y, rect.width, rect.height);
-				cvSaveImage((infile + "." + who + ".ddz_play_num_unknown" + num2str(i) + ".png").c_str(), unknownImage);
-				cvReleaseImage(&unknownImage);
+				cvSaveImage((infile + ".ddz_play_num_unknown" + num2str(i) + ".png").c_str(), unknownImage); 
+				cvReleaseImage(&unknownImage); 
 			}
 		}
 	}
@@ -822,5 +925,19 @@ int main(int argc, char ** argv)
 	cvSaveImage((infile + ".out.png").c_str(), drawImage);
 	cvReleaseImage(&drawImage);
 
+	for(FileMap::iterator it = map_allImgs.begin(); it != map_allImgs.end(); it++)
+	{
+		IplImage * image = it->second;
+		if(image) cvReleaseImage(&image);
+	}
+
+	if(!map_maskImgs.empty())
+	{
+		for(FileMap::iterator it = map_maskImgs.begin(); it != map_maskImgs.end(); it++)
+		{
+			IplImage * image = it->second;
+			if(image) cvReleaseImage(&image);
+		}
+	}
 	return 0;
 }
