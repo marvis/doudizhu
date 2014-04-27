@@ -19,16 +19,14 @@ int main(int argc, char ** argv)
 		return 0;
 	}
 	infile = argv[1];
-	loadAllTemplates();
+	//loadAllTemplates(); // 最好在getImage中装载
 
 	IplImage * image = cvLoadImage(argv[1], 1);
 	IplImage * drawImage = cvLoadImage(argv[1], 1);
 
 	build_patch_map();
-	if(isImagePatchSame(image, "ddz_patch_start_game.png")) {cout<<"开始游戏"<<endl; return 0;}
-	if(isImagePatchSame(image, "ddz_patch_left_clock.png") || isImagePatchSame(image, "ddz_patch_me_clock.png") ||
-			isImagePatchSame(image, "ddz_patch_right_clock.png")) {cout<<"Game started"<<endl; return 0;}
-	else {cout<<"Game is over!"<<endl; return 0;}
+	string stage = which_game_stage(image);
+	cout<<stage<<endl;
 	return 0;
 
 	vector<Card> cards;

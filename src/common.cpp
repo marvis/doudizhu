@@ -12,7 +12,6 @@ map<string, IplImage *> map_allImgs;
 IplImage * getImage(string file)
 {
 	if(map_allImgs.find(file) != map_allImgs.end()) return map_allImgs[file];
-	cerr<<"image \""<<file<<"\" is not loaded as template"<<endl;
 
 	IplImage * image = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
 	if(!image)
@@ -21,6 +20,7 @@ IplImage * getImage(string file)
 		return 0;
 	}
 	map_allImgs[file] = image;
+	//cerr<<"image "<<file<<" is add to map"<<endl;
 	return image;
 }
 

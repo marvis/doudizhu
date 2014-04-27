@@ -30,3 +30,4 @@ class ImagePatch
 
 void build_patch_map();
 bool isImagePatchSame(IplImage * image, string file);
+string which_game_stage(IplImage * image);
