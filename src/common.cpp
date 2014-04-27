@@ -154,7 +154,7 @@ bool isImageSame(IplImage * bigImage, int x0, int y0, string filename,  double t
 void loadAllTemplates()
 {
 	string file;
-	string prefixs[] = {"last", "play"};
+	string prefixs[] = {"last", "play", "inhand"};
 	string nums[] = {"3", "5", "4", "6", "7", "8", "9", "10", "J", "Q", "K", "A", "2"};
 	string types[] = {"spade", "heart", "club", "diamond", "rjoker", "bjoker"};
 	for(int i = 0; i < sizeof(prefixs)/sizeof(string); i++)
@@ -180,6 +180,18 @@ void loadAllTemplates()
 	file = "ddz_check_lturn.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
 	file = "ddz_check_myturn.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
 	file = "ddz_check_rturn.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
+	file = "ddz_check_left_no.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
+	file = "ddz_check_me_no.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
+	file = "ddz_check_right_no.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
+	//file = "ddz_check_left_jiao.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
+	file = "ddz_check_me_jiao.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
+	//file = "ddz_check_right_jiao.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
+	//file = "ddz_check_left_chu.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
+	//file = "ddz_check_me_chu.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
+	//file = "ddz_check_right_chu.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
+
+	file = "ddz_check_effect_shunzi_left.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
+	file = "ddz_check_effect_liandui_me.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
 
 #if DEBUG
 	for(map<string, IplImage*>::iterator it = map_allImgs.begin(); it != map_allImgs.end(); it++)
