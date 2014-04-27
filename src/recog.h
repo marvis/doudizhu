@@ -75,8 +75,8 @@ class Recog
 		vector<Card> recog_cards(IplImage * _image);
 		void drawResult(IplImage * drawImage, int shiftx = -50);
 
-	private:
+	public:
 		virtual void recog_bbox() = 0;
-		void recog_card_types();
-		void recog_card_nums();
+		virtual void recog_card_types();
+		virtual void recog_card_nums();
 };

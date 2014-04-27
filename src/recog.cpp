@@ -137,7 +137,12 @@ void Recog::recog_card_nums()
 		vector<double> diffvals;
 		double diffval;
 		vector<double>::iterator min_elem;
-		if(cards[i].type == TYPE_UNKNOWN || cards[i].type == TYPE_RED_JOKER || cards[i].type == TYPE_BLACK_JOKER) continue;
+		if(cards[i].type == TYPE_UNKNOWN) continue;
+		if(cards[i].type == TYPE_RED_JOKER || cards[i].type == TYPE_BLACK_JOKER)
+		{
+			cards[i].num = NUM_JOKER;
+			continue;
+		}
 
 		vector<string> & numFiles = isblack(cards[i].type) ? blackNumFiles : redNumFiles;
 		for(int num = NUM_3; num <= NUM_2; num++)
@@ -156,7 +161,7 @@ void Recog::recog_card_nums()
 			else
 			{
 				IplImage * unknownImage = cropImage(image, rect.x, rect.y, rect.width, rect.height);
-				cvSaveImage((infile + ".ddz_last_num_unknown" + num2str(i) + ".png").c_str(), unknownImage); 
+				cvSaveImage((infile + ".ddz_" + prefix + "_num_unknown" + num2str(i) + ".png").c_str(), unknownImage); 
 				cvReleaseImage(&unknownImage); 
 			}
 		}

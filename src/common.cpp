@@ -20,6 +20,7 @@ IplImage * getImage(string file)
 		cerr<<"unable to load \""<<file<<"\""<<endl;
 		return 0;
 	}
+	map_allImgs[file] = image;
 	return image;
 }
 
@@ -119,10 +120,41 @@ bool isImageSame(IplImage * bigImage, int x0, int y0, string filename, double & 
 	return false;
 }
 
+bool isImageSame(IplImage * bigImage, int x0, int y0, string filename,  double thresh)
+{
+	//filename = DDZTMPLPATH + filename;
+	IplImage * smallImage = getImage(filename);// cvLoadImage(filename.c_str(), 1);
+	if(!smallImage) return false;
+	assert(bigImage);
+	assert(bigImage->width >= smallImage->width && bigImage->height >= smallImage->height && bigImage->nChannels == smallImage->nChannels);
+	int width = smallImage->width;
+	int height = smallImage->height;
+	int nchannels = bigImage->nChannels;
+	assert(x0 >= 0 && y0 >= 0 && x0 + width <= bigImage->width && y0 + height <= bigImage->height);
+	double sumdiff = 0;
+	for(int y = 0; y < height; y++)
+	{
+		for(int x = 0; x < width; x++)
+		{
+			int by = y0 + y;
+			int bx = x0 + x;
+			for(int c = 0; c < nchannels; c++)
+			{
+				double val1 = CV_IMAGE_ELEM(smallImage, unsigned char, y, x*nchannels + c);
+				double val2 = CV_IMAGE_ELEM(bigImage, unsigned char, by, bx*nchannels + c);
+				sumdiff += ABS(val1-val2);
+			}
+		}
+	}
+	cout<<filename<<" avgdiff = "<<sumdiff/(width*height)<<endl;
+	return (sumdiff/(width*height) < thresh);
+}
+
+
 void loadAllTemplates()
 {
 	string file;
-	string prefixs[] = {"last"};
+	string prefixs[] = {"last", "play"};
 	string nums[] = {"3", "5", "4", "6", "7", "8", "9", "10", "J", "Q", "K", "A", "2"};
 	string types[] = {"spade", "heart", "club", "diamond", "rjoker", "bjoker"};
 	for(int i = 0; i < sizeof(prefixs)/sizeof(string); i++)
@@ -142,10 +174,28 @@ void loadAllTemplates()
 		}
 	}
 
+	file = "ddz_check_start_game.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
+	file = "ddz_check_ming_pai.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
+	file = "ddz_check_last_bkg.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
+	file = "ddz_check_lturn.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
+	file = "ddz_check_myturn.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
+	file = "ddz_check_rturn.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
+
+#if DEBUG
 	for(map<string, IplImage*>::iterator it = map_allImgs.begin(); it != map_allImgs.end(); it++)
 	{
 		string file = it->first;
 		IplImage * image = it->second;
 		if(!image) cerr<<"unable to load template "<<file<<endl;
+	}
+#endif
+}
+
+void releaseAllTemplates()
+{
+	for(map<string, IplImage*>::iterator it = map_allImgs.begin(); it != map_allImgs.end(); it++)
+	{
+		IplImage * image = it->second;
+		if(image) cvReleaseImage(&image);
 	}
 }
