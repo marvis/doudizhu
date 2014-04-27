@@ -90,9 +90,11 @@ vector<Card> Recog::recog_cards(IplImage * _image)
 	
 	recog_bbox();
 	cards.resize(numBBox.size());
+	cout<<"cards.size() = "<<cards.size()<<endl;
 
 	recog_card_types();
 	recog_card_nums();
+	cout<<"cards.size() = "<<cards.size()<<endl;
 	return cards;
 }
 

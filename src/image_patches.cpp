@@ -79,6 +79,11 @@ void build_patch_map()
 
 bool isImagePatchSame(IplImage * image, string file)
 {
+	if(map_patches.find(file) == map_patches.end())
+	{
+		cerr<<"Undefined file "<<file<<endl;
+		return false;
+	}
 	ImagePatch p = map_patches[file];
 	assert(file == p.file);
 	return isImageSame(image, p.x, p.y, p.file, 10);
@@ -89,13 +94,30 @@ bool isImagePatchSame(IplImage * image, string file)
 // 抢地主阶段
 // 出牌阶段
 // 游戏结束
+bool isCardExist(IplImage * image)
+{
+	int x0 = 321, y0 = 216;
+	int x1 = 354, y1 = 246;
+	for(int x = x0; x <= x1; x++)
+	{
+		int y = y0 + (x - x0);
+		int R = CV_IMAGE_ELEM(image, unsigned char, y, 3*x + 2);
+		int G = CV_IMAGE_ELEM(image, unsigned char, y, 3*x + 1);
+		int B = CV_IMAGE_ELEM(image, unsigned char, y, 3*x + 0);
+		double diff = ABS(R - 132) + ABS(G - 190) + ABS(B - 238);
+		if(diff < 30) return true;
+	}
+	return false;
+}
 string which_game_stage(IplImage * image)
 {
 	if(isImagePatchSame(image, "ddz_patch_click_start.png") || isImagePatchSame(image, "ddz_patch_waiting_start.png")) return "等待开始";
 	if(isImagePatchSame(image, "ddz_patch_me_ming_pai.png")) return "起牌阶段"; // 起牌到叫地主之间的那个状态可以忽略
-	if(isImagePatchSame(image, "ddz_patch_last3_bkg.png")) return "叫地主阶段";
+	bool is_card_exist = isCardExist(image);
+	if(isImagePatchSame(image, "ddz_patch_last3_bkg.png") && is_card_exist) return "叫地主阶段";
 	if(isImagePatchSame(image, "ddz_patch_me_is_jia.png") || isImagePatchSame(image, "ddz_patch_left_jia_or_not.png") ||
 	   isImagePatchSame(image, "ddz_patch_left_jia_or_not.png") || isImagePatchSame(image, "ddz_patch_me_jia_or_not.png")) return "加倍阶段";
-	if(isImagePatchSame(image, "ddz_patch_left_clock.png") || isImagePatchSame(image, "ddz_patch_me_clock.png") || isImagePatchSame(image, "ddz_patch_right_clock.png")) return "出牌阶段";
-	return "未知阶段";
+	if(isImagePatchSame(image, "ddz_patch_left_clock.png") || isImagePatchSame(image, "ddz_patch_me_clock.png") ||
+	   isImagePatchSame(image, "ddz_patch_right_clock.png") || is_card_exist) return "出牌阶段";
+	return "游戏结束";
 }

@@ -3,6 +3,7 @@
 #include "recog_last.h"
 #include "recog_play.h"
 #include "recog_inhand.h"
+#include "recog_display.h"
 #include "image_patches.h"
 #include "common.h"
 
@@ -27,10 +28,10 @@ int main(int argc, char ** argv)
 	build_patch_map();
 	string stage = which_game_stage(image);
 	cout<<stage<<endl;
-	return 0;
+	//return 0;
 
 	vector<Card> cards;
-	if(!isImageSame(image, 639, 36, "ddz_patch_last3_bkg.png", 10))
+	if(!isImagePatchSame(image, "ddz_patch_last3_bkg.png"))
 	{
 		cout<<"======  last  ======"<<endl;
 		RecogLast last("last");
@@ -44,9 +45,10 @@ int main(int argc, char ** argv)
 	if(1)
 	{
 		cout<<"======  play  ======"<<endl;
-		if(isImageSame(image, 408, 244, "ddz_patch_lturn.png", 10)) cout<<"It is left turn"<<endl;
-		else if(isImageSame(image, 373, 355, "ddz_patch_left_no.png", 10)) cout<<"Left doesn't play"<<endl;
-		else if(isImageSame(image, 360, 256, "ddz_patch_effect_shunzi_left.png", 10)) cout<<"Left played shunzi"<<endl;
+		if(isImagePatchSame(image, "ddz_patch_left_clock.png")) cout<<"It is left turn"<<endl;
+		else if(isImagePatchSame(image, "ddz_patch_left_has_not_play.png")) cout<<"Left doesn't play"<<endl;
+		else if(isImagePatchSame(image, "ddz_patch_left_liandui.png")) cout<<"Left played liandui"<<endl;
+		else if(isImagePatchSame(image, "ddz_patch_left_shunzi.png")) cout<<"Left played shunzi"<<endl;
 		else
 		{
 			cout<<"Left played ";
@@ -57,15 +59,10 @@ int main(int argc, char ** argv)
 			cout<<endl;
 		}
 
-		if(isImageSame(image, 316, 485, "ddz_patch_myturn.png", 10)) cout<<"It is my turn"<<endl;
-		else if(isImageSame(image, 274, 578, "ddz_patch_me_no.png", 10))
-		{
-			if(isImageSame(image, 277, 648, "ddz_patch_me_jiao.png", 10))
-				cout<<"I don't want master"<<endl;
-			else
-				cout<<"I don't play"<<endl;
-		}
-		else if(isImageSame(image, 270, 563, "ddz_patch_effect_liandui_me.png", 10)) cout<<"I played lian dui"<<endl;
+		if(isImagePatchSame(image, "ddz_patch_me_clock.png")) cout<<"It is my turn"<<endl;
+		else if(isImagePatchSame(image, "ddz_patch_me_has_not_play.png")) cout<<"I don't play"<<endl;
+		else if(isImagePatchSame(image, "ddz_patch_me_liandui.png")) cout<<"I played lian dui"<<endl;
+		else if(isImagePatchSame(image, "ddz_patch_me_shunzi.png")) cout<<"I played lian shunzi"<<endl;
 		else
 		{
 			cout<<"I played ";
@@ -76,8 +73,10 @@ int main(int argc, char ** argv)
 			cout<<endl;
 		}
 
-		if(isImageSame(image, 409, 934, "ddz_patch_rturn.png", 10)) cout<<"It is right turn"<<endl;
-		else if(isImageSame(image, 377, 806, "ddz_patch_right_no.png", 10)) cout<<"Right doesn't play"<<endl;
+		if(isImagePatchSame(image, "ddz_patch_right_clock.png")) cout<<"It is right turn"<<endl;
+		else if(isImagePatchSame(image, "ddz_patch_right_has_not_play.png")) cout<<"Right doesn't play"<<endl;
+		else if(isImagePatchSame(image, "ddz_patch_right_liandui.png")) cout<<"Right played liandui"<<endl;
+		else if(isImagePatchSame(image, "ddz_patch_right_shunzi.png")) cout<<"Right played shunzi"<<endl;
 		else
 		{
 			cout<<"Right played : ";
@@ -97,6 +96,13 @@ int main(int argc, char ** argv)
 	inhand.drawResult(drawImage, -100);
 	for(int i = 0; i < cards.size(); i++) cout<<cards[i].str();
 	cout<<endl<<endl;;
+
+	cout<<"====== Display  ======"<<endl;
+	RecogDisplay disp("showed");
+	cards = disp.recog_cards(image);
+	//disp.drawResult(drawImage);
+	for(int i = 0; i < cards.size(); i++) cout<<cards[i].str();
+	cout<<endl;
 
 	cvSaveImage((infile + ".out.png").c_str(), drawImage);
 	releaseAllTemplates();
