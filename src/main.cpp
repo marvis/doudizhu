@@ -3,36 +3,13 @@
 #include "recog_last.h"
 #include "recog_play.h"
 #include "recog_inhand.h"
+#include "image_patches.h"
 #include "common.h"
 
 using namespace std;
 using namespace cv;
 
 string infile;
-
-enum PatchType {
-	PATCH_START_GAME = 0, PATCH_MING_PAI, PATCH_LAST3_BKG, 
-	CHECK_ME_
-};
-
-struct ImagePatch
-{
-	int x;
-	int y;
-	string file;
-};
-
-ImagePatch allPatches[] = 
-{
-	{221, 745, "ddz_patch_start_game.png"},
-	{281, 547, "ddz_patch_ming_pai.png"},
-};
-
-bool isImagePatch(IplImage * image, int type)
-{
-	ImagePatch p = allPatches[type];
-	return isImageSame(image, p.x, p.y, p.file, 10);
-}
 
 int main(int argc, char ** argv)
 {
@@ -46,13 +23,16 @@ int main(int argc, char ** argv)
 
 	IplImage * image = cvLoadImage(argv[1], 1);
 	IplImage * drawImage = cvLoadImage(argv[1], 1);
+
+	build_patch_map();
+	if(isImagePatchSame(image, "ddz_patch_start_game.png")) {cout<<"开始游戏"<<endl; return 0;}
+	if(isImagePatchSame(image, "ddz_patch_left_clock.png") || isImagePatchSame(image, "ddz_patch_me_clock.png") ||
+			isImagePatchSame(image, "ddz_patch_right_clock.png")) {cout<<"Game started"<<endl; return 0;}
+	else {cout<<"Game is over!"<<endl; return 0;}
+	return 0;
+
 	vector<Card> cards;
-
-	if(isImagePatch(image, PATCH_GAME_START)) {cout<<"开始游戏"<<endl; return 0;}
-	if(isImagePatch(image, PATCH_MING_PAI)) {cout<<"是否明牌"<<endl; return 0;}
-
-
-	if(!isImageSame(image, 639, 36, "ddz_patch_last_bkg.png", 10))
+	if(!isImageSame(image, 639, 36, "ddz_patch_last3_bkg.png", 10))
 	{
 		cout<<"======  last  ======"<<endl;
 		RecogLast last("last");

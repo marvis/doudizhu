@@ -12,7 +12,7 @@ map<string, IplImage *> map_allImgs;
 IplImage * getImage(string file)
 {
 	if(map_allImgs.find(file) != map_allImgs.end()) return map_allImgs[file];
-	cerr<<"image "<<file<<" is not loaded as template"<<endl;
+	cerr<<"image \""<<file<<"\" is not loaded as template"<<endl;
 
 	IplImage * image = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
 	if(!image)
@@ -146,7 +146,7 @@ bool isImageSame(IplImage * bigImage, int x0, int y0, string filename,  double t
 			}
 		}
 	}
-	cout<<filename<<" avgdiff = "<<sumdiff/(width*height)<<endl;
+	//cout<<filename<<" avgdiff = "<<sumdiff/(width*height)<<endl;
 	return (sumdiff/(width*height) < thresh);
 }
 
@@ -173,25 +173,6 @@ void loadAllTemplates()
 			map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
 		}
 	}
-
-	file = "ddz_check_start_game.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
-	file = "ddz_check_ming_pai.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
-	file = "ddz_check_last_bkg.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
-	file = "ddz_check_lturn.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
-	file = "ddz_check_myturn.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
-	file = "ddz_check_rturn.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
-	file = "ddz_check_left_no.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
-	file = "ddz_check_me_no.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
-	file = "ddz_check_right_no.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
-	//file = "ddz_check_left_jiao.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
-	file = "ddz_check_me_jiao.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
-	//file = "ddz_check_right_jiao.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
-	//file = "ddz_check_left_chu.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
-	//file = "ddz_check_me_chu.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
-	//file = "ddz_check_right_chu.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
-
-	file = "ddz_check_effect_shunzi_left.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
-	file = "ddz_check_effect_liandui_me.png"; map_allImgs[file] = cvLoadImage((DDZTMPLPATH + file).c_str(), 1);
 
 #if DEBUG
 	for(map<string, IplImage*>::iterator it = map_allImgs.begin(); it != map_allImgs.end(); it++)
