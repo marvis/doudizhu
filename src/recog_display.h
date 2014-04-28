@@ -4,7 +4,9 @@
 class RecogDisplay : public Recog
 {
 	public:
-		RecogDisplay(string _prefix);
+		string direction;
+
+		RecogDisplay(string _prefix, string _direction);
 
 	public:
 		void recog_bbox();

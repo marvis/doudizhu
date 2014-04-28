@@ -88,6 +88,7 @@ void RecogInhand::recog_bbox()
 			}
 		}
 	}
+	if(bot <= 639) return; // 由于对称, bot 不能小于中线, 同时bot会出错, 但不能超过第一张牌的最左边缘
 	int num = 0;
 	for(int j = top; j <= bot-150; j++)
 	{

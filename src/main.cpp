@@ -98,7 +98,7 @@ int main(int argc, char ** argv)
 	cout<<endl<<endl;;
 
 	cout<<"====== Display  ======"<<endl;
-	RecogDisplay disp("showed");
+	RecogDisplay disp("showed", "left");
 	cards = disp.recog_cards(image);
 	//disp.drawResult(drawImage);
 	for(int i = 0; i < cards.size(); i++) cout<<cards[i].str();

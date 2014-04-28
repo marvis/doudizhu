@@ -90,11 +90,9 @@ vector<Card> Recog::recog_cards(IplImage * _image)
 	
 	recog_bbox();
 	cards.resize(numBBox.size());
-	cout<<"cards.size() = "<<cards.size()<<endl;
 
 	recog_card_types();
 	recog_card_nums();
-	cout<<"cards.size() = "<<cards.size()<<endl;
 	return cards;
 }
 
@@ -123,9 +121,12 @@ void Recog::recog_card_types()
 			if(*min_elem < second_thresh) cards[i].type = (int)(min_elem - diffvals.begin()) + TYPE_SPADE;
 			else
 			{
-				IplImage * unknownImage = cropImage(image, rect.x, rect.y, rect.width, rect.height);
-				cvSaveImage((infile + ".ddz_" + prefix + "_type_unknown" + num2str(i) + ".png").c_str(), unknownImage);
-				cvReleaseImage(&unknownImage);
+				if(prefix != "last" || i != 2) // otherwise, it will be judged again
+				{
+					IplImage * unknownImage = cropImage(image, rect.x, rect.y, rect.width, rect.height);
+					cvSaveImage((infile + ".ddz_" + prefix + "_type_unknown" + num2str(i) + ".png").c_str(), unknownImage);
+					cvReleaseImage(&unknownImage);
+				}
 			}
 		}
 	}
