@@ -51,7 +51,7 @@ int main(int argc, char ** argv)
 		else if(isImagePatchSame(image, "ddz_patch_left_shunzi.png")) cout<<"Left played shunzi"<<endl;
 		else
 		{
-			cout<<"Left played ";
+			cout<<"Left played : ";
 			RecogPlay lplay("play", "left");
 			cards = lplay.recog_cards(image);
 			lplay.drawResult(drawImage);
@@ -98,11 +98,20 @@ int main(int argc, char ** argv)
 	cout<<endl<<endl;;
 
 	cout<<"====== Display  ======"<<endl;
-	RecogDisplay disp("showed", "left");
-	cards = disp.recog_cards(image);
-	//disp.drawResult(drawImage);
+	cout<<"Left showed: ";
+	RecogDisplay ldisp("showed", "left");
+	cards = ldisp.recog_cards(image);
+	//ldisp.drawResult(drawImage);
 	for(int i = 0; i < cards.size(); i++) cout<<cards[i].str();
 	cout<<endl;
+
+	cout<<"Right showed: ";
+	RecogDisplay rdisp("showed", "right");
+	cards = rdisp.recog_cards(image);
+	rdisp.drawResult(drawImage);
+	for(int i = 0; i < cards.size(); i++) cout<<cards[i].str();
+	cout<<endl;
+
 
 	cvSaveImage((infile + ".out.png").c_str(), drawImage);
 	releaseAllTemplates();

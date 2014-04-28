@@ -4,33 +4,34 @@
 
 struct SearchPara
 {
-	int play_leftx;
-	int play_rightx;
-	int play_top_most;
-	int play_bot_most;
+	int top_most;
+	int bot_most;
+	int check_left;
+	int check_right;
 
-	int play_midx;
-	int play_step;
-	int play_card_height;
+	int step;
+	int card_height;
 
-	int play_num_gap;
-	int play_num_leftx;
-	int play_num_width;
-	int play_num_height;
+	int num_gap;
+	int num_leftx;
+	int num_width;
+	int num_height;
 	
-	int play_type_gap;
-	int play_type_leftx;
-	int play_type_width;
-	int play_type_height;
+	int type_gap;
+	int type_leftx;
+	int type_width;
+	int type_height;
 };
 
 class RecogPlay :public Recog
 {
 	public:
-		SearchPara para;
+		string direction;
 		RecogPlay(string _prefix, string direction);
 
 	public:
+		int numCards(SearchPara para);
 		void recog_bbox();
-		void recog_card_nums();
+		void recog_bbox(SearchPara para);
+		//void recog_card_nums();
 };
