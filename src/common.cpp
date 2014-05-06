@@ -150,7 +150,7 @@ bool isImageSame(IplImage * bigImage, int x0, int y0, string filename,  double t
 	return (sumdiff/(width*height) < thresh);
 }
 
-
+/*
 void loadAllTemplates()
 {
 	string file;
@@ -183,6 +183,7 @@ void loadAllTemplates()
 	}
 #endif
 }
+*/
 
 void releaseAllTemplates()
 {

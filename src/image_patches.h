@@ -7,6 +7,8 @@
 using namespace std;
 using namespace cv;
 
+enum Stage {STAGE_GAME_WAITING = 0, STAGE_FETCH_CARDS, STAGE_LAND_CHOOSE, STAGE_DOUBLE_SCORE, 
+	STAGE_PLAYING, STAGE_UNKNOWN};
 class ImagePatch
 {
 	public:
@@ -30,4 +32,4 @@ class ImagePatch
 
 void build_patch_map();
 bool isImagePatchSame(IplImage * image, string file);
-string which_game_stage(IplImage * image);
+int which_game_stage(IplImage * image);

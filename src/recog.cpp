@@ -6,6 +6,30 @@ using namespace std;
 using namespace cv;
 
 extern string infile;
+
+void disp_cards(vector<Card> & cards)
+{
+	string line1 = "";
+	string line2 = "";
+	string line3 = "";
+	string line4 = "";
+	string line5 = "";
+	for(int i = 0; i < cards.size(); i++)
+	{
+		vector<string> matrix = cards[i].disp(); 
+		line1 += matrix[0];
+		line2 += matrix[1];
+		line3 += matrix[2];
+		line4 += matrix[3];
+		line5 += matrix[4];
+	}
+	cout<<line1<<endl;
+	cout<<line2<<endl;
+	cout<<line3<<endl;
+	cout<<line4<<endl;
+	cout<<line5<<endl;
+}
+
 bool isblack(int type)
 {
 	return (type == TYPE_SPADE || type == TYPE_CLUB);

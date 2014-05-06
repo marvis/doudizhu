@@ -5,6 +5,8 @@
 
 using namespace std;
 using namespace cv;
+#define RED_T(x) ("\033[1;31m" + string(x) + "\033[0m")
+#define BLK_T(x) ("\033[1;30m" + string(x) + "\033[0m")
 
 enum CardType {TYPE_SPADE = 0 , TYPE_HEART, TYPE_CLUB, TYPE_DIAMOND, 
 	TYPE_RED_JOKER, TYPE_BLACK_JOKER, TYPE_UNKNOWN};
@@ -51,7 +53,57 @@ class Card
 			else out +="?)";
 			return out;
 		}
+		vector<string> disp()
+		{
+			string line1 = " -----  ";
+			string line2 = "|     | ";
+			string line3 = "|     | ";
+			string line4 = "|     | ";
+			string line5 = " -----  ";
+			vector<string> matrix;
+			string num_str = "     ", type_str = " ";
+			if(num == NUM_3)      num_str = " 3   ";
+			else if(num == NUM_4) num_str = " 4   ";
+			else if(num == NUM_5) num_str = " 5   ";
+			else if(num == NUM_6) num_str = " 6   ";
+			else if(num == NUM_7) num_str = " 7   ";
+			else if(num == NUM_8) num_str = " 8   ";
+			else if(num == NUM_9) num_str = " 9   ";
+			else if(num ==NUM_10) num_str = " 10  ";
+			else if(num == NUM_J) num_str = " J   ";
+			else if(num == NUM_Q) num_str = " Q   ";
+			else if(num == NUM_K) num_str = " K   ";
+			else if(num == NUM_A) num_str = " A   ";
+			else if(num == NUM_2) num_str = " 2   ";
+			else if(num == NUM_JOKER) num_str = "JOKER";
+			else num_str =" ?   ";
+
+			if(type == TYPE_SPADE) type_str = "♠";
+			else if(type == TYPE_HEART) 
+			{
+				type_str = RED_T("♥");
+				num_str = RED_T(num_str);
+			}
+			else if(type == TYPE_CLUB) type_str = "♣";
+			else if(type == TYPE_DIAMOND) 
+			{
+				type_str = RED_T("♦");
+				num_str = RED_T(num_str);
+			}
+			else if(type == TYPE_RED_JOKER) num_str = RED_T(num_str);
+			else type_str = " ";
+			line2 = "|" + num_str + "| ";
+			line3 = "| " + type_str + "   | ";
+			matrix.push_back(line1);
+			matrix.push_back(line2);
+			matrix.push_back(line3);
+			matrix.push_back(line4);
+			matrix.push_back(line5);
+			return matrix;
+		}
 };
+
+void disp_cards(vector<Card> & cards);
 
 class Recog
 {

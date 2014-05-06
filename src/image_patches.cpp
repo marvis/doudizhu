@@ -18,7 +18,7 @@ ImagePatch allPatches[] =
 	ImagePatch(281, 547, "ddz_patch_me_ming_pai.png"),             // 明牌吗?
 
 	//叫地主阶段 
-	ImagePatch(314, 592, "ddz_patch_me_clock_master.png"),        // 叫/抢地主(master)阶段
+	ImagePatch(314, 592, "ddz_patch_me_clock_fight.png"),        // 叫/抢地主阶段
 	ImagePatch(276, 362, "ddz_patch_me_is_qiang.png"),          // 抢地主吗?
 
 	ImagePatch(270, 546, "ddz_patch_me_has_jiao.png"),          // 叫地主
@@ -109,15 +109,16 @@ bool isCardExist(IplImage * image)
 	}
 	return false;
 }
-string which_game_stage(IplImage * image)
+
+int which_game_stage(IplImage * image)
 {
-	if(isImagePatchSame(image, "ddz_patch_click_start.png") || isImagePatchSame(image, "ddz_patch_waiting_start.png")) return "等待开始";
-	if(isImagePatchSame(image, "ddz_patch_me_ming_pai.png")) return "起牌阶段"; // 起牌到叫地主之间的那个状态可以忽略
+	if(isImagePatchSame(image, "ddz_patch_click_start.png") || isImagePatchSame(image, "ddz_patch_waiting_start.png")) return STAGE_GAME_WAITING;
+	if(isImagePatchSame(image, "ddz_patch_me_ming_pai.png")) return STAGE_FETCH_CARDS; // 起牌到叫地主之间的那个状态可以忽略
 	bool is_card_exist = isCardExist(image);
-	if(isImagePatchSame(image, "ddz_patch_last3_bkg.png") && is_card_exist) return "叫地主阶段";
+	if(isImagePatchSame(image, "ddz_patch_last3_bkg.png") && is_card_exist) return STAGE_LAND_CHOOSE;
 	if(isImagePatchSame(image, "ddz_patch_me_is_jia.png") || isImagePatchSame(image, "ddz_patch_left_jia_or_not.png") ||
-	   isImagePatchSame(image, "ddz_patch_left_jia_or_not.png") || isImagePatchSame(image, "ddz_patch_me_jia_or_not.png")) return "加倍阶段";
+	   isImagePatchSame(image, "ddz_patch_left_jia_or_not.png") || isImagePatchSame(image, "ddz_patch_me_jia_or_not.png")) return STAGE_DOUBLE_SCORE;
 	if(isImagePatchSame(image, "ddz_patch_left_clock.png") || isImagePatchSame(image, "ddz_patch_me_clock.png") ||
-	   isImagePatchSame(image, "ddz_patch_right_clock.png") || is_card_exist) return "出牌阶段";
-	return "游戏结束";
+	   isImagePatchSame(image, "ddz_patch_right_clock.png") || is_card_exist) return STAGE_PLAYING;
+	return STAGE_GAME_WAITING;
 }

@@ -3,7 +3,7 @@
 #include "recog_last.h"
 #include "recog_play.h"
 #include "recog_inhand.h"
-#include "recog_display.h"
+#include "recog_ming.h"
 #include "image_patches.h"
 #include "common.h"
 
@@ -12,6 +12,7 @@ using namespace cv;
 
 string infile;
 
+string stage_str[] = {"等待游戏", "发牌阶段", "叫地主阶段", "加分阶段", "游戏进行中"};
 int main(int argc, char ** argv)
 {
 	if(argc == 1) 
@@ -20,15 +21,13 @@ int main(int argc, char ** argv)
 		return 0;
 	}
 	infile = argv[1];
-	//loadAllTemplates(); // 最好在getImage中装载
 
 	IplImage * image = cvLoadImage(argv[1], 1);
 	IplImage * drawImage = cvLoadImage(argv[1], 1);
 
 	build_patch_map();
-	string stage = which_game_stage(image);
+	string stage = stage_str[which_game_stage(image)];
 	cout<<stage<<endl;
-	//return 0;
 
 	vector<Card> cards;
 	if(!isImagePatchSame(image, "ddz_patch_last3_bkg.png"))
@@ -37,9 +36,7 @@ int main(int argc, char ** argv)
 		RecogLast last("last");
 		cards = last.recog_cards(image);
 		last.drawResult(drawImage);
-
-		for(int i = 0; i < cards.size(); i++) cout<<cards[i].str();
-		cout<<endl<<endl;
+		disp_cards(cards);
 		//cout<<"======  last end    ======"<<endl;
 	}
 	if(1)
@@ -51,12 +48,11 @@ int main(int argc, char ** argv)
 		else if(isImagePatchSame(image, "ddz_patch_left_shunzi.png")) cout<<"Left played shunzi"<<endl;
 		else
 		{
-			cout<<"Left played : ";
+			cout<<"Left played : "<<endl;;
 			RecogPlay lplay("play", "left");
 			cards = lplay.recog_cards(image);
 			lplay.drawResult(drawImage);
-			for(int i = 0; i < cards.size(); i++) cout<<cards[i].str();
-			cout<<endl;
+			disp_cards(cards);
 		}
 
 		if(isImagePatchSame(image, "ddz_patch_me_clock.png")) cout<<"It is my turn"<<endl;
@@ -65,12 +61,11 @@ int main(int argc, char ** argv)
 		else if(isImagePatchSame(image, "ddz_patch_me_shunzi.png")) cout<<"I played lian shunzi"<<endl;
 		else
 		{
-			cout<<"I played ";
+			cout<<"I played "<<endl;
 			RecogPlay mplay("play", "myself");
 			cards = mplay.recog_cards(image);
 			mplay.drawResult(drawImage);
-			for(int i = 0; i < cards.size(); i++) cout<<cards[i].str();
-			cout<<endl;
+			disp_cards(cards);
 		}
 
 		if(isImagePatchSame(image, "ddz_patch_right_clock.png")) cout<<"It is right turn"<<endl;
@@ -79,12 +74,11 @@ int main(int argc, char ** argv)
 		else if(isImagePatchSame(image, "ddz_patch_right_shunzi.png")) cout<<"Right played shunzi"<<endl;
 		else
 		{
-			cout<<"Right played : ";
+			cout<<"Right played : "<<endl;
 			RecogPlay rplay("play", "right");
 			cards = rplay.recog_cards(image);
 			rplay.drawResult(drawImage);
-			for(int i = 0; i < cards.size(); i++) cout<<cards[i].str();
-			cout<<endl;
+			disp_cards(cards);
 		}
 		cout<<endl;
 	}
@@ -94,24 +88,20 @@ int main(int argc, char ** argv)
 	RecogInhand inhand("inhand");
 	cards = inhand.recog_cards(image);
 	inhand.drawResult(drawImage, -100);
-	for(int i = 0; i < cards.size(); i++) cout<<cards[i].str();
-	cout<<endl<<endl;;
+	disp_cards(cards);
 
-	cout<<"====== Display  ======"<<endl;
-	cout<<"Left showed: ";
-	RecogDisplay ldisp("showed", "left");
-	cards = ldisp.recog_cards(image);
-	//ldisp.drawResult(drawImage);
-	for(int i = 0; i < cards.size(); i++) cout<<cards[i].str();
-	cout<<endl;
+	//cout<<"====== Display  ======"<<endl;
+	cout<<"Left showed: "<<endl;
+	RecogMing lming("showed", "left");
+	cards = lming.recog_cards(image);
+	lming.drawResult(drawImage);
+	disp_cards(cards);
 
-	cout<<"Right showed: ";
-	RecogDisplay rdisp("showed", "right");
-	cards = rdisp.recog_cards(image);
-	rdisp.drawResult(drawImage);
-	for(int i = 0; i < cards.size(); i++) cout<<cards[i].str();
-	cout<<endl;
-
+	cout<<"Right showed: "<<endl;
+	RecogMing rming("showed", "right");
+	cards = rming.recog_cards(image);
+	rming.drawResult(drawImage);
+	disp_cards(cards);
 
 	cvSaveImage((infile + ".out.png").c_str(), drawImage);
 	releaseAllTemplates();

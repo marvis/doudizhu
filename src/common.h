@@ -16,5 +16,5 @@ string num2str(int num);
 void drawOnImage(IplImage * image, int x0, int y0, string file);
 bool isImageSame(IplImage * bigImage, int x0, int y0, string filename, double & diffval, double thresh, int shiftnum);
 bool isImageSame(IplImage * bigImage, int x0, int y0, string filename, double thresh);
-void loadAllTemplates();
+//void loadAllTemplates();
 void releaseAllTemplates();
