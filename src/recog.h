@@ -26,6 +26,25 @@ class Card
 			num = NUM_UNKNOWN;
 			type = TYPE_UNKNOWN;
 		}
+		bool operator<(const Card & other) const
+		{
+			if(this->num == NUM_UNKNOWN) return true;
+			if(other.num == NUM_UNKNOWN) return false;
+			if(this->num == NUM_JOKER && other.num == NUM_JOKER) 
+			{
+				if(this->type == other.type) return false;
+				if(this->type == TYPE_RED_JOKER) return false;
+				if(this->type == TYPE_BLACK_JOKER) return true;
+			}
+			if(this->num < other.num) return true;
+			if(this->num > other.num) return false;
+			
+			if(this->type == TYPE_UNKNOWN) return true;
+			if(other.type == TYPE_UNKNOWN) return false;
+			if(this->type < other.type) return true;
+			if(this->type > other.type) return false;
+			return false;
+		}
 		string str()
 		{
 			string out;
@@ -103,7 +122,9 @@ class Card
 		}
 };
 
-void disp_cards(vector<Card> & cards);
+void disp_cards(vector<Card> & cards, string msg = "");
+void disp_played_cards(vector<Card> & cards1, string msg1, vector<Card> & cards2, string msg2);
+void disp_played_cards(vector<vector<Card> > & all_cards, vector<string> & all_msg);
 
 class Recog
 {
@@ -119,9 +140,9 @@ class Recog
 		double second_thresh;
 		int shiftnum;
 
-		vector<string> typeFiles;
-		vector<string> blackNumFiles;
-		vector<string> redNumFiles;
+		vector<string> tmpl_typeFiles;
+		vector<string> tmpl_blackNumFiles;
+		vector<string> tmpl_redNumFiles;
 
 		Recog(string _prefix);
 		vector<Card> recog_cards(IplImage * _image);
