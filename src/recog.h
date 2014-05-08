@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __RECOG_H__
+#define __RECOG_H__
 
 #include <opencv/cv.h>
 #include <opencv/highgui.h>
@@ -25,6 +26,14 @@ class Card
 		{
 			num = NUM_UNKNOWN;
 			type = TYPE_UNKNOWN;
+		}
+		bool operator!=(const Card & other) const
+		{
+			return (this->num != other.num || this->type != other.type);
+		}
+		bool operator==(const Card & other) const
+		{
+			return (this->num == other.num && this->type == other.type);
 		}
 		bool operator<(const Card & other) const
 		{
@@ -123,8 +132,7 @@ class Card
 };
 
 void disp_cards(vector<Card> & cards, string msg = "");
-void disp_played_cards(vector<Card> & cards1, string msg1, vector<Card> & cards2, string msg2);
-void disp_played_cards(vector<vector<Card> > & all_cards, vector<string> & all_msg);
+void disp_cards(vector<vector<Card> > & all_cards, vector<string> & all_msg);
 
 class Recog
 {
@@ -153,3 +161,5 @@ class Recog
 		virtual void recog_card_types();
 		virtual void recog_card_nums();
 };
+
+#endif

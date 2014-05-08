@@ -35,7 +35,7 @@ void disp_cards(vector<Card> & cards, string msg)
 	cout<<line5<<endl;
 }
 
-void disp_played_cards(vector<vector<Card> > & all_cards, vector<string> &all_msg)
+void disp_cards(vector<vector<Card> > & all_cards, vector<string> &all_msg)
 {
 	assert(all_cards.size() == all_msg.size());
 	string line1 = "";
@@ -66,8 +66,16 @@ void disp_played_cards(vector<vector<Card> > & all_cards, vector<string> &all_ms
 		}
 		if(msg != "")
 		{
-			int n = line11.size() < msg.size() ? line11.size() : msg.size();
-			for(int i = 0; i < n; i++) line11[i] = msg[i];
+			if(msg == "4x")
+			{
+				line11 = line11.substr(2, line11.size() - 2);
+				line11 = RED_T(msg) + line11;
+			}
+			else
+			{
+				int n = line11.size() < msg.size() ? line11.size() : msg.size();
+				for(int i = 0; i < n; i++) line11[i] = msg[i];
+			}
 		}
 		line1 += line11;
 		line2 += line12;
@@ -76,74 +84,6 @@ void disp_played_cards(vector<vector<Card> > & all_cards, vector<string> &all_ms
 		line5 += line15;
 	}
 	if(ncards == 0) return;
-	cout<<line1<<endl;
-	cout<<line2<<endl;
-	cout<<line3<<endl;
-	cout<<line4<<endl;
-	cout<<line5<<endl;
-}
-void disp_played_cards(vector<Card> & cards1, string msg1, vector<Card> & cards2, string msg2)
-{
-	if(cards1.empty() && cards2.empty()) return;
-	string line1 = "";
-	string line2 = "";
-	string line3 = "";
-	string line4 = "";
-	string line5 = "";
-	if(!cards1.empty())
-	{
-		string line11 = "";
-		string line12 = "";
-		string line13 = "";
-		string line14 = "";
-		string line15 = "";
-		for(int i = 0; i < cards1.size(); i++)
-		{
-			vector<string> matrix = cards1[i].disp(); 
-			line11 += matrix[0];
-			line12 += matrix[1];
-			line13 += matrix[2];
-			line14 += matrix[3];
-			line15 += matrix[4];
-		}
-		if(msg1 != "")
-		{
-			int n = line11.size() < msg1.size() ? line11.size() : msg1.size();
-			for(int i = 0; i < n; i++) line11[i] = msg1[i];
-		}
-		line1 += line11;
-		line2 += line12;
-		line3 += line13;
-		line4 += line14;
-		line5 += line15;
-	}
-	if(!cards2.empty())
-	{
-		string line11 = "";
-		string line12 = "";
-		string line13 = "";
-		string line14 = "";
-		string line15 = "";
-		for(int i = 0; i < cards2.size(); i++)
-		{
-			vector<string> matrix = cards2[i].disp(); 
-			line11 += matrix[0];
-			line12 += matrix[1];
-			line13 += matrix[2];
-			line14 += matrix[3];
-			line15 += matrix[4];
-		}
-		if(msg2 != "")
-		{
-			int n = line11.size() < msg2.size() ? line11.size() : msg2.size();
-			for(int i = 0; i < n; i++) line11[i] = msg2[i];
-		}
-		line1 += line11;
-		line2 += line12;
-		line3 += line13;
-		line4 += line14;
-		line5 += line15;
-	}
 	cout<<line1<<endl;
 	cout<<line2<<endl;
 	cout<<line3<<endl;

@@ -1,3 +1,6 @@
+#ifndef __IMAGE_PATCHES_H__
+#define __IMAGE_PATCHES_H__
+
 #include <opencv/cv.h>
 #include <opencv/highgui.h>
 
@@ -33,3 +36,5 @@ class ImagePatch
 void build_patch_map();
 bool isImagePatchSame(IplImage * image, string file);
 int which_game_stage(IplImage * image);
+
+#endif

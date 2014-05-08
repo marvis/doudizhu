@@ -1,4 +1,6 @@
-#pragma once
+#ifndef __COMMON_H__
+#define __COMMON_H__
+
 #include <opencv/cv.h>
 #include <opencv/highgui.h>
 #include <string>
@@ -18,3 +20,5 @@ bool isImageSame(IplImage * bigImage, int x0, int y0, string filename, double & 
 bool isImageSame(IplImage * bigImage, int x0, int y0, string filename, double thresh);
 //void loadAllTemplates();
 void releaseAllTemplates();
+
+#endif
