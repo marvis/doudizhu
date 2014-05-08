@@ -4,10 +4,10 @@
 #include "common.h"
 using namespace std;
 using namespace cv;
-#define DEBUG_SAVE 0
+#define DEBUG_SAVE 1
 extern string infile;
 
-void disp_cards(vector<Card> & cards, string msg)
+void disp_cards(vector<Card> & cards, string msg, int num)
 {
 	string line1 = "";
 	string line2 = "";
@@ -28,6 +28,8 @@ void disp_cards(vector<Card> & cards, string msg)
 		if(line1.size() <= msg.size()) line1 = msg;
 		else for(int i = 0; i < msg.size(); i++) line1[i] = msg[i];
 	}
+	if(num > 0) line5 = line5 + num2str(num) + "x";
+	else if(num == 0) line5 = line5 + num2str(cards.size()) + "x";
 	cout<<line1<<endl;
 	cout<<line2<<endl;
 	cout<<line3<<endl;
@@ -35,7 +37,7 @@ void disp_cards(vector<Card> & cards, string msg)
 	cout<<line5<<endl;
 }
 
-void disp_cards(vector<vector<Card> > & all_cards, vector<string> &all_msg)
+void disp_cards(vector<vector<Card> > & all_cards, vector<string> &all_msg, int num)
 {
 	assert(all_cards.size() == all_msg.size());
 	string line1 = "";
@@ -84,6 +86,8 @@ void disp_cards(vector<vector<Card> > & all_cards, vector<string> &all_msg)
 		line5 += line15;
 	}
 	if(ncards == 0) return;
+	if(num > 0) line5 = line5 + num2str(num) + "x";
+	else if(num == 0) line5 = line5 + num2str(ncards) + "x";
 	cout<<line1<<endl;
 	cout<<line2<<endl;
 	cout<<line3<<endl;

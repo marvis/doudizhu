@@ -131,8 +131,8 @@ class Card
 		}
 };
 
-void disp_cards(vector<Card> & cards, string msg = "");
-void disp_cards(vector<vector<Card> > & all_cards, vector<string> & all_msg);
+void disp_cards(vector<Card> & cards, string msg = "", int num = 0);
+void disp_cards(vector<vector<Card> > & all_cards, vector<string> & all_msg, int num = 0);
 
 class Recog
 {

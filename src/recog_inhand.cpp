@@ -105,6 +105,7 @@ void RecogInhand::recog_bbox()
 	double step = 66.66;
 	int ncards = num + 1;//(bot - top - 150)/step + 1;
 	if(ncards > 1) step = (bot - 159 - top)/(double)(ncards-1);
+
 	for(int n = 0; n < ncards; n++)
 	{
 		int shift = 0;

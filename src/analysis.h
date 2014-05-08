@@ -54,7 +54,7 @@ class Analysis
 		{
 			init();
 		}
-		bool is_unknown_exist(vector<Card> & cards)
+		bool isExistUnknownCard(vector<Card> & cards)
 		{
 			for(int i = 0; i < cards.size(); i++)
 			{
@@ -62,6 +62,15 @@ class Analysis
 				if(cards[i].type == TYPE_UNKNOWN) return true;
 			}
 			return false;
+		}
+		int unknownCardNum(vector<Card> & cards)
+		{
+			int n = 0;
+			for(int i = 0; i < cards.size(); i++)
+			{
+				if(cards[i].num == NUM_UNKNOWN || cards[i].type == TYPE_UNKNOWN) n++;
+			}
+			return n;
 		}
 		bool isExistEqualCard(vector<Card> &cards1, vector<Card> &cards2)
 		{
@@ -154,7 +163,7 @@ class Analysis
 		void add_to_history(vector<Card> & cards, string who)
 		{
 			if(cards.empty()) return;
-			if(is_unknown_exist(cards)) return;
+			if(isExistUnknownCard(cards)) return;
 			for(int i = 0; i < cards.size(); i++)
 				if(allplayed_history.find(cards[i]) != allplayed_history.end()) return; // alread add
 
@@ -164,6 +173,65 @@ class Analysis
 			if(who == "lplayed") for(int i = 0; i < cards.size(); i++) lplayed_history.insert(cards[i]);
 			else if(who == "iplayed") for(int i = 0; i < cards.size(); i++) iplayed_history.insert(cards[i]);
 			else if(who == "rplayed") for(int i = 0; i < cards.size(); i++) rplayed_history.insert(cards[i]);
+		}
+		void remove_from_history(vector<Card> & cards, string who)
+		{
+			if(cards.empty()) return;
+			if(isExistUnknownCard(cards)) return;
+			for(int i = 0; i < cards.size(); i++)
+			{
+				Card card = cards[i];
+				set<Card>::iterator it = allplayed_history.find(card);
+				if(it == allplayed_history.end())
+				{
+					cerr<<"can't remove card "<<card.str()<<" from history"<<endl;
+				}
+				else allplayed_history.erase(it);
+			}
+			if(isEqualCards(*history_plays.rbegin(), cards))
+			{
+				history_plays.erase(history_plays.begin() + (history_plays.size() - 1));
+				history_players.erase(history_players.begin() + (history_players.size() - 1));
+			}
+			if(who == "iplayed")
+			{
+				for(int i = 0; i < cards.size(); i++)
+				{
+					Card card = cards[i];
+					set<Card>::iterator it = iplayed_history.find(card);
+					if(it == iplayed_history.end())
+					{
+						cerr<<"can't remove card "<<card.str()<<" from history"<<endl;
+					}
+					else iplayed_history.erase(it);
+				}
+			}
+			else if(who == "lplayed")
+			{
+				for(int i = 0; i < cards.size(); i++)
+				{
+					Card card = cards[i];
+					set<Card>::iterator it = lplayed_history.find(card);
+					if(it == lplayed_history.end())
+					{
+						cerr<<"can't remove card "<<card.str()<<" from history"<<endl;
+					}
+					else lplayed_history.erase(it);
+				}
+			}
+			else if(who == "rplayed")
+			{
+				for(int i = 0; i < cards.size(); i++)
+				{
+					Card card = cards[i];
+					set<Card>::iterator it = rplayed_history.find(card);
+					if(it == rplayed_history.end())
+					{
+						cerr<<"can't remove card "<<card.str()<<" from history"<<endl;
+					}
+					else rplayed_history.erase(it);
+				}
+			}
 		}
 		vector<Card> get_hidden_cards()
 		{
@@ -221,7 +289,7 @@ class Analysis
 					i = j;
 				}
 			}
-			disp_cards(cards_list, msg_list);
+			disp_cards(cards_list, msg_list, hidden_cards.size());
 		}
 		void disp_history()
 		{
@@ -241,7 +309,7 @@ class Analysis
 					ncards += cards.size();
 					i++;
 				}
-				disp_cards( cards_list, msg_list);
+				disp_cards( cards_list, msg_list, -1);
 				//disp_cards(history_plays[i], history_players[i]);
 			}
 		}
@@ -292,6 +360,31 @@ class Analysis
 			//todo: 测试打出的牌数目和手牌数目之和是17或者20
 			if(cur_stage == STAGE_PLAYING)
 			{
+				if(!isExistUnknownCard(prev_myself_cards) && !prev_myself_cards.empty() && myself_cards.size() >= prev_myself_cards.size())
+					myself_cards = prev_myself_cards;
+				else if(!isExistUnknownCard(prev_myself_cards) && unknownCardNum(myself_cards) >= 3)
+					myself_cards = prev_myself_cards;
+
+				if(!isEqualCards(prev_lplayed_cards, lplayed_cards) && 
+					isExistEqualCard(prev_lplayed_cards, lplayed_cards) &&
+					prev_lplayed_cards.size() < lplayed_cards.size())
+				{
+					remove_from_history(prev_lplayed_cards, "lplayed");
+				}
+
+				if(!isEqualCards(prev_iplayed_cards, iplayed_cards) && 
+					isExistEqualCard(prev_iplayed_cards, iplayed_cards) &&
+					prev_iplayed_cards.size() < iplayed_cards.size())
+				{
+					remove_from_history(prev_iplayed_cards, "iplayed");
+				}
+
+				if(!isEqualCards(prev_rplayed_cards, rplayed_cards) && 
+					isExistEqualCard(prev_rplayed_cards, rplayed_cards) &&
+					prev_rplayed_cards.size() < rplayed_cards.size())
+				{
+					remove_from_history(prev_rplayed_cards, "rplayed");
+				}
 			}
 			return true;
 		}	
@@ -319,9 +412,8 @@ class Analysis
 			if(cur_stage == STAGE_PLAYING || cur_stage == STAGE_LAND_CHOOSE || cur_stage == STAGE_DOUBLE_SCORE)
 			{
 				if(islshowed == UNKNOWN)
-				//	|| islshowed == SHOWED)
 				{
-					lshowed_cards = RecogMing("showed", "right").recog_cards(image);
+					lshowed_cards = RecogMing("showed", "left").recog_cards(image);
 					if(lshowed_cards.empty())
 					{
 						islshowed = UNSHOWED;
@@ -330,7 +422,7 @@ class Analysis
 				}
 				else if(islshowed == SHOWED)
 				{
-					lshowed_cards = RecogMing("showed", "right").recog_cards(image);
+					lshowed_cards = RecogMing("showed", "left").recog_cards(image);
 					if(lshowed_cards.empty())
 					{
 						cerr<<"lshowed_cards should not be empty"<<endl;
@@ -339,6 +431,10 @@ class Analysis
 				else if(isrshowed == SHOWED)
 				{
 					lshowed_cards = get_hidden_cards();
+				}
+				else if(cur_stage != prev_stage)
+				{
+					islshowed = UNKNOWN;
 				}
 			}
 			else
@@ -351,7 +447,6 @@ class Analysis
 			if(cur_stage == STAGE_PLAYING || cur_stage == STAGE_LAND_CHOOSE || cur_stage == STAGE_DOUBLE_SCORE)
 			{
 				if(isrshowed == UNKNOWN)
-				//	|| isrshowed == SHOWED)
 				{
 					rshowed_cards = RecogMing("showed", "right").recog_cards(image);
 					if(rshowed_cards.empty())
@@ -371,6 +466,10 @@ class Analysis
 				else if(islshowed == SHOWED)
 				{
 					rshowed_cards = get_hidden_cards();
+				}
+				else if(cur_stage != prev_stage)
+				{
+					isrshowed = UNKNOWN;
 				}
 			}
 			else
@@ -417,10 +516,11 @@ class Analysis
 			recog_last3(); //if(!last3_cards.empty()) disp_cards(last3_cards, "last3");
 			recog_myself();
 			recog_lshowed();
-			recog_rshowed();
+			recog_rshowed(); //if(!rshowed_cards.empty()) disp_cards(rshowed_cards, "rshowed");
 			recog_lplayed(); //if(!lplayed_cards.empty()) disp_cards(lplayed_cards, "lplayed");
 			recog_iplayed(); //if(!iplayed_cards.empty()) disp_cards(iplayed_cards, "iplayed");
 			recog_rplayed(); //if(!rplayed_cards.empty()) disp_cards(rplayed_cards, "rplayed");
+			verify_cards();
 			refresh_prev_cards();
 			if(lplayed_cards.empty())
 			{
