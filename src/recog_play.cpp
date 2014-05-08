@@ -1,7 +1,7 @@
 #include "recog_play.h"
 #include "common.h"
 
-extern string infile;
+//extern string infile;
 SearchPara myself_para = {
 	270, 994, 258, 336, 
 	40, 68,

@@ -16,19 +16,14 @@ int main(int argc, char ** argv)
 	if(argc == 2) fid = atoi(argv[1]);
 	while(1)
 	{
-		infile = "/Users/xiaohang/Test/doudizhu/data2/screen" + num2str(fid) + ".png";
-		if(file_exists(infile))
-		{
-			system("clear");
-			cout<<infile<<endl;
-			ana.process(infile);
-		}
+		infile = "/Users/xiaohang/Test/doudizhu/data1/screen" + num2str(fid) + ".png";
+		if(file_exists(infile)) ana.process(infile);
 		else
 		{
 			cout<<infile<<" doesn't exist"<<endl;
 			break;
 		}
-		//sleep(1);
+		//sleep(5);
 		usleep(500000);
 		fid++;
 	}

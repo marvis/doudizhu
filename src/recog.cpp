@@ -4,7 +4,7 @@
 #include "common.h"
 using namespace std;
 using namespace cv;
-
+#define DEBUG_SAVE 0
 extern string infile;
 
 void disp_cards(vector<Card> & cards, string msg)
@@ -208,9 +208,11 @@ void Recog::recog_card_types()
 			{
 				if(prefix != "last" || i != 2) // otherwise, it will be judged again
 				{
+#if DEBUG_SAVE
 					IplImage * unknownImage = cropImage(image, rect.x, rect.y, rect.width, rect.height);
 					cvSaveImage((infile + ".ddz_" + prefix + "_type_unknown" + num2str(i) + ".png").c_str(), unknownImage);
 					cvReleaseImage(&unknownImage);
+#endif
 				}
 			}
 		}
@@ -248,9 +250,11 @@ void Recog::recog_card_nums()
 			if(*min_elem < second_thresh) cards[i].num = (int)(min_elem - diffvals.begin()) + NUM_3;
 			else
 			{
+#if DEBUG_SAVE
 				IplImage * unknownImage = cropImage(image, rect.x, rect.y, rect.width, rect.height);
 				cvSaveImage((infile + ".ddz_" + prefix + "_num_unknown" + num2str(i) + ".png").c_str(), unknownImage); 
 				cvReleaseImage(&unknownImage); 
+#endif
 			}
 		}
 	}

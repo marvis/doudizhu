@@ -28,9 +28,11 @@ void RecogLast::recog_card_types()
 	if(0)
 	{
 		CvRect rect = typeBBox[2];
+#if DEBUG_SAVE
 		IplImage * unknownImage = cropImage(image, rect.x, rect.y, rect.width, rect.height);
 		cvSaveImage((infile + ".ddz_" + prefix + "_type_unknown" + num2str(i) + ".png").c_str(), unknownImage);
 		cvReleaseImage(&unknownImage);
+#endif
 	}
 
 	if(cards[i].type == TYPE_UNKNOWN)
@@ -65,9 +67,11 @@ void RecogLast::recog_card_types()
 			if(*min_elem < second_thresh) cards[i].type = (int)(min_elem - diffvals.begin()) + TYPE_SPADE;
 			else
 			{
+#if DEBUG_SAVE
 				IplImage * unknownImage = cropImage(image, rect.x, rect.y, rect.width, rect.height);
 				cvSaveImage((infile + ".ddz_" + prefix + "_type_unknown" + num2str(i) + ".png").c_str(), unknownImage);
 				cvReleaseImage(&unknownImage);
+#endif
 			}
 		}
 	}
