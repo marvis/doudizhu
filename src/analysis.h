@@ -18,7 +18,6 @@ using namespace cv;
 
 class Analysis
 {
-	enum {UNKNOWN = 1, SHOWED, UNSHOWED};
 	public:
 		vector<Card> myself_cards;
 		vector<Card> lshowed_cards;
@@ -36,15 +35,16 @@ class Analysis
 		vector<Card> prev_iplayed_cards;
 		vector<Card> prev_last3_cards;
 
-		int islshowed;
-		int isrshowed;
-
 		set<Card> allplayed_history;
 		set<Card> iplayed_history;
 		set<Card> lplayed_history;
 		set<Card> rplayed_history;
 		vector<vector<Card> > history_plays;
 		vector<string> history_players;
+
+		string boss;
+		int nlcards;
+		int nrcards;
 
 		int prev_stage;
 		int cur_stage;
@@ -123,8 +123,6 @@ class Analysis
 			image = 0;
 			prev_stage = STAGE_UNKNOWN;
 			cur_stage = STAGE_UNKNOWN;
-			islshowed = UNKNOWN;
-			isrshowed = UNKNOWN;
 
 			last3_cards.clear();
 			myself_cards.clear();
@@ -148,6 +146,10 @@ class Analysis
 			rplayed_history.clear();
 			history_plays.clear();
 			history_players.clear();
+
+			boss = "";
+			nlcards = 0;
+			nrcards = 0;
 		}
 		bool is_valid_stage()
 		{
@@ -237,8 +239,8 @@ class Analysis
 		{
 			set<Card> known_cards = allplayed_history;
 			for(int i = 0; i < myself_cards.size(); i++) known_cards.insert(myself_cards[i]);
-			if(islshowed == SHOWED) for(int i = 0; i < lshowed_cards.size(); i++) known_cards.insert(lshowed_cards[i]);
-			if(isrshowed == SHOWED) for(int i = 0; i < rshowed_cards.size(); i++) known_cards.insert(rshowed_cards[i]);
+			for(int i = 0; i < lshowed_cards.size(); i++) known_cards.insert(lshowed_cards[i]);
+			for(int i = 0; i < rshowed_cards.size(); i++) known_cards.insert(rshowed_cards[i]);
 			vector<Card> hidden_cards;
 			Card card;
 			card.num = NUM_JOKER;
@@ -260,36 +262,41 @@ class Analysis
 		void disp_hidden_cards()
 		{
 			vector<Card> hidden_cards = get_hidden_cards();
-			cout<<"**********************************************************************************************************"<<endl;
-			vector<vector<Card> > cards_list;
-			vector<string> msg_list;
-			int i = 0;
-			while(i < hidden_cards.size())
+			if(!lshowed_cards.empty()) disp_cards(hidden_cards, "right");
+			else if(!rshowed_cards.empty()) disp_cards(hidden_cards, "left");
+			else
 			{
-				Card card = hidden_cards[i];
-				if(card.num == NUM_JOKER)
+				cout<<"**********************************************************************************************************"<<endl;
+				vector<vector<Card> > cards_list;
+				vector<string> msg_list;
+				int i = 0;
+				while(i < hidden_cards.size())
 				{
-					vector<Card> cards;
-					cards.push_back(card);
-					cards_list.push_back(cards);
-					msg_list.push_back("");
-					i++;
+					Card card = hidden_cards[i];
+					if(card.num == NUM_JOKER)
+					{
+						vector<Card> cards;
+						cards.push_back(card);
+						cards_list.push_back(cards);
+						msg_list.push_back("");
+						i++;
+					}
+					else
+					{
+						int j = i+1;
+						while(j < hidden_cards.size() && hidden_cards[j].num == card.num) j++;
+						ostringstream oss;
+						oss<<j-i<<"x";
+						vector<Card> cards;
+						card.type = TYPE_UNKNOWN;
+						cards.push_back(card);
+						cards_list.push_back(cards);
+						msg_list.push_back(oss.str());
+						i = j;
+					}
 				}
-				else
-				{
-					int j = i+1;
-					while(j < hidden_cards.size() && hidden_cards[j].num == card.num) j++;
-					ostringstream oss;
-					oss<<j-i<<"x";
-					vector<Card> cards;
-					card.type = TYPE_UNKNOWN;
-					cards.push_back(card);
-					cards_list.push_back(cards);
-					msg_list.push_back(oss.str());
-					i = j;
-				}
+				disp_cards(cards_list, msg_list, hidden_cards.size());
 			}
-			disp_cards(cards_list, msg_list, hidden_cards.size());
 		}
 		void disp_history()
 		{
@@ -410,70 +417,69 @@ class Analysis
 		{
 			assert(image);
 			if(cur_stage == STAGE_PLAYING || cur_stage == STAGE_LAND_CHOOSE || cur_stage == STAGE_DOUBLE_SCORE)
-			{
-				if(islshowed == UNKNOWN)
-				{
-					lshowed_cards = RecogMing("showed", "left").recog_cards(image);
-					if(lshowed_cards.empty())
-					{
-						islshowed = UNSHOWED;
-					}
-					else islshowed = SHOWED;
-				}
-				else if(islshowed == SHOWED)
-				{
-					lshowed_cards = RecogMing("showed", "left").recog_cards(image);
-					if(lshowed_cards.empty())
-					{
-						cerr<<"lshowed_cards should not be empty"<<endl;
-					}
-				}
-				else if(isrshowed == SHOWED)
-				{
-					lshowed_cards = get_hidden_cards();
-				}
-				else if(cur_stage != prev_stage)
-				{
-					islshowed = UNKNOWN;
-				}
-			}
+				lshowed_cards = RecogMing("showed", "left").recog_cards(image);
 			else
-				rshowed_cards.clear();
+				lshowed_cards.clear();
 
 		}
 		void recog_rshowed()
 		{
 			assert(image);
 			if(cur_stage == STAGE_PLAYING || cur_stage == STAGE_LAND_CHOOSE || cur_stage == STAGE_DOUBLE_SCORE)
-			{
-				if(isrshowed == UNKNOWN)
-				{
-					rshowed_cards = RecogMing("showed", "right").recog_cards(image);
-					if(rshowed_cards.empty())
-					{
-						isrshowed = UNSHOWED;
-					}
-					else isrshowed = SHOWED;
-				}
-				else if(isrshowed == SHOWED)
-				{
-					rshowed_cards = RecogMing("showed", "right").recog_cards(image);
-					if(rshowed_cards.empty())
-					{
-						cerr<<"rshowed_cards should not be empty"<<endl;
-					}
-				}
-				else if(islshowed == SHOWED)
-				{
-					rshowed_cards = get_hidden_cards();
-				}
-				else if(cur_stage != prev_stage)
-				{
-					isrshowed = UNKNOWN;
-				}
-			}
+				rshowed_cards = RecogMing("showed", "right").recog_cards(image);
 			else
 				rshowed_cards.clear();
+		}
+		void recog_cardnum()
+		{
+			assert(image);
+			if(cur_stage == STAGE_PLAYING)
+			{
+				if(isImagePatchSame(image, "ddz_patch_cardnum_left_l2.png")) nlcards = 20;
+				else if(isImagePatchSame(image, "ddz_patch_cardnum_left_l1.png"))
+				{
+					if(isImagePatchSame(image, "ddz_patch_card_left_r0.png")) nlcards = 10;
+					else if(isImagePatchSame(image, "ddz_patch_card_left_r1.png")) nlcards = 11;
+					else if(isImagePatchSame(image, "ddz_patch_card_left_r2.png")) nlcards = 12;
+					else if(isImagePatchSame(image, "ddz_patch_card_left_r3.png")) nlcards = 13;
+					else if(isImagePatchSame(image, "ddz_patch_card_left_r4.png")) nlcards = 14;
+					else if(isImagePatchSame(image, "ddz_patch_card_left_r5.png")) nlcards = 15;
+					else if(isImagePatchSame(image, "ddz_patch_card_left_r6.png")) nlcards = 16;
+					else if(isImagePatchSame(image, "ddz_patch_card_left_r7.png")) nlcards = 17;
+					else if(isImagePatchSame(image, "ddz_patch_card_left_r8.png")) nlcards = 18;
+					else if(isImagePatchSame(image, "ddz_patch_card_left_r9.png")) nlcards = 19;
+					else 
+					{
+						cerr<<"unknown cards number for left"<<endl;
+					}
+				}
+				else if(isImagePatchSame(image, "ddz_patch_cardnum_left_l0.png"))
+				{
+					if(isImagePatchSame(image, "ddz_patch_card_left_m1.png")) nlcards = 1;
+					else if(isImagePatchSame(image, "ddz_patch_card_left_m2.png")) nlcards = 2;
+					else if(isImagePatchSame(image, "ddz_patch_card_left_m3.png")) nlcards = 3;
+					else if(isImagePatchSame(image, "ddz_patch_card_left_m4.png")) nlcards = 4;
+					else if(isImagePatchSame(image, "ddz_patch_card_left_m5.png")) nlcards = 5;
+					else if(isImagePatchSame(image, "ddz_patch_card_left_m6.png")) nlcards = 6;
+					else if(isImagePatchSame(image, "ddz_patch_card_left_m7.png")) nlcards = 7;
+					else if(isImagePatchSame(image, "ddz_patch_card_left_m8.png")) nlcards = 8;
+					else if(isImagePatchSame(image, "ddz_patch_card_left_m9.png")) nlcards = 9;
+					else
+					{
+						cerr<<"unknown cards number for left"<<endl;
+					}
+				}
+			}
+		}
+		void recog_boss()
+		{
+			assert(image);
+			if(cur_stage == STAGE_PLAYING)
+			{
+				if(isImagePatchSame(image, "ddz_patch_boss_left1.png") || isImagePatchSame(image, "ddz_patch_boss_left2.png")) boss = "left";
+				else if(isImagePatchSame(image, "ddz_patch_boss_right1.png") || isImagePatchSame(image, "ddz_patch_boss_right2.png")) boss = "right";
+				else boss = "me";
+			}
 		}
 		// this function is invoke in the last step
 		void refresh_prev_cards()
@@ -485,8 +491,8 @@ class Analysis
 				prev_lplayed_cards = lplayed_cards;
 				prev_rplayed_cards = rplayed_cards;
 				prev_myself_cards = myself_cards;
-				if(islshowed == SHOWED) prev_lshowed_cards = lshowed_cards;
-				if(isrshowed == SHOWED) prev_rplayed_cards = rshowed_cards;
+				prev_lshowed_cards = lshowed_cards;
+				prev_rplayed_cards = rshowed_cards;
 			}
 		}
 		void process(string file)
@@ -513,6 +519,7 @@ class Analysis
 				prev_stage = cur_stage;
 				return;
 			}
+			recog_boss();
 			recog_last3(); //if(!last3_cards.empty()) disp_cards(last3_cards, "last3");
 			recog_myself();
 			recog_lshowed();
@@ -542,13 +549,14 @@ class Analysis
 				system("clear");
 				cout<<file<<endl;
 				cout<<stage_str[cur_stage]<<endl;
+				cout<<"boss is "<<boss<<" nlcards = "<<nlcards<<" nrcards = "<<nrcards<<endl;
 				if(!isEqualCards(myself_cards, prev_myself_cards)) cerr<<"myself cards changed"<<endl;
 				if(!isEqualCards(lshowed_cards, prev_lshowed_cards)) cerr<<"lshowed cards changed"<<endl;
 				if(!isEqualCards(rshowed_cards, prev_rshowed_cards)) cerr<<"rshowed cards changed"<<endl;
 				if(!lshowed_cards.empty()) disp_cards(lshowed_cards, "left");
 				if(!myself_cards.empty()) disp_cards(myself_cards, "me");
 				if(!rshowed_cards.empty()) disp_cards(rshowed_cards, "right");
-				if(islshowed != SHOWED && isrshowed != SHOWED) disp_hidden_cards();
+				if(lshowed_cards.empty() || rshowed_cards.empty()) disp_hidden_cards();
 				disp_history();
 			}
 

@@ -62,7 +62,32 @@ ImagePatch allPatches[] =
 	ImagePatch(369, 870, "ddz_patch_right_shunzi.png"),         // 顺子
 
 	// other
-	ImagePatch(639, 36, "ddz_patch_last3_bkg.png")
+	ImagePatch(639, 36, "ddz_patch_last3_bkg.png"),
+	ImagePatch(363, 48, "ddz_patch_boss_left1.png"),
+	ImagePatch(363, 48, "ddz_patch_boss_left2.png"),
+	ImagePatch(358, 1208, "ddz_patch_boss_right1.png"),
+	ImagePatch(358, 1208, "ddz_patch_boss_right2.png"),
+
+	// card number
+	ImagePatch(319, 151, "ddz_patch_cardnum_left_l2.png"),
+	ImagePatch(319, 151, "ddz_patch_cardnum_left_l1.png"),
+	ImagePatch(319, 151, "ddz_patch_cardnum_left_l0.png"),
+	ImagePatch(319, 166, "ddz_patch_cardnum_left_m1.png"),
+	ImagePatch(319, 166, "ddz_patch_cardnum_left_m3.png"),
+	ImagePatch(319, 166, "ddz_patch_cardnum_left_m4.png"),
+	ImagePatch(319, 166, "ddz_patch_cardnum_left_m5.png"),
+	ImagePatch(319, 166, "ddz_patch_cardnum_left_m6.png"),
+	ImagePatch(319, 166, "ddz_patch_cardnum_left_m8.png"),
+	ImagePatch(319, 166, "ddz_patch_cardnum_left_m9.png"),
+	ImagePatch(319, 181, "ddz_patch_cardnum_left_r1.png"),
+	ImagePatch(319, 181, "ddz_patch_cardnum_left_r2.png"),
+	ImagePatch(319, 181, "ddz_patch_cardnum_left_r3.png"),
+	ImagePatch(319, 181, "ddz_patch_cardnum_left_r4.png"),
+	ImagePatch(319, 181, "ddz_patch_cardnum_left_r5.png"),
+	ImagePatch(319, 181, "ddz_patch_cardnum_left_r6.png"),
+	ImagePatch(319, 181, "ddz_patch_cardnum_left_r7.png"),
+	ImagePatch(319, 181, "ddz_patch_cardnum_left_r8.png"),
+	ImagePatch(319, 181, "ddz_patch_cardnum_left_r9.png")
 };
 
 //build map_patches and load images
