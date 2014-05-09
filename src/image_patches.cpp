@@ -67,18 +67,22 @@ ImagePatch allPatches[] =
 	ImagePatch(363, 48, "ddz_patch_boss_left2.png"),
 	ImagePatch(358, 1208, "ddz_patch_boss_right1.png"),
 	ImagePatch(358, 1208, "ddz_patch_boss_right2.png"),
+	ImagePatch(470, 400, "ddz_patch_stage_profile.png"),
 
 	// card number
 	ImagePatch(319, 151, "ddz_patch_cardnum_left_l2.png"),
 	ImagePatch(319, 151, "ddz_patch_cardnum_left_l1.png"),
 	ImagePatch(319, 151, "ddz_patch_cardnum_left_l0.png"),
 	ImagePatch(319, 166, "ddz_patch_cardnum_left_m1.png"),
+	ImagePatch(319, 166, "ddz_patch_cardnum_left_m2.png"),
 	ImagePatch(319, 166, "ddz_patch_cardnum_left_m3.png"),
 	ImagePatch(319, 166, "ddz_patch_cardnum_left_m4.png"),
 	ImagePatch(319, 166, "ddz_patch_cardnum_left_m5.png"),
 	ImagePatch(319, 166, "ddz_patch_cardnum_left_m6.png"),
+	ImagePatch(319, 166, "ddz_patch_cardnum_left_m7.png"),
 	ImagePatch(319, 166, "ddz_patch_cardnum_left_m8.png"),
 	ImagePatch(319, 166, "ddz_patch_cardnum_left_m9.png"),
+	ImagePatch(319, 181, "ddz_patch_cardnum_left_r0.png"),
 	ImagePatch(319, 181, "ddz_patch_cardnum_left_r1.png"),
 	ImagePatch(319, 181, "ddz_patch_cardnum_left_r2.png"),
 	ImagePatch(319, 181, "ddz_patch_cardnum_left_r3.png"),
@@ -87,7 +91,30 @@ ImagePatch allPatches[] =
 	ImagePatch(319, 181, "ddz_patch_cardnum_left_r6.png"),
 	ImagePatch(319, 181, "ddz_patch_cardnum_left_r7.png"),
 	ImagePatch(319, 181, "ddz_patch_cardnum_left_r8.png"),
-	ImagePatch(319, 181, "ddz_patch_cardnum_left_r9.png")
+	ImagePatch(319, 181, "ddz_patch_cardnum_left_r9.png"),
+
+	ImagePatch(319, 1043, "ddz_patch_cardnum_right_l0.png"),
+	ImagePatch(319, 1043, "ddz_patch_cardnum_right_l1.png"),
+	ImagePatch(319, 1043, "ddz_patch_cardnum_right_l2.png"),
+	ImagePatch(319, 1058, "ddz_patch_cardnum_right_m1.png"),
+	ImagePatch(319, 1058, "ddz_patch_cardnum_right_m2.png"),
+	ImagePatch(319, 1058, "ddz_patch_cardnum_right_m3.png"),
+	ImagePatch(319, 1058, "ddz_patch_cardnum_right_m4.png"),
+	ImagePatch(319, 1058, "ddz_patch_cardnum_right_m5.png"),
+	ImagePatch(319, 1058, "ddz_patch_cardnum_right_m6.png"),
+	ImagePatch(319, 1058, "ddz_patch_cardnum_right_m7.png"),
+	ImagePatch(319, 1058, "ddz_patch_cardnum_right_m8.png"),
+	ImagePatch(319, 1058, "ddz_patch_cardnum_right_m9.png"),
+	ImagePatch(319, 1073, "ddz_patch_cardnum_right_r0.png"),
+	ImagePatch(319, 1073, "ddz_patch_cardnum_right_r1.png"),
+	ImagePatch(319, 1073, "ddz_patch_cardnum_right_r2.png"),
+	ImagePatch(319, 1073, "ddz_patch_cardnum_right_r3.png"),
+	ImagePatch(319, 1073, "ddz_patch_cardnum_right_r4.png"),
+	ImagePatch(319, 1073, "ddz_patch_cardnum_right_r5.png"),
+	ImagePatch(319, 1073, "ddz_patch_cardnum_right_r6.png"),
+	ImagePatch(319, 1073, "ddz_patch_cardnum_right_r7.png"),
+	ImagePatch(319, 1073, "ddz_patch_cardnum_right_r8.png"),
+	ImagePatch(319, 1073, "ddz_patch_cardnum_right_r9.png"),
 };
 
 //build map_patches and load images
@@ -102,7 +129,7 @@ void build_patch_map()
 	}
 }
 
-bool isImagePatchSame(IplImage * image, string file)
+bool isImagePatchSame(IplImage * image, string file, double thresh)
 {
 	if(map_patches.find(file) == map_patches.end())
 	{
@@ -111,7 +138,7 @@ bool isImagePatchSame(IplImage * image, string file)
 	}
 	ImagePatch p = map_patches[file];
 	assert(file == p.file);
-	return isImageSame(image, p.x, p.y, p.file, 10);
+	return isImageSame(image, p.x, p.y, p.file, thresh);
 }
 
 // 等待开始
@@ -145,5 +172,6 @@ int which_game_stage(IplImage * image)
 	   isImagePatchSame(image, "ddz_patch_left_jia_or_not.png") || isImagePatchSame(image, "ddz_patch_me_jia_or_not.png")) return STAGE_DOUBLE_SCORE;
 	if(isImagePatchSame(image, "ddz_patch_left_clock.png") || isImagePatchSame(image, "ddz_patch_me_clock.png") ||
 	   isImagePatchSame(image, "ddz_patch_right_clock.png") || is_card_exist) return STAGE_PLAYING;
+	if(isImagePatchSame(image, "ddz_patch_stage_profile.png")) return STAGE_UNKNOWN; 
 	return STAGE_GAME_WAITING;
 }

@@ -433,42 +433,78 @@ class Analysis
 		void recog_cardnum()
 		{
 			assert(image);
-			if(cur_stage == STAGE_PLAYING)
+			if(cur_stage == STAGE_PLAYING || cur_stage == STAGE_LAND_CHOOSE || cur_stage == STAGE_DOUBLE_SCORE)
 			{
-				if(isImagePatchSame(image, "ddz_patch_cardnum_left_l2.png")) nlcards = 20;
-				else if(isImagePatchSame(image, "ddz_patch_cardnum_left_l1.png"))
+				if(isImagePatchSame(image, "ddz_patch_cardnum_left_l2.png", 40)) nlcards = 20;
+				else if(isImagePatchSame(image, "ddz_patch_cardnum_left_l1.png", 40))
 				{
-					if(isImagePatchSame(image, "ddz_patch_card_left_r0.png")) nlcards = 10;
-					else if(isImagePatchSame(image, "ddz_patch_card_left_r1.png")) nlcards = 11;
-					else if(isImagePatchSame(image, "ddz_patch_card_left_r2.png")) nlcards = 12;
-					else if(isImagePatchSame(image, "ddz_patch_card_left_r3.png")) nlcards = 13;
-					else if(isImagePatchSame(image, "ddz_patch_card_left_r4.png")) nlcards = 14;
-					else if(isImagePatchSame(image, "ddz_patch_card_left_r5.png")) nlcards = 15;
-					else if(isImagePatchSame(image, "ddz_patch_card_left_r6.png")) nlcards = 16;
-					else if(isImagePatchSame(image, "ddz_patch_card_left_r7.png")) nlcards = 17;
-					else if(isImagePatchSame(image, "ddz_patch_card_left_r8.png")) nlcards = 18;
-					else if(isImagePatchSame(image, "ddz_patch_card_left_r9.png")) nlcards = 19;
+					if(isImagePatchSame(image, "ddz_patch_cardnum_left_r0.png")) nlcards = 10;
+					else if(isImagePatchSame(image, "ddz_patch_cardnum_left_r1.png")) nlcards = 11;
+					else if(isImagePatchSame(image, "ddz_patch_cardnum_left_r2.png")) nlcards = 12;
+					else if(isImagePatchSame(image, "ddz_patch_cardnum_left_r3.png")) nlcards = 13;
+					else if(isImagePatchSame(image, "ddz_patch_cardnum_left_r4.png")) nlcards = 14;
+					else if(isImagePatchSame(image, "ddz_patch_cardnum_left_r5.png")) nlcards = 15;
+					else if(isImagePatchSame(image, "ddz_patch_cardnum_left_r6.png")) nlcards = 16;
+					else if(isImagePatchSame(image, "ddz_patch_cardnum_left_r7.png")) nlcards = 17;
+					else if(isImagePatchSame(image, "ddz_patch_cardnum_left_r8.png")) nlcards = 18;
+					else if(isImagePatchSame(image, "ddz_patch_cardnum_left_r9.png")) nlcards = 19;
 					else 
 					{
 						cerr<<"unknown cards number for left"<<endl;
 					}
 				}
-				else if(isImagePatchSame(image, "ddz_patch_cardnum_left_l0.png"))
+				else if(isImagePatchSame(image, "ddz_patch_cardnum_left_l0.png", 40))
 				{
-					if(isImagePatchSame(image, "ddz_patch_card_left_m1.png")) nlcards = 1;
-					else if(isImagePatchSame(image, "ddz_patch_card_left_m2.png")) nlcards = 2;
-					else if(isImagePatchSame(image, "ddz_patch_card_left_m3.png")) nlcards = 3;
-					else if(isImagePatchSame(image, "ddz_patch_card_left_m4.png")) nlcards = 4;
-					else if(isImagePatchSame(image, "ddz_patch_card_left_m5.png")) nlcards = 5;
-					else if(isImagePatchSame(image, "ddz_patch_card_left_m6.png")) nlcards = 6;
-					else if(isImagePatchSame(image, "ddz_patch_card_left_m7.png")) nlcards = 7;
-					else if(isImagePatchSame(image, "ddz_patch_card_left_m8.png")) nlcards = 8;
-					else if(isImagePatchSame(image, "ddz_patch_card_left_m9.png")) nlcards = 9;
+					if(isImagePatchSame(image, "ddz_patch_cardnum_left_m1.png")) nlcards = 1;
+					else if(isImagePatchSame(image, "ddz_patch_cardnum_left_m2.png")) nlcards = 2;
+					else if(isImagePatchSame(image, "ddz_patch_cardnum_left_m3.png")) nlcards = 3;
+					else if(isImagePatchSame(image, "ddz_patch_cardnum_left_m4.png")) nlcards = 4;
+					else if(isImagePatchSame(image, "ddz_patch_cardnum_left_m5.png")) nlcards = 5;
+					else if(isImagePatchSame(image, "ddz_patch_cardnum_left_m6.png")) nlcards = 6;
+					else if(isImagePatchSame(image, "ddz_patch_cardnum_left_m7.png")) nlcards = 7;
+					else if(isImagePatchSame(image, "ddz_patch_cardnum_left_m8.png")) nlcards = 8;
+					else if(isImagePatchSame(image, "ddz_patch_cardnum_left_m9.png")) nlcards = 9;
 					else
 					{
 						cerr<<"unknown cards number for left"<<endl;
 					}
 				}
+
+				if(isImagePatchSame(image, "ddz_patch_cardnum_right_l2.png", 60)) nrcards = 20;
+				else if(isImagePatchSame(image, "ddz_patch_cardnum_right_l1.png", 60))
+				{
+					if(isImagePatchSame(image, "ddz_patch_cardnum_right_r0.png")) nrcards = 10;
+					else if(isImagePatchSame(image, "ddz_patch_cardnum_right_r1.png")) nrcards = 11;
+					else if(isImagePatchSame(image, "ddz_patch_cardnum_right_r2.png")) nrcards = 12;
+					else if(isImagePatchSame(image, "ddz_patch_cardnum_right_r3.png")) nrcards = 13;
+					else if(isImagePatchSame(image, "ddz_patch_cardnum_right_r4.png")) nrcards = 14;
+					else if(isImagePatchSame(image, "ddz_patch_cardnum_right_r5.png")) nrcards = 15;
+					else if(isImagePatchSame(image, "ddz_patch_cardnum_right_r6.png")) nrcards = 16;
+					else if(isImagePatchSame(image, "ddz_patch_cardnum_right_r7.png")) nrcards = 17;
+					else if(isImagePatchSame(image, "ddz_patch_cardnum_right_r8.png")) nrcards = 18;
+					else if(isImagePatchSame(image, "ddz_patch_cardnum_right_r9.png")) nrcards = 19;
+					else 
+					{
+						cerr<<"unknown cards number for right"<<endl;
+					}
+				}
+				else if(isImagePatchSame(image, "ddz_patch_cardnum_right_l0.png", 60))
+				{
+					if(isImagePatchSame(image, "ddz_patch_cardnum_right_m1.png")) nrcards = 1;
+					else if(isImagePatchSame(image, "ddz_patch_cardnum_right_m2.png")) nrcards = 2;
+					else if(isImagePatchSame(image, "ddz_patch_cardnum_right_m3.png")) nrcards = 3;
+					else if(isImagePatchSame(image, "ddz_patch_cardnum_right_m4.png")) nrcards = 4;
+					else if(isImagePatchSame(image, "ddz_patch_cardnum_right_m5.png")) nrcards = 5;
+					else if(isImagePatchSame(image, "ddz_patch_cardnum_right_m6.png")) nrcards = 6;
+					else if(isImagePatchSame(image, "ddz_patch_cardnum_right_m7.png")) nrcards = 7;
+					else if(isImagePatchSame(image, "ddz_patch_cardnum_right_m8.png")) nrcards = 8;
+					else if(isImagePatchSame(image, "ddz_patch_cardnum_right_m9.png")) nrcards = 9;
+					else
+					{
+						cerr<<"unknown cards number for right"<<endl;
+					}
+				}
+
 			}
 		}
 		void recog_boss()
@@ -500,15 +536,17 @@ class Analysis
 			image = cvLoadImage(file.c_str(), 1);
 			if(!image) return;
 			cur_stage = which_game_stage(image);
-
-			if(!is_valid_stage())
+			string stage_str[] = {"等待游戏", "发牌阶段", "叫地主阶段", "加倍阶段", "游戏进行中", "未知阶段"};
+			if(cur_stage == STAGE_UNKNOWN)
 			{
-				cerr<<"Invalid stage"<<endl;
+				system("clear");
+				cout<<file<<endl;
+				cout<<stage_str[cur_stage]<<endl;
 				cvReleaseImage(&image);
 				prev_stage = cur_stage;
 				return;
 			}
-			string stage_str[] = {"等待游戏", "发牌阶段", "叫地主阶段", "加倍阶段", "游戏进行中", "游戏结束"};
+			
 			if(cur_stage == STAGE_GAME_WAITING)
 			{
 				system("clear");
@@ -520,6 +558,7 @@ class Analysis
 				return;
 			}
 			recog_boss();
+			recog_cardnum();
 			recog_last3(); //if(!last3_cards.empty()) disp_cards(last3_cards, "last3");
 			recog_myself();
 			recog_lshowed();
@@ -549,7 +588,8 @@ class Analysis
 				system("clear");
 				cout<<file<<endl;
 				cout<<stage_str[cur_stage]<<endl;
-				cout<<"boss is "<<boss<<" nlcards = "<<nlcards<<" nrcards = "<<nrcards<<endl;
+				cout<<boss<<" is boss"<<endl;
+				cout<<"nlcards = "<<nlcards<<" nrcards = "<<nrcards<<endl;
 				if(!isEqualCards(myself_cards, prev_myself_cards)) cerr<<"myself cards changed"<<endl;
 				if(!isEqualCards(lshowed_cards, prev_lshowed_cards)) cerr<<"lshowed cards changed"<<endl;
 				if(!isEqualCards(rshowed_cards, prev_rshowed_cards)) cerr<<"rshowed cards changed"<<endl;
