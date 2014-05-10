@@ -1,4 +1,5 @@
 #include "analysis.h"
+#include "path.h"
 
 string infile = "";
 
@@ -16,7 +17,7 @@ int main(int argc, char ** argv)
 	if(argc == 2) fid = atoi(argv[1]);
 	while(1)
 	{
-		infile = "/Users/xiaohang/Test/doudizhu/data1/screen" + num2str(fid) + ".png";
+		infile = DDZ_OFFLINE_PATH"screen" + num2str(fid) + ".png";
 		if(file_exists(infile)) ana.process(infile);
 		else
 		{

@@ -36,7 +36,14 @@ using namespace cv;
 #define CT_MISSILE_CARD               14                                  //火箭类型
 #define CT_UNKNOWN                    15                                  //没有计算
 
-enum {PLAY_LIANDUI, PLAY_SHUNZI, PLAY_UNKNOWN};
+enum {ANIMATION_LIANDUI, ANIMATION_SHUNZI, ANIMATION_NONE};
+
+string cards_str(vector<Card> & cards)
+{
+	string out;
+	for(int i = 0; i < cards.size(); i++) out += cards[i].str();
+	return out;
+}
 
 class PlayAnalysisResult
 {
@@ -343,6 +350,7 @@ class Analysis
 		OnePlay prev_iplay;
 
 		vector<OnePlay> history;
+
 		int last_lplay_id; // To avoid duplicated adding 
 		int last_iplay_id; // to history
 		int last_rplay_id; // it is the last id in history
@@ -357,6 +365,11 @@ class Analysis
 
 		int cur_clock;
 		int prev_clock;
+
+		int animation_me;
+		int animation_left;
+		int animation_right;
+		
 		IplImage * image;
 
 		Analysis()
@@ -447,13 +460,14 @@ class Analysis
 			return true;
 		}
 		// more_cards have much more cards and contains less_cards
-		vector<Card> diffCards(vector<Card> &more_cards, vector<Card> &less_cards)
+		vector<Card> missingCards(vector<Card> &more_cards, vector<Card> &less_cards)
 		{
+			assert(more_cards.size() >= less_cards.size());
 			vector<Card> diffCards;
 			for(int i = 0; i < more_cards.size(); i++)
 			{
 				bool isexist = false;
-				for(int j = 0; j < less_cards.size(); i++)
+				for(int j = 0; j < less_cards.size(); j++)
 				{
 					if(more_cards[i] == less_cards[j]) 
 					{
@@ -498,6 +512,10 @@ class Analysis
 			boss = "";
 			nlcards = 0;
 			nrcards = 0;
+
+			animation_me = ANIMATION_NONE;
+			animation_left = ANIMATION_NONE;
+			animation_right = ANIMATION_NONE;
 		}
 		bool is_valid_stage()
 		{
@@ -613,20 +631,6 @@ class Analysis
 				}
 			}
 		}
-		/*
-		void remove_from_history(OnePlay & play)
-		{
-			if(play.cards.empty()) return;
-			if(isExistUnknownCard(play.cards)) return;
-			cerr<<"remove play "<<play.str()<<" from history"<<endl;
-			
-			if(play.who == "left" && isEqualCards(history[last_lplay_id].cards, play.cards)) history.erase(history.begin() + last_lplay_id);
-			else if(play.who == "me" && isEqualCards(history[last_iplay_id].cards, play.cards)) history.erase(history.begin() + last_iplay_id);
-			else if(play.who == "right" && isEqualCards(history[last_rplay_id].cards, play.cards)) history.erase(history.begin() + last_rplay_id);
-			else
-				cerr<<"can't remove play "<<play.str()<<" from history"<<endl;
-		}
-		*/
 
 		vector<Card> get_hidden_cards()
 		{
@@ -803,10 +807,12 @@ class Analysis
 					cur_iplay.cards.clear();
 				else if(isImagePatchSame(image, "ddz_patch_me_liandui.png"))
 				{
+					animation_me = ANIMATION_LIANDUI;
 					cur_iplay.cards.clear();// = RecogPlay("play", "me").recog_cards_liandui(image);
 				}
 				else if(isImagePatchSame(image, "ddz_patch_me_shunzi.png"))
 				{
+					animation_me = ANIMATION_SHUNZI;
 					cur_iplay.cards.clear();// = RecogPlay("play", "me").recog_cards_shunzi(image);
 				}
 				else
@@ -829,12 +835,12 @@ class Analysis
 					cur_lplay.cards.clear();
 				else if(isImagePatchSame(image, "ddz_patch_left_liandui.png"))
 				{
-					cerr<<"left is liandui"<<endl;
+					animation_left = ANIMATION_LIANDUI;
 					cur_lplay.cards = RecogPlay("play", "left").recog_cards_liandui(image);
 				}
 				else if(isImagePatchSame(image, "ddz_patch_left_shunzi.png"))
 				{
-					cerr<<"left is shunzi"<<endl;
+					animation_left = ANIMATION_SHUNZI;
 					cur_lplay.cards = RecogPlay("play", "left").recog_cards_shunzi(image);
 				}
 				else
@@ -857,12 +863,12 @@ class Analysis
 					cur_rplay.cards.clear();
 				else if(isImagePatchSame(image, "ddz_patch_right_liandui.png"))
 				{
-					cerr<<"right is liandui"<<endl;
+					animation_right = ANIMATION_LIANDUI;
 					cur_rplay.cards = RecogPlay("play", "right").recog_cards_liandui(image);
 				}
 				else if(isImagePatchSame(image, "ddz_patch_right_shunzi.png"))
 				{
-					cerr<<"right is shunzi"<<endl;
+					animation_right = ANIMATION_SHUNZI;
 					cur_rplay.cards = RecogPlay("play", "right").recog_cards_shunzi(image);
 				}
 				else
@@ -875,12 +881,46 @@ class Analysis
 		{
 			if(cur_stage == STAGE_PLAYING)
 			{
-				// 手牌出错时用之前的状态
-				//if(!isExistUnknownCard(prev_handcards) && !prev_handcards.empty() && cur_handcards.size() > prev_handcards.size())
-				//	cur_handcards = prev_handcards;
-				//else 
-				if(!isExistUnknownCard(prev_handcards) && numberOfUnknownCards(cur_handcards) >= 3)
-					cur_handcards = prev_handcards;
+				// 根据prev_handcards, cur_handcards 以及 cur_iplay 相互之间进行验证
+				// 前提得是prev_handcards没有错误
+				if(!isExistUnknownCard(prev_handcards))
+				{
+					if(!isExistUnknownCard(cur_handcards))
+					{
+						if(prev_handcards.size() > cur_handcards.size())
+						{
+							if(animation_me != ANIMATION_NONE)
+							{
+								cerr<<"refresh iplay by cur_handcards "<<cards_str(cur_handcards)<<" and prev_handcards"<<cards_str(prev_handcards)<<endl;
+								cur_iplay.cards = missingCards(prev_handcards, cur_handcards);
+								cur_iplay.refresh_card_type();
+							}
+						}
+						else if(isEqualCards(prev_handcards, cur_handcards))
+						{
+							if(animation_me != ANIMATION_NONE)
+							{
+								if(prev_iplay.card_type != CT_ERROR)
+								{
+									cerr<<"As handcars doesn't change, and there is move, set cur_iplay to prev_iplay"<<endl;
+									cur_iplay = prev_iplay;
+								}
+							}
+						}
+					}
+					else if(cur_iplay.card_type != CT_ERROR)
+					{
+						//if(animation_me == NONE)
+						{
+							cerr<<"refresh cur_handcards by prev_handcards and cur_iplay"<<endl;
+							cur_handcards = missingCards(prev_handcards, cur_iplay.cards);
+						}
+					}
+					else if(numberOfUnknownCards(cur_handcards) >= 3)
+						cur_handcards = prev_handcards;
+
+				}
+
 			}
 		}
 		void recog_lshowed()
@@ -1007,6 +1047,10 @@ class Analysis
 				cur_clock= CLOCK_UNKNOWN; 
 				
 				prev_stage = cur_stage;
+
+				animation_me = ANIMATION_NONE;
+				animation_left = ANIMATION_NONE;
+				animation_right = ANIMATION_NONE;
 			}
 		}
 		void process(string file)

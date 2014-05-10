@@ -1,4 +1,5 @@
 #include "analysis.h"
+#include "path.h"
 
 string infile = "";
 
@@ -8,11 +9,12 @@ bool file_exists(string filename){
 }
 int main(int argc, char ** argv)
 {
-	system("rm -rf /Users/xiaohang/Test/doudizhu/data2/*");
+	system("rm -rf "DDZ_ONLINE_PATH"*");
 	build_patch_map(); // 为使用isImagePatchSame 做准备
 
 	Analysis ana;
 	int fid = 1;
+	int nfails = 0;
 	while(1)
 	{
 		ostringstream oss;
@@ -24,7 +26,7 @@ int main(int argc, char ** argv)
 		vector<int> fids;
 		for(int id = fid - 15; id < fid; id++)
 		{
-			infile = "/Users/xiaohang/Test/doudizhu/data2/screen" + num2str(id) + ".png";
+			infile = DDZ_ONLINE_PATH"screen" + num2str(id) + ".png";
 			if(file_exists(infile))
 			{
 				if(fids.empty()) fids.push_back(id);
@@ -36,11 +38,11 @@ int main(int argc, char ** argv)
 		{
 			for(int i = 0; i < fids.size() - 1; i++)
 			{
-				infile = "/Users/xiaohang/Test/doudizhu/data2/screen" + num2str(fids[i]) + ".png";
+				infile = DDZ_ONLINE_PATH"screen" + num2str(fids[i]) + ".png";
 				ana.process(infile);
 				if(argc == 2)
 				{
-					string cmd = "mv " + infile + " /Users/xiaohang/Test/doudizhu/data1/";
+					string cmd = "mv " + infile + " "DDZ_OFFLINE_PATH;
 					system(cmd.c_str());
 				}
 				else
@@ -49,6 +51,12 @@ int main(int argc, char ** argv)
 					system(cmd.c_str());
 				}
 			}
+			nfails = 0;
+		}
+		else 
+		{
+			nfails++;
+			if(nfails > 10) break;
 		}
 		fid++;
 		//usleep(500000);
