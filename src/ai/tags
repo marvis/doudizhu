@@ -1,0 +1,336 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+ASSERT	StdAfx.h	14;"	d
+Add	StdAfx.h	/^		void Add(T & val)$/;"	f	class:CArrayTemplate	access:public	signature:(T & val)
+AnalyseFourCardType	GameLogic.cpp	/^bool CGameLogic::AnalyseFourCardType( BYTE const cbHandCardData[MAX_COUNT], BYTE cbHandCardCount, BYTE cbEnemyCardData[MAX_COUNT], BYTE cbEnemyCardCount, tagOutCardResult &CardResult )$/;"	f	class:CGameLogic	signature:( BYTE const cbHandCardData[MAX_COUNT], BYTE cbHandCardCount, BYTE cbEnemyCardData[MAX_COUNT], BYTE cbEnemyCardCount, tagOutCardResult &CardResult )
+AnalyseFourCardType	GameLogic.h	/^	bool AnalyseFourCardType( BYTE const cbHandCardData[MAX_COUNT], BYTE cbHandCardCount, BYTE cbEnemyCardData[MAX_COUNT], BYTE cbEnemyCardCount, tagOutCardResult &CardResult ) ;$/;"	p	class:CGameLogic	access:protected	signature:( BYTE const cbHandCardData[MAX_COUNT], BYTE cbHandCardCount, BYTE cbEnemyCardData[MAX_COUNT], BYTE cbEnemyCardCount, tagOutCardResult &CardResult )
+AnalyseOutCardType	GameLogic.cpp	/^void CGameLogic::AnalyseOutCardType(BYTE const cbHandCardData[], BYTE const cbHandCardCount, BYTE const cbTurnCardData[], BYTE const cbTurnCardCount,tagOutCardTypeResult CardTypeResult[12+1])$/;"	f	class:CGameLogic	signature:(BYTE const cbHandCardData[], BYTE const cbHandCardCount, BYTE const cbTurnCardData[], BYTE const cbTurnCardCount,tagOutCardTypeResult CardTypeResult[12+1])
+AnalyseOutCardType	GameLogic.cpp	/^void CGameLogic::AnalyseOutCardType(BYTE const cbHandCardData[], BYTE const cbHandCardCount, tagOutCardTypeResult CardTypeResult[12+1])$/;"	f	class:CGameLogic	signature:(BYTE const cbHandCardData[], BYTE const cbHandCardCount, tagOutCardTypeResult CardTypeResult[12+1])
+AnalyseOutCardType	GameLogic.h	/^	void AnalyseOutCardType(BYTE const cbHandCardData[], BYTE const cbHandCardCount, BYTE const cbTurnCardData[], BYTE const cbTurnCardCount, tagOutCardTypeResult CardTypeResult[12+1]);$/;"	p	class:CGameLogic	access:protected	signature:(BYTE const cbHandCardData[], BYTE const cbHandCardCount, BYTE const cbTurnCardData[], BYTE const cbTurnCardCount, tagOutCardTypeResult CardTypeResult[12+1])
+AnalyseOutCardType	GameLogic.h	/^	void AnalyseOutCardType(BYTE const cbHandCardData[], BYTE const cbHandCardCount, tagOutCardTypeResult CardTypeResult[12+1]);$/;"	p	class:CGameLogic	access:protected	signature:(BYTE const cbHandCardData[], BYTE const cbHandCardCount, tagOutCardTypeResult CardTypeResult[12+1])
+AnalyseSinleCardCount	GameLogic.cpp	/^BYTE CGameLogic::AnalyseSinleCardCount(BYTE const cbHandCardData[], BYTE const cbHandCardCount, BYTE const cbWantOutCardData[], BYTE const cbWantOutCardCount, BYTE cbSingleCardData[])$/;"	f	class:CGameLogic	signature:(BYTE const cbHandCardData[], BYTE const cbHandCardCount, BYTE const cbWantOutCardData[], BYTE const cbWantOutCardCount, BYTE cbSingleCardData[])
+AnalyseSinleCardCount	GameLogic.h	/^	BYTE AnalyseSinleCardCount(BYTE const cbHandCardData[], BYTE const cbHandCardCount, BYTE const cbWantOutCardData[], BYTE const cbWantOutCardCount, BYTE cbSingleCardData[]=NULL);$/;"	p	class:CGameLogic	access:protected	signature:(BYTE const cbHandCardData[], BYTE const cbHandCardCount, BYTE const cbWantOutCardData[], BYTE const cbWantOutCardCount, BYTE cbSingleCardData[]=NULL)
+AnalysebCardData	GameLogic.cpp	/^bool CGameLogic::AnalysebCardData(const BYTE cbCardData[], BYTE cbCardCount, tagAnalyseResult & AnalyseResult)$/;"	f	class:CGameLogic	signature:(const BYTE cbCardData[], BYTE cbCardCount, tagAnalyseResult & AnalyseResult)
+AnalysebCardData	GameLogic.h	/^	bool AnalysebCardData(const BYTE cbCardData[], BYTE cbCardCount, tagAnalyseResult & AnalyseResult);$/;"	p	class:CGameLogic	access:public	signature:(const BYTE cbCardData[], BYTE cbCardCount, tagAnalyseResult & AnalyseResult)
+BACK_COUNT	GameLogic.h	19;"	d
+BYTE	StdAfx.h	13;"	d
+BankerOutCard	GameLogic.cpp	/^void CGameLogic::BankerOutCard(const BYTE cbHandCardData[], BYTE cbHandCardCount, WORD wOutCardUser, const BYTE cbTurnCardData[], BYTE cbTurnCardCount, tagOutCardResult & OutCardResult) $/;"	f	class:CGameLogic	signature:(const BYTE cbHandCardData[], BYTE cbHandCardCount, WORD wOutCardUser, const BYTE cbTurnCardData[], BYTE cbTurnCardCount, tagOutCardResult & OutCardResult)
+BankerOutCard	GameLogic.cpp	/^void CGameLogic::BankerOutCard(const BYTE cbHandCardData[], BYTE cbHandCardCount, tagOutCardResult & OutCardResult) $/;"	f	class:CGameLogic	signature:(const BYTE cbHandCardData[], BYTE cbHandCardCount, tagOutCardResult & OutCardResult)
+BankerOutCard	GameLogic.h	/^	void BankerOutCard(const BYTE cbHandCardData[], BYTE cbHandCardCount, WORD wOutCardUser, const BYTE cbTurnCardData[], BYTE cbTurnCardCount, tagOutCardResult & OutCardResult) ;$/;"	p	class:CGameLogic	access:public	signature:(const BYTE cbHandCardData[], BYTE cbHandCardCount, WORD wOutCardUser, const BYTE cbTurnCardData[], BYTE cbTurnCardCount, tagOutCardResult & OutCardResult)
+BankerOutCard	GameLogic.h	/^	void BankerOutCard(const BYTE cbHandCardData[], BYTE cbHandCardCount, tagOutCardResult & OutCardResult) ;$/;"	p	class:CGameLogic	access:public	signature:(const BYTE cbHandCardData[], BYTE cbHandCardCount, tagOutCardResult & OutCardResult)
+CArrayTemplate	StdAfx.h	/^class CArrayTemplate : public vector<T>$/;"	c	inherits:vector
+CArrayTemplate::Add	StdAfx.h	/^		void Add(T & val)$/;"	f	class:CArrayTemplate	access:public	signature:(T & val)
+CArrayTemplate::GetAt	StdAfx.h	/^		T & GetAt(int n)$/;"	f	class:CArrayTemplate	access:public	signature:(int n)
+CArrayTemplate::GetCount	StdAfx.h	/^		int GetCount()$/;"	f	class:CArrayTemplate	access:public	signature:()
+CArrayTemplate::InsertAt	StdAfx.h	/^		void InsertAt(int n, T & val)$/;"	f	class:CArrayTemplate	access:public	signature:(int n, T & val)
+CArrayTemplate::IsEmpty	StdAfx.h	/^		bool IsEmpty()$/;"	f	class:CArrayTemplate	access:public	signature:()
+CArrayTemplate::RemoveAll	StdAfx.h	/^		void RemoveAll()$/;"	f	class:CArrayTemplate	access:public	signature:()
+CArrayTemplate::RemoveAt	StdAfx.h	/^		void RemoveAt(int n)$/;"	f	class:CArrayTemplate	access:public	signature:(int n)
+CGameLogic	GameLogic.cpp	/^CGameLogic::CGameLogic()$/;"	f	class:CGameLogic	signature:()
+CGameLogic	GameLogic.h	/^	CGameLogic();$/;"	p	class:CGameLogic	access:public	signature:()
+CGameLogic	GameLogic.h	/^class CGameLogic$/;"	c
+CGameLogic::AnalyseFourCardType	GameLogic.cpp	/^bool CGameLogic::AnalyseFourCardType( BYTE const cbHandCardData[MAX_COUNT], BYTE cbHandCardCount, BYTE cbEnemyCardData[MAX_COUNT], BYTE cbEnemyCardCount, tagOutCardResult &CardResult )$/;"	f	class:CGameLogic	signature:( BYTE const cbHandCardData[MAX_COUNT], BYTE cbHandCardCount, BYTE cbEnemyCardData[MAX_COUNT], BYTE cbEnemyCardCount, tagOutCardResult &CardResult )
+CGameLogic::AnalyseFourCardType	GameLogic.h	/^	bool AnalyseFourCardType( BYTE const cbHandCardData[MAX_COUNT], BYTE cbHandCardCount, BYTE cbEnemyCardData[MAX_COUNT], BYTE cbEnemyCardCount, tagOutCardResult &CardResult ) ;$/;"	p	class:CGameLogic	access:protected	signature:( BYTE const cbHandCardData[MAX_COUNT], BYTE cbHandCardCount, BYTE cbEnemyCardData[MAX_COUNT], BYTE cbEnemyCardCount, tagOutCardResult &CardResult )
+CGameLogic::AnalyseOutCardType	GameLogic.cpp	/^void CGameLogic::AnalyseOutCardType(BYTE const cbHandCardData[], BYTE const cbHandCardCount, BYTE const cbTurnCardData[], BYTE const cbTurnCardCount,tagOutCardTypeResult CardTypeResult[12+1])$/;"	f	class:CGameLogic	signature:(BYTE const cbHandCardData[], BYTE const cbHandCardCount, BYTE const cbTurnCardData[], BYTE const cbTurnCardCount,tagOutCardTypeResult CardTypeResult[12+1])
+CGameLogic::AnalyseOutCardType	GameLogic.cpp	/^void CGameLogic::AnalyseOutCardType(BYTE const cbHandCardData[], BYTE const cbHandCardCount, tagOutCardTypeResult CardTypeResult[12+1])$/;"	f	class:CGameLogic	signature:(BYTE const cbHandCardData[], BYTE const cbHandCardCount, tagOutCardTypeResult CardTypeResult[12+1])
+CGameLogic::AnalyseOutCardType	GameLogic.h	/^	void AnalyseOutCardType(BYTE const cbHandCardData[], BYTE const cbHandCardCount, BYTE const cbTurnCardData[], BYTE const cbTurnCardCount, tagOutCardTypeResult CardTypeResult[12+1]);$/;"	p	class:CGameLogic	access:protected	signature:(BYTE const cbHandCardData[], BYTE const cbHandCardCount, BYTE const cbTurnCardData[], BYTE const cbTurnCardCount, tagOutCardTypeResult CardTypeResult[12+1])
+CGameLogic::AnalyseOutCardType	GameLogic.h	/^	void AnalyseOutCardType(BYTE const cbHandCardData[], BYTE const cbHandCardCount, tagOutCardTypeResult CardTypeResult[12+1]);$/;"	p	class:CGameLogic	access:protected	signature:(BYTE const cbHandCardData[], BYTE const cbHandCardCount, tagOutCardTypeResult CardTypeResult[12+1])
+CGameLogic::AnalyseSinleCardCount	GameLogic.cpp	/^BYTE CGameLogic::AnalyseSinleCardCount(BYTE const cbHandCardData[], BYTE const cbHandCardCount, BYTE const cbWantOutCardData[], BYTE const cbWantOutCardCount, BYTE cbSingleCardData[])$/;"	f	class:CGameLogic	signature:(BYTE const cbHandCardData[], BYTE const cbHandCardCount, BYTE const cbWantOutCardData[], BYTE const cbWantOutCardCount, BYTE cbSingleCardData[])
+CGameLogic::AnalyseSinleCardCount	GameLogic.h	/^	BYTE AnalyseSinleCardCount(BYTE const cbHandCardData[], BYTE const cbHandCardCount, BYTE const cbWantOutCardData[], BYTE const cbWantOutCardCount, BYTE cbSingleCardData[]=NULL);$/;"	p	class:CGameLogic	access:protected	signature:(BYTE const cbHandCardData[], BYTE const cbHandCardCount, BYTE const cbWantOutCardData[], BYTE const cbWantOutCardCount, BYTE cbSingleCardData[]=NULL)
+CGameLogic::AnalysebCardData	GameLogic.cpp	/^bool CGameLogic::AnalysebCardData(const BYTE cbCardData[], BYTE cbCardCount, tagAnalyseResult & AnalyseResult)$/;"	f	class:CGameLogic	signature:(const BYTE cbCardData[], BYTE cbCardCount, tagAnalyseResult & AnalyseResult)
+CGameLogic::AnalysebCardData	GameLogic.h	/^	bool AnalysebCardData(const BYTE cbCardData[], BYTE cbCardCount, tagAnalyseResult & AnalyseResult);$/;"	p	class:CGameLogic	access:public	signature:(const BYTE cbCardData[], BYTE cbCardCount, tagAnalyseResult & AnalyseResult)
+CGameLogic::BankerOutCard	GameLogic.cpp	/^void CGameLogic::BankerOutCard(const BYTE cbHandCardData[], BYTE cbHandCardCount, WORD wOutCardUser, const BYTE cbTurnCardData[], BYTE cbTurnCardCount, tagOutCardResult & OutCardResult) $/;"	f	class:CGameLogic	signature:(const BYTE cbHandCardData[], BYTE cbHandCardCount, WORD wOutCardUser, const BYTE cbTurnCardData[], BYTE cbTurnCardCount, tagOutCardResult & OutCardResult)
+CGameLogic::BankerOutCard	GameLogic.cpp	/^void CGameLogic::BankerOutCard(const BYTE cbHandCardData[], BYTE cbHandCardCount, tagOutCardResult & OutCardResult) $/;"	f	class:CGameLogic	signature:(const BYTE cbHandCardData[], BYTE cbHandCardCount, tagOutCardResult & OutCardResult)
+CGameLogic::BankerOutCard	GameLogic.h	/^	void BankerOutCard(const BYTE cbHandCardData[], BYTE cbHandCardCount, WORD wOutCardUser, const BYTE cbTurnCardData[], BYTE cbTurnCardCount, tagOutCardResult & OutCardResult) ;$/;"	p	class:CGameLogic	access:public	signature:(const BYTE cbHandCardData[], BYTE cbHandCardCount, WORD wOutCardUser, const BYTE cbTurnCardData[], BYTE cbTurnCardCount, tagOutCardResult & OutCardResult)
+CGameLogic::BankerOutCard	GameLogic.h	/^	void BankerOutCard(const BYTE cbHandCardData[], BYTE cbHandCardCount, tagOutCardResult & OutCardResult) ;$/;"	p	class:CGameLogic	access:public	signature:(const BYTE cbHandCardData[], BYTE cbHandCardCount, tagOutCardResult & OutCardResult)
+CGameLogic::CGameLogic	GameLogic.cpp	/^CGameLogic::CGameLogic()$/;"	f	class:CGameLogic	signature:()
+CGameLogic::CGameLogic	GameLogic.h	/^	CGameLogic();$/;"	p	class:CGameLogic	access:public	signature:()
+CGameLogic::Combination	GameLogic.cpp	/^void CGameLogic::Combination(BYTE cbCombineCardData[], BYTE cbResComLen,  BYTE cbResultCardData[100][5], BYTE &cbResCardLen,BYTE cbSrcCardData[] , BYTE cbCombineLen1, BYTE cbSrcLen, const BYTE cbCombineLen2)$/;"	f	class:CGameLogic	signature:(BYTE cbCombineCardData[], BYTE cbResComLen, BYTE cbResultCardData[100][5], BYTE &cbResCardLen,BYTE cbSrcCardData[] , BYTE cbCombineLen1, BYTE cbSrcLen, const BYTE cbCombineLen2)
+CGameLogic::Combination	GameLogic.h	/^	void Combination(BYTE cbCombineCardData[], BYTE cbResComLen,  BYTE cbResultCardData[254][5], BYTE &cbResCardLen,BYTE cbSrcCardData[] , BYTE cbCombineLen1, BYTE cbSrcLen, const BYTE cbCombineLen2);$/;"	p	class:CGameLogic	access:protected	signature:(BYTE cbCombineCardData[], BYTE cbResComLen, BYTE cbResultCardData[254][5], BYTE &cbResCardLen,BYTE cbSrcCardData[] , BYTE cbCombineLen1, BYTE cbSrcLen, const BYTE cbCombineLen2)
+CGameLogic::CompareCard	GameLogic.cpp	/^bool CGameLogic::CompareCard(const BYTE cbFirstCard[], const BYTE cbNextCard[], BYTE cbFirstCount, BYTE cbNextCount)$/;"	f	class:CGameLogic	signature:(const BYTE cbFirstCard[], const BYTE cbNextCard[], BYTE cbFirstCount, BYTE cbNextCount)
+CGameLogic::CompareCard	GameLogic.h	/^	bool CompareCard(const BYTE cbFirstCard[], const BYTE cbNextCard[], BYTE cbFirstCount, BYTE cbNextCount);$/;"	p	class:CGameLogic	access:public	signature:(const BYTE cbFirstCard[], const BYTE cbNextCard[], BYTE cbFirstCount, BYTE cbNextCount)
+CGameLogic::GetAllBomCard	GameLogic.cpp	/^void CGameLogic::GetAllBomCard(BYTE const cbHandCardData[], BYTE const cbHandCardCount, BYTE cbBomCardData[], BYTE &cbBomCardCount)$/;"	f	class:CGameLogic	signature:(BYTE const cbHandCardData[], BYTE const cbHandCardCount, BYTE cbBomCardData[], BYTE &cbBomCardCount)
+CGameLogic::GetAllBomCard	GameLogic.h	/^	void GetAllBomCard(BYTE const cbHandCardData[], BYTE const cbHandCardCount, BYTE cbBomCardData[], BYTE &cbBomCardCount);$/;"	p	class:CGameLogic	access:protected	signature:(BYTE const cbHandCardData[], BYTE const cbHandCardCount, BYTE cbBomCardData[], BYTE &cbBomCardCount)
+CGameLogic::GetAllDoubleCard	GameLogic.cpp	/^void CGameLogic::GetAllDoubleCard(BYTE const cbHandCardData[], BYTE const cbHandCardCount, BYTE cbDoubleCardData[], BYTE &cbDoubleCardCount)$/;"	f	class:CGameLogic	signature:(BYTE const cbHandCardData[], BYTE const cbHandCardCount, BYTE cbDoubleCardData[], BYTE &cbDoubleCardCount)
+CGameLogic::GetAllDoubleCard	GameLogic.h	/^	void GetAllDoubleCard(BYTE const cbHandCardData[], BYTE const cbHandCardCount, BYTE cbDoubleCardData[], BYTE &cbDoubleCardCount);$/;"	p	class:CGameLogic	access:protected	signature:(BYTE const cbHandCardData[], BYTE const cbHandCardCount, BYTE cbDoubleCardData[], BYTE &cbDoubleCardCount)
+CGameLogic::GetAllLineCard	GameLogic.cpp	/^void CGameLogic::GetAllLineCard(BYTE const cbHandCardData[], BYTE const cbHandCardCount, BYTE cbLineCardData[], BYTE &cbLineCardCount)$/;"	f	class:CGameLogic	signature:(BYTE const cbHandCardData[], BYTE const cbHandCardCount, BYTE cbLineCardData[], BYTE &cbLineCardCount)
+CGameLogic::GetAllLineCard	GameLogic.h	/^	void GetAllLineCard(BYTE const cbHandCardData[], BYTE const cbHandCardCount, BYTE cbLineCardData[], BYTE &cbLineCardCount);$/;"	p	class:CGameLogic	access:protected	signature:(BYTE const cbHandCardData[], BYTE const cbHandCardCount, BYTE cbLineCardData[], BYTE &cbLineCardCount)
+CGameLogic::GetAllSingleCard	GameLogic.cpp	/^void CGameLogic::GetAllSingleCard(BYTE const cbHandCardData[], BYTE const cbHandCardCount, BYTE cbSingleCardData[], BYTE &cbSingleCardCount)$/;"	f	class:CGameLogic	signature:(BYTE const cbHandCardData[], BYTE const cbHandCardCount, BYTE cbSingleCardData[], BYTE &cbSingleCardCount)
+CGameLogic::GetAllSingleCard	GameLogic.h	/^	void GetAllSingleCard(BYTE const cbHandCardData[], BYTE const cbHandCardCount, BYTE cbSingleCardData[], BYTE &cbSingleCardCount);$/;"	p	class:CGameLogic	access:protected	signature:(BYTE const cbHandCardData[], BYTE const cbHandCardCount, BYTE cbSingleCardData[], BYTE &cbSingleCardCount)
+CGameLogic::GetAllThreeCard	GameLogic.cpp	/^void CGameLogic::GetAllThreeCard(BYTE const cbHandCardData[], BYTE const cbHandCardCount, BYTE cbThreeCardData[], BYTE &cbThreeCardCount)$/;"	f	class:CGameLogic	signature:(BYTE const cbHandCardData[], BYTE const cbHandCardCount, BYTE cbThreeCardData[], BYTE &cbThreeCardCount)
+CGameLogic::GetAllThreeCard	GameLogic.h	/^	void GetAllThreeCard(BYTE const cbHandCardData[], BYTE const cbHandCardCount, BYTE cbThreeCardData[], BYTE &cbThreeCardCount);$/;"	p	class:CGameLogic	access:protected	signature:(BYTE const cbHandCardData[], BYTE const cbHandCardCount, BYTE cbThreeCardData[], BYTE &cbThreeCardCount)
+CGameLogic::GetCardColor	GameLogic.h	/^	BYTE GetCardColor(BYTE cbCardData) { return cbCardData&MASK_COLOR; }$/;"	f	class:CGameLogic	access:public	signature:(BYTE cbCardData)
+CGameLogic::GetCardCueID	GameLogic.cpp	/^int CGameLogic::GetCardCueID(const BYTE cbCardData[],BYTE  cbCardCount,BYTE byFindData)$/;"	f	class:CGameLogic	signature:(const BYTE cbCardData[],BYTE cbCardCount,BYTE byFindData)
+CGameLogic::GetCardCueID	GameLogic.h	/^	int GetCardCueID(const BYTE cbCardData[],BYTE  cbCardCount,BYTE byFindData);$/;"	p	class:CGameLogic	access:public	signature:(const BYTE cbCardData[],BYTE cbCardCount,BYTE byFindData)
+CGameLogic::GetCardLogicValue	GameLogic.cpp	/^BYTE CGameLogic::GetCardLogicValue(BYTE cbCardData)$/;"	f	class:CGameLogic	signature:(BYTE cbCardData)
+CGameLogic::GetCardLogicValue	GameLogic.h	/^	BYTE GetCardLogicValue(BYTE cbCardData);$/;"	p	class:CGameLogic	access:public	signature:(BYTE cbCardData)
+CGameLogic::GetCardType	GameLogic.cpp	/^BYTE CGameLogic::GetCardType(const BYTE cbCardData[], BYTE cbCardCount)$/;"	f	class:CGameLogic	signature:(const BYTE cbCardData[], BYTE cbCardCount)
+CGameLogic::GetCardType	GameLogic.h	/^	BYTE GetCardType(const BYTE cbCardData[], BYTE cbCardCount);$/;"	p	class:CGameLogic	access:public	signature:(const BYTE cbCardData[], BYTE cbCardCount)
+CGameLogic::GetCardValue	GameLogic.h	/^	BYTE GetCardValue(BYTE cbCardData) { return cbCardData&MASK_VALUE; }$/;"	f	class:CGameLogic	access:public	signature:(BYTE cbCardData)
+CGameLogic::GetGoodCardData	GameLogic.cpp	/^void CGameLogic::GetGoodCardData(BYTE cbGoodCardData[NORMAL_COUNT])$/;"	f	class:CGameLogic	signature:(BYTE cbGoodCardData[NORMAL_COUNT])
+CGameLogic::GetGoodCardData	GameLogic.h	/^	void GetGoodCardData(BYTE cbGoodCardData[NORMAL_COUNT]) ;$/;"	p	class:CGameLogic	access:public	signature:(BYTE cbGoodCardData[NORMAL_COUNT])
+CGameLogic::GetNoShanThreeCardType	GameLogic.cpp	/^BYTE CGameLogic::GetNoShanThreeCardType(const BYTE cbCardData[], BYTE cbCardCount)$/;"	f	class:CGameLogic	signature:(const BYTE cbCardData[], BYTE cbCardCount)
+CGameLogic::GetNoShanThreeCardType	GameLogic.h	/^	BYTE GetNoShanThreeCardType(const BYTE cbCardData[], BYTE cbCardCount);$/;"	p	class:CGameLogic	access:public	signature:(const BYTE cbCardData[], BYTE cbCardCount)
+CGameLogic::GetRandomCard	GameLogic.cpp	/^BYTE CGameLogic::GetRandomCard(void)$/;"	f	class:CGameLogic	signature:(void)
+CGameLogic::GetRandomCard	GameLogic.h	/^	BYTE GetRandomCard(void) ;$/;"	p	class:CGameLogic	access:public	signature:(void)
+CGameLogic::GetShanCardType	GameLogic.cpp	/^bool CGameLogic::GetShanCardType( const BYTE cbCardData[], BYTE cbCardCount,BYTE byType[], BYTE &byCountType ,BYTE byThreeCardData[] )$/;"	f	class:CGameLogic	signature:( const BYTE cbCardData[], BYTE cbCardCount,BYTE byType[], BYTE &byCountType ,BYTE byThreeCardData[] )
+CGameLogic::GetShanCardType	GameLogic.h	/^	bool GetShanCardType( const BYTE cbCardData[], BYTE cbCardCount,BYTE byType[], BYTE &byCountType,BYTE byThreeCardData[] );$/;"	p	class:CGameLogic	access:public	signature:( const BYTE cbCardData[], BYTE cbCardCount,BYTE byType[], BYTE &byCountType,BYTE byThreeCardData[] )
+CGameLogic::GetWeiZhiChangeThree	GameLogic.cpp	/^BYTE CGameLogic::GetWeiZhiChangeThree( const BYTE cbCardData[], BYTE cbCardCount)$/;"	f	class:CGameLogic	signature:( const BYTE cbCardData[], BYTE cbCardCount)
+CGameLogic::GetWeiZhiChangeThree	GameLogic.h	/^	BYTE GetWeiZhiChangeThree( const BYTE cbCardData[], BYTE cbCardCount);$/;"	p	class:CGameLogic	access:public	signature:( const BYTE cbCardData[], BYTE cbCardCount)
+CGameLogic::IsHaveChangeThree	GameLogic.cpp	/^bool CGameLogic::IsHaveChangeThree(const BYTE cbCardData[],BYTE cbCardCount)$/;"	f	class:CGameLogic	signature:(const BYTE cbCardData[],BYTE cbCardCount)
+CGameLogic::IsHaveChangeThree	GameLogic.h	/^	bool IsHaveChangeThree(const BYTE cbCardData[],BYTE cbCardCount);$/;"	p	class:CGameLogic	access:public	signature:(const BYTE cbCardData[],BYTE cbCardCount)
+CGameLogic::IsLargestCard	GameLogic.cpp	/^bool CGameLogic::IsLargestCard( WORD wTestUser, BYTE const cbWantOutCardData[], BYTE const cbWantOutCardCount ) {$/;"	f	class:CGameLogic	signature:( WORD wTestUser, BYTE const cbWantOutCardData[], BYTE const cbWantOutCardCount )
+CGameLogic::IsLargestCard	GameLogic.h	/^	bool IsLargestCard( WORD wTestUser, BYTE const cbWantOutCardData[], BYTE const cbWantOutCardCount );$/;"	p	class:CGameLogic	access:protected	signature:( WORD wTestUser, BYTE const cbWantOutCardData[], BYTE const cbWantOutCardCount )
+CGameLogic::IsValidCard	GameLogic.cpp	/^bool CGameLogic::IsValidCard(BYTE cbCardData)$/;"	f	class:CGameLogic	signature:(BYTE cbCardData)
+CGameLogic::IsValidCard	GameLogic.h	/^	bool IsValidCard(BYTE cbCardData);$/;"	p	class:CGameLogic	access:public	signature:(BYTE cbCardData)
+CGameLogic::LandScore	GameLogic.cpp	/^BYTE CGameLogic::LandScore(WORD wMeChairID, BYTE cbCurrentLandScore)$/;"	f	class:CGameLogic	signature:(WORD wMeChairID, BYTE cbCurrentLandScore)
+CGameLogic::LandScore	GameLogic.h	/^	BYTE LandScore(WORD wMeChairID, BYTE cbCurrentLandScore) ;$/;"	p	class:CGameLogic	access:public	signature:(WORD wMeChairID, BYTE cbCurrentLandScore)
+CGameLogic::Permutation	GameLogic.cpp	/^void CGameLogic::Permutation(BYTE *list, int m, int n, BYTE result[][4], BYTE &len)$/;"	f	class:CGameLogic	signature:(BYTE *list, int m, int n, BYTE result[][4], BYTE &len)
+CGameLogic::Permutation	GameLogic.h	/^	void Permutation(BYTE *list, int m, int n, BYTE result[][4], BYTE &len) ;$/;"	p	class:CGameLogic	access:protected	signature:(BYTE *list, int m, int n, BYTE result[][4], BYTE &len)
+CGameLogic::RandCardList	GameLogic.cpp	/^void CGameLogic::RandCardList(BYTE cbCardBuffer[], BYTE cbBufferCount)$/;"	f	class:CGameLogic	signature:(BYTE cbCardBuffer[], BYTE cbBufferCount)
+CGameLogic::RandCardList	GameLogic.h	/^	void RandCardList(BYTE cbCardBuffer[], BYTE cbBufferCount);$/;"	p	class:CGameLogic	access:public	signature:(BYTE cbCardBuffer[], BYTE cbBufferCount)
+CGameLogic::RemoveCard	GameLogic.cpp	/^bool CGameLogic::RemoveCard(const BYTE cbRemoveCard[], BYTE cbRemoveCount, BYTE cbCardData[], BYTE cbCardCount)$/;"	f	class:CGameLogic	signature:(const BYTE cbRemoveCard[], BYTE cbRemoveCount, BYTE cbCardData[], BYTE cbCardCount)
+CGameLogic::RemoveCard	GameLogic.h	/^	bool RemoveCard(const BYTE cbRemoveCard[], BYTE cbRemoveCount, BYTE cbCardData[], BYTE cbCardCount);$/;"	p	class:CGameLogic	access:public	signature:(const BYTE cbRemoveCard[], BYTE cbRemoveCount, BYTE cbCardData[], BYTE cbCardCount)
+CGameLogic::RemoveGoodCardData	GameLogic.cpp	/^bool CGameLogic::RemoveGoodCardData(BYTE cbGoodcardData[NORMAL_COUNT], BYTE cbGoodCardCount, BYTE cbCardData[FULL_COUNT], BYTE cbCardCount) $/;"	f	class:CGameLogic	signature:(BYTE cbGoodcardData[NORMAL_COUNT], BYTE cbGoodCardCount, BYTE cbCardData[FULL_COUNT], BYTE cbCardCount)
+CGameLogic::RemoveGoodCardData	GameLogic.h	/^	bool RemoveGoodCardData(BYTE cbGoodcardData[NORMAL_COUNT], BYTE cbGoodCardCount, BYTE cbCardData[FULL_COUNT], BYTE cbCardCount) ;$/;"	p	class:CGameLogic	access:public	signature:(BYTE cbGoodcardData[NORMAL_COUNT], BYTE cbGoodCardCount, BYTE cbCardData[FULL_COUNT], BYTE cbCardCount)
+CGameLogic::RemoveUserCardData	GameLogic.cpp	/^void CGameLogic::RemoveUserCardData(WORD wChairID, BYTE cbRemoveCardData[], BYTE cbRemoveCardCount) $/;"	f	class:CGameLogic	signature:(WORD wChairID, BYTE cbRemoveCardData[], BYTE cbRemoveCardCount)
+CGameLogic::RemoveUserCardData	GameLogic.h	/^	void RemoveUserCardData(WORD wChairID, BYTE cbRemoveCardData[], BYTE cbRemoveCardCount) ;$/;"	p	class:CGameLogic	access:public	signature:(WORD wChairID, BYTE cbRemoveCardData[], BYTE cbRemoveCardCount)
+CGameLogic::SearchOutCard	GameLogic.cpp	/^bool CGameLogic::SearchOutCard(const BYTE cbHandCardData[], BYTE cbHandCardCount, const BYTE cbTurnCardData[], BYTE cbTurnCardCount, WORD wOutCardUser, WORD wMeChairID, tagOutCardResult & OutCardResult)$/;"	f	class:CGameLogic	signature:(const BYTE cbHandCardData[], BYTE cbHandCardCount, const BYTE cbTurnCardData[], BYTE cbTurnCardCount, WORD wOutCardUser, WORD wMeChairID, tagOutCardResult & OutCardResult)
+CGameLogic::SearchOutCard	GameLogic.h	/^	bool SearchOutCard(const BYTE cbHandCardData[], BYTE cbHandCardCount, const BYTE cbTurnCardData[], BYTE cbTurnCardCount, WORD wOutCardUser, WORD wMeChairID, tagOutCardResult & OutCardResult);$/;"	p	class:CGameLogic	access:public	signature:(const BYTE cbHandCardData[], BYTE cbHandCardCount, const BYTE cbTurnCardData[], BYTE cbTurnCardCount, WORD wOutCardUser, WORD wMeChairID, tagOutCardResult & OutCardResult)
+CGameLogic::SetBackCard	GameLogic.cpp	/^void CGameLogic::SetBackCard(WORD wChairID, BYTE cbBackCardData[], BYTE cbCardCount)$/;"	f	class:CGameLogic	signature:(WORD wChairID, BYTE cbBackCardData[], BYTE cbCardCount)
+CGameLogic::SetBackCard	GameLogic.h	/^	void SetBackCard(WORD wChairID, BYTE cbBackCardData[], BYTE cbCardCount) ;$/;"	p	class:CGameLogic	access:public	signature:(WORD wChairID, BYTE cbBackCardData[], BYTE cbCardCount)
+CGameLogic::SetBanker	GameLogic.cpp	/^void CGameLogic::SetBanker(WORD wBanker) $/;"	f	class:CGameLogic	signature:(WORD wBanker)
+CGameLogic::SetBanker	GameLogic.h	/^	void SetBanker(WORD wBanker) ;$/;"	p	class:CGameLogic	access:public	signature:(WORD wBanker)
+CGameLogic::SetLandScoreCardData	GameLogic.cpp	/^void CGameLogic::SetLandScoreCardData(BYTE cbCardData[], BYTE cbCardCount) $/;"	f	class:CGameLogic	signature:(BYTE cbCardData[], BYTE cbCardCount)
+CGameLogic::SetLandScoreCardData	GameLogic.h	/^	void SetLandScoreCardData(BYTE cbCardData[], BYTE cbCardCount) ;$/;"	p	class:CGameLogic	access:public	signature:(BYTE cbCardData[], BYTE cbCardCount)
+CGameLogic::SetUserCard	GameLogic.cpp	/^void CGameLogic::SetUserCard(WORD wChairID, BYTE cbCardData[], BYTE cbCardCount)$/;"	f	class:CGameLogic	signature:(WORD wChairID, BYTE cbCardData[], BYTE cbCardCount)
+CGameLogic::SetUserCard	GameLogic.h	/^	void SetUserCard(WORD wChairID, BYTE cbCardData[], BYTE cbCardCount) ;$/;"	p	class:CGameLogic	access:public	signature:(WORD wChairID, BYTE cbCardData[], BYTE cbCardCount)
+CGameLogic::SortCardList	GameLogic.cpp	/^void CGameLogic::SortCardList(BYTE cbCardData[], BYTE cbCardCount, BYTE cbSortType)$/;"	f	class:CGameLogic	signature:(BYTE cbCardData[], BYTE cbCardCount, BYTE cbSortType)
+CGameLogic::SortCardList	GameLogic.h	/^	void SortCardList(BYTE cbCardData[], BYTE cbCardCount, BYTE cbSortType);$/;"	p	class:CGameLogic	access:public	signature:(BYTE cbCardData[], BYTE cbCardCount, BYTE cbSortType)
+CGameLogic::TestOutAllCard	GameLogic.cpp	/^bool CGameLogic::TestOutAllCard( WORD wTestUser, BYTE cbWantOutCardData[], BYTE cbWantOutCardCount, bool bFirstOutCard ) {$/;"	f	class:CGameLogic	signature:( WORD wTestUser, BYTE cbWantOutCardData[], BYTE cbWantOutCardCount, bool bFirstOutCard )
+CGameLogic::TestOutAllCard	GameLogic.h	/^	bool TestOutAllCard(WORD wTestUser, BYTE cbWantOutCardData[], BYTE cbWantOutCardCount, bool bFirstOutCard) ;$/;"	p	class:CGameLogic	access:protected	signature:(WORD wTestUser, BYTE cbWantOutCardData[], BYTE cbWantOutCardCount, bool bFirstOutCard)
+CGameLogic::UndersideOfBankerOutCard	GameLogic.cpp	/^void CGameLogic::UndersideOfBankerOutCard(const BYTE cbHandCardData[], BYTE cbHandCardCount, WORD wMeChairID,tagOutCardResult & OutCardResult) $/;"	f	class:CGameLogic	signature:(const BYTE cbHandCardData[], BYTE cbHandCardCount, WORD wMeChairID,tagOutCardResult & OutCardResult)
+CGameLogic::UndersideOfBankerOutCard	GameLogic.cpp	/^void CGameLogic::UndersideOfBankerOutCard(const BYTE cbHandCardData[], BYTE cbHandCardCount, WORD wOutCardUser, const BYTE cbTurnCardData[], BYTE cbTurnCardCount, tagOutCardResult & OutCardResult)$/;"	f	class:CGameLogic	signature:(const BYTE cbHandCardData[], BYTE cbHandCardCount, WORD wOutCardUser, const BYTE cbTurnCardData[], BYTE cbTurnCardCount, tagOutCardResult & OutCardResult)
+CGameLogic::UndersideOfBankerOutCard	GameLogic.h	/^	void UndersideOfBankerOutCard(const BYTE cbHandCardData[], BYTE cbHandCardCount, WORD wMeChairID,tagOutCardResult & OutCardResult) ;$/;"	p	class:CGameLogic	access:public	signature:(const BYTE cbHandCardData[], BYTE cbHandCardCount, WORD wMeChairID,tagOutCardResult & OutCardResult)
+CGameLogic::UndersideOfBankerOutCard	GameLogic.h	/^	void UndersideOfBankerOutCard(const BYTE cbHandCardData[], BYTE cbHandCardCount, WORD wOutCardUser, const BYTE cbTurnCardData[], BYTE cbTurnCardCount, tagOutCardResult & OutCardResult) ;$/;"	p	class:CGameLogic	access:public	signature:(const BYTE cbHandCardData[], BYTE cbHandCardCount, WORD wOutCardUser, const BYTE cbTurnCardData[], BYTE cbTurnCardCount, tagOutCardResult & OutCardResult)
+CGameLogic::UpsideOfBankerOutCard	GameLogic.cpp	/^void CGameLogic::UpsideOfBankerOutCard(const BYTE cbHandCardData[], BYTE cbHandCardCount, WORD wMeChairID, tagOutCardResult & OutCardResult)$/;"	f	class:CGameLogic	signature:(const BYTE cbHandCardData[], BYTE cbHandCardCount, WORD wMeChairID, tagOutCardResult & OutCardResult)
+CGameLogic::UpsideOfBankerOutCard	GameLogic.cpp	/^void CGameLogic::UpsideOfBankerOutCard(const BYTE cbHandCardData[], BYTE cbHandCardCount, WORD wOutCardUser, const BYTE cbTurnCardData[], BYTE cbTurnCardCount, tagOutCardResult & OutCardResult) $/;"	f	class:CGameLogic	signature:(const BYTE cbHandCardData[], BYTE cbHandCardCount, WORD wOutCardUser, const BYTE cbTurnCardData[], BYTE cbTurnCardCount, tagOutCardResult & OutCardResult)
+CGameLogic::UpsideOfBankerOutCard	GameLogic.h	/^	void UpsideOfBankerOutCard(const BYTE cbHandCardData[], BYTE cbHandCardCount, WORD wMeChairID,tagOutCardResult & OutCardResult) ;$/;"	p	class:CGameLogic	access:public	signature:(const BYTE cbHandCardData[], BYTE cbHandCardCount, WORD wMeChairID,tagOutCardResult & OutCardResult)
+CGameLogic::UpsideOfBankerOutCard	GameLogic.h	/^	void UpsideOfBankerOutCard(const BYTE cbHandCardData[], BYTE cbHandCardCount, WORD wOutCardUser,  const BYTE cbTurnCardData[], BYTE cbTurnCardCount, tagOutCardResult & OutCardResult) ;$/;"	p	class:CGameLogic	access:public	signature:(const BYTE cbHandCardData[], BYTE cbHandCardCount, WORD wOutCardUser, const BYTE cbTurnCardData[], BYTE cbTurnCardCount, tagOutCardResult & OutCardResult)
+CGameLogic::VerifyOutCard	GameLogic.cpp	/^bool CGameLogic::VerifyOutCard( WORD wTestUser, BYTE const cbWantOutCardData[], BYTE const cbWantOutCardCount, BYTE const cbCurHandCardData[ MAX_COUNT ], BYTE const cbCurHandCardCount, bool bFirstOutCard ) {$/;"	f	class:CGameLogic	signature:( WORD wTestUser, BYTE const cbWantOutCardData[], BYTE const cbWantOutCardCount, BYTE const cbCurHandCardData[ MAX_COUNT ], BYTE const cbCurHandCardCount, bool bFirstOutCard )
+CGameLogic::VerifyOutCard	GameLogic.h	/^	bool VerifyOutCard( WORD wTestUser, BYTE const cbWantOutCardData[], BYTE const cbWantOutCardCount, BYTE const cbCurHandCardData[ MAX_COUNT ], BYTE const cbCurHandCardCount, bool bFirstOutCard ) ;$/;"	p	class:CGameLogic	access:protected	signature:( WORD wTestUser, BYTE const cbWantOutCardData[], BYTE const cbWantOutCardCount, BYTE const cbCurHandCardData[ MAX_COUNT ], BYTE const cbCurHandCardCount, bool bFirstOutCard )
+CGameLogic::_TestOutAllCard	GameLogic.cpp	/^bool CGameLogic::_TestOutAllCard(WORD wTestUser, BYTE cbWantOutCardData[], BYTE cbWantOutCardCount, BYTE	cbAllCardData[GAME_PLAYER][MAX_COUNT], BYTE cbUserCardCount[GAME_PLAYER], bool bFirstOutCard)$/;"	f	class:CGameLogic	signature:(WORD wTestUser, BYTE cbWantOutCardData[], BYTE cbWantOutCardCount, BYTE cbAllCardData[GAME_PLAYER][MAX_COUNT], BYTE cbUserCardCount[GAME_PLAYER], bool bFirstOutCard)
+CGameLogic::_TestOutAllCard	GameLogic.h	/^	bool _TestOutAllCard(WORD wTestUser, BYTE cbWantOutCardData[], BYTE cbWantOutCardCount, BYTE	cbAllCardData[GAME_PLAYER][MAX_COUNT], BYTE cbUserCardCount[GAME_PLAYER], bool bFirstOutCard) ;$/;"	p	class:CGameLogic	access:protected	signature:(WORD wTestUser, BYTE cbWantOutCardData[], BYTE cbWantOutCardCount, BYTE cbAllCardData[GAME_PLAYER][MAX_COUNT], BYTE cbUserCardCount[GAME_PLAYER], bool bFirstOutCard)
+CGameLogic::m_StackHandCardInfo	GameLogic.h	/^	tagStackHandCardInfo			m_StackHandCardInfo;				\/\/栈变量$/;"	m	class:CGameLogic	access:public
+CGameLogic::m_cbAllCardData	GameLogic.h	/^	BYTE							m_cbAllCardData[GAME_PLAYER][MAX_COUNT];\/\/所有扑克$/;"	m	class:CGameLogic	access:public
+CGameLogic::m_cbCardData	GameLogic.cpp	/^const BYTE	CGameLogic::m_cbCardData[FULL_COUNT]=$/;"	m	class:CGameLogic	file:
+CGameLogic::m_cbCardData	GameLogic.h	/^	static const BYTE				m_cbCardData[FULL_COUNT];			\/\/扑克数据$/;"	m	class:CGameLogic	access:protected
+CGameLogic::m_cbGoodcardData	GameLogic.cpp	/^const BYTE	CGameLogic::m_cbGoodcardData[GOOD_CARD_COUTN]=$/;"	m	class:CGameLogic	file:
+CGameLogic::m_cbGoodcardData	GameLogic.h	/^	static const BYTE				m_cbGoodcardData[GOOD_CARD_COUTN];	\/\/好牌数据$/;"	m	class:CGameLogic	access:protected
+CGameLogic::m_cbHpCardData	GameLogic.cpp	/^const BYTE	CGameLogic::m_cbHpCardData[FULL_COUNT]=$/;"	m	class:CGameLogic	file:
+CGameLogic::m_cbHpCardData	GameLogic.h	/^	static const BYTE				m_cbHpCardData[FULL_COUNT];			\/\/扑克数据$/;"	m	class:CGameLogic	access:protected
+CGameLogic::m_cbLandScoreCardData	GameLogic.h	/^	BYTE							m_cbLandScoreCardData[MAX_COUNT];	\/\/叫牌扑克$/;"	m	class:CGameLogic	access:public
+CGameLogic::m_cbUserCardCount	GameLogic.h	/^	BYTE							m_cbUserCardCount[GAME_PLAYER];		\/\/扑克数目$/;"	m	class:CGameLogic	access:public
+CGameLogic::m_lBankerOutCardCount	GameLogic.h	/^	LONG							m_lBankerOutCardCount ;				\/\/出牌次数$/;"	m	class:CGameLogic	access:public
+CGameLogic::m_wBankerUser	GameLogic.h	/^	WORD							m_wBankerUser;						\/\/地主玩家$/;"	m	class:CGameLogic	access:public
+CGameLogic::~CGameLogic	GameLogic.cpp	/^CGameLogic::~CGameLogic()$/;"	f	class:CGameLogic	signature:()
+CGameLogic::~CGameLogic	GameLogic.h	/^	virtual ~CGameLogic();$/;"	p	class:CGameLogic	access:public	signature:()
+CT_BOMB_CARD	GameLogic.h	40;"	d
+CT_DOUBLE	GameLogic.h	31;"	d
+CT_DOUBLE_LINE	GameLogic.h	34;"	d
+CT_ERROR	GameLogic.h	29;"	d
+CT_FOUR_LINE_TAKE_ONE	GameLogic.h	38;"	d
+CT_FOUR_LINE_TAKE_TWO	GameLogic.h	39;"	d
+CT_MISSILE_CARD	GameLogic.h	41;"	d
+CT_SHEN_BOMBCARD	GameLogic.h	42;"	d
+CT_SHEN_MISSILE_CARD	GameLogic.h	43;"	d
+CT_SINGLE	GameLogic.h	30;"	d
+CT_SINGLE_LINE	GameLogic.h	33;"	d
+CT_THREE	GameLogic.h	32;"	d
+CT_THREE_LINE	GameLogic.h	35;"	d
+CT_THREE_LINE_TAKE_ONE	GameLogic.h	36;"	d
+CT_THREE_LINE_TAKE_TWO	GameLogic.h	37;"	d
+CardTypeResult	GameLogic.h	/^	tagOutCardTypeResult		CardTypeResult[ 12 + 1 ] ;					\/\/分析数据$/;"	m	struct:tagHandCardInfo	access:public
+ClearAll	GameLogic.h	/^	void ClearAll() {$/;"	f	class:tagStackHandCardInfo	access:public	signature:()
+Combination	GameLogic.cpp	/^void CGameLogic::Combination(BYTE cbCombineCardData[], BYTE cbResComLen,  BYTE cbResultCardData[100][5], BYTE &cbResCardLen,BYTE cbSrcCardData[] , BYTE cbCombineLen1, BYTE cbSrcLen, const BYTE cbCombineLen2)$/;"	f	class:CGameLogic	signature:(BYTE cbCombineCardData[], BYTE cbResComLen, BYTE cbResultCardData[100][5], BYTE &cbResCardLen,BYTE cbSrcCardData[] , BYTE cbCombineLen1, BYTE cbSrcLen, const BYTE cbCombineLen2)
+Combination	GameLogic.h	/^	void Combination(BYTE cbCombineCardData[], BYTE cbResComLen,  BYTE cbResultCardData[254][5], BYTE &cbResCardLen,BYTE cbSrcCardData[] , BYTE cbCombineLen1, BYTE cbSrcLen, const BYTE cbCombineLen2);$/;"	p	class:CGameLogic	access:protected	signature:(BYTE cbCombineCardData[], BYTE cbResComLen, BYTE cbResultCardData[254][5], BYTE &cbResCardLen,BYTE cbSrcCardData[] , BYTE cbCombineLen1, BYTE cbSrcLen, const BYTE cbCombineLen2)
+CompareCard	GameLogic.cpp	/^bool CGameLogic::CompareCard(const BYTE cbFirstCard[], const BYTE cbNextCard[], BYTE cbFirstCount, BYTE cbNextCount)$/;"	f	class:CGameLogic	signature:(const BYTE cbFirstCard[], const BYTE cbNextCard[], BYTE cbFirstCount, BYTE cbNextCount)
+CompareCard	GameLogic.h	/^	bool CompareCard(const BYTE cbFirstCard[], const BYTE cbNextCard[], BYTE cbFirstCount, BYTE cbNextCount);$/;"	p	class:CGameLogic	access:public	signature:(const BYTE cbFirstCard[], const BYTE cbNextCard[], BYTE cbFirstCount, BYTE cbNextCount)
+CopyMemory	StdAfx.h	11;"	d
+CountArray	StdAfx.h	18;"	d
+FULL_COUNT	GameLogic.h	17;"	d
+GAME_LOGIC_HEAD_FILE	GameLogic.h	2;"	d
+GAME_PLAYER	StdAfx.h	15;"	d
+GOOD_CARD_COUTN	GameLogic.h	18;"	d
+GetAllBomCard	GameLogic.cpp	/^void CGameLogic::GetAllBomCard(BYTE const cbHandCardData[], BYTE const cbHandCardCount, BYTE cbBomCardData[], BYTE &cbBomCardCount)$/;"	f	class:CGameLogic	signature:(BYTE const cbHandCardData[], BYTE const cbHandCardCount, BYTE cbBomCardData[], BYTE &cbBomCardCount)
+GetAllBomCard	GameLogic.h	/^	void GetAllBomCard(BYTE const cbHandCardData[], BYTE const cbHandCardCount, BYTE cbBomCardData[], BYTE &cbBomCardCount);$/;"	p	class:CGameLogic	access:protected	signature:(BYTE const cbHandCardData[], BYTE const cbHandCardCount, BYTE cbBomCardData[], BYTE &cbBomCardCount)
+GetAllDoubleCard	GameLogic.cpp	/^void CGameLogic::GetAllDoubleCard(BYTE const cbHandCardData[], BYTE const cbHandCardCount, BYTE cbDoubleCardData[], BYTE &cbDoubleCardCount)$/;"	f	class:CGameLogic	signature:(BYTE const cbHandCardData[], BYTE const cbHandCardCount, BYTE cbDoubleCardData[], BYTE &cbDoubleCardCount)
+GetAllDoubleCard	GameLogic.h	/^	void GetAllDoubleCard(BYTE const cbHandCardData[], BYTE const cbHandCardCount, BYTE cbDoubleCardData[], BYTE &cbDoubleCardCount);$/;"	p	class:CGameLogic	access:protected	signature:(BYTE const cbHandCardData[], BYTE const cbHandCardCount, BYTE cbDoubleCardData[], BYTE &cbDoubleCardCount)
+GetAllLineCard	GameLogic.cpp	/^void CGameLogic::GetAllLineCard(BYTE const cbHandCardData[], BYTE const cbHandCardCount, BYTE cbLineCardData[], BYTE &cbLineCardCount)$/;"	f	class:CGameLogic	signature:(BYTE const cbHandCardData[], BYTE const cbHandCardCount, BYTE cbLineCardData[], BYTE &cbLineCardCount)
+GetAllLineCard	GameLogic.h	/^	void GetAllLineCard(BYTE const cbHandCardData[], BYTE const cbHandCardCount, BYTE cbLineCardData[], BYTE &cbLineCardCount);$/;"	p	class:CGameLogic	access:protected	signature:(BYTE const cbHandCardData[], BYTE const cbHandCardCount, BYTE cbLineCardData[], BYTE &cbLineCardCount)
+GetAllSingleCard	GameLogic.cpp	/^void CGameLogic::GetAllSingleCard(BYTE const cbHandCardData[], BYTE const cbHandCardCount, BYTE cbSingleCardData[], BYTE &cbSingleCardCount)$/;"	f	class:CGameLogic	signature:(BYTE const cbHandCardData[], BYTE const cbHandCardCount, BYTE cbSingleCardData[], BYTE &cbSingleCardCount)
+GetAllSingleCard	GameLogic.h	/^	void GetAllSingleCard(BYTE const cbHandCardData[], BYTE const cbHandCardCount, BYTE cbSingleCardData[], BYTE &cbSingleCardCount);$/;"	p	class:CGameLogic	access:protected	signature:(BYTE const cbHandCardData[], BYTE const cbHandCardCount, BYTE cbSingleCardData[], BYTE &cbSingleCardCount)
+GetAllThreeCard	GameLogic.cpp	/^void CGameLogic::GetAllThreeCard(BYTE const cbHandCardData[], BYTE const cbHandCardCount, BYTE cbThreeCardData[], BYTE &cbThreeCardCount)$/;"	f	class:CGameLogic	signature:(BYTE const cbHandCardData[], BYTE const cbHandCardCount, BYTE cbThreeCardData[], BYTE &cbThreeCardCount)
+GetAllThreeCard	GameLogic.h	/^	void GetAllThreeCard(BYTE const cbHandCardData[], BYTE const cbHandCardCount, BYTE cbThreeCardData[], BYTE &cbThreeCardCount);$/;"	p	class:CGameLogic	access:protected	signature:(BYTE const cbHandCardData[], BYTE const cbHandCardCount, BYTE cbThreeCardData[], BYTE &cbThreeCardCount)
+GetAt	StdAfx.h	/^		T & GetAt(int n)$/;"	f	class:CArrayTemplate	access:public	signature:(int n)
+GetCardColor	GameLogic.h	/^	BYTE GetCardColor(BYTE cbCardData) { return cbCardData&MASK_COLOR; }$/;"	f	class:CGameLogic	access:public	signature:(BYTE cbCardData)
+GetCardCueID	GameLogic.cpp	/^int CGameLogic::GetCardCueID(const BYTE cbCardData[],BYTE  cbCardCount,BYTE byFindData)$/;"	f	class:CGameLogic	signature:(const BYTE cbCardData[],BYTE cbCardCount,BYTE byFindData)
+GetCardCueID	GameLogic.h	/^	int GetCardCueID(const BYTE cbCardData[],BYTE  cbCardCount,BYTE byFindData);$/;"	p	class:CGameLogic	access:public	signature:(const BYTE cbCardData[],BYTE cbCardCount,BYTE byFindData)
+GetCardLogicValue	GameLogic.cpp	/^BYTE CGameLogic::GetCardLogicValue(BYTE cbCardData)$/;"	f	class:CGameLogic	signature:(BYTE cbCardData)
+GetCardLogicValue	GameLogic.h	/^	BYTE GetCardLogicValue(BYTE cbCardData);$/;"	p	class:CGameLogic	access:public	signature:(BYTE cbCardData)
+GetCardType	GameLogic.cpp	/^BYTE CGameLogic::GetCardType(const BYTE cbCardData[], BYTE cbCardCount)$/;"	f	class:CGameLogic	signature:(const BYTE cbCardData[], BYTE cbCardCount)
+GetCardType	GameLogic.h	/^	BYTE GetCardType(const BYTE cbCardData[], BYTE cbCardCount);$/;"	p	class:CGameLogic	access:public	signature:(const BYTE cbCardData[], BYTE cbCardCount)
+GetCardValue	GameLogic.h	/^	BYTE GetCardValue(BYTE cbCardData) { return cbCardData&MASK_VALUE; }$/;"	f	class:CGameLogic	access:public	signature:(BYTE cbCardData)
+GetCount	StdAfx.h	/^		int GetCount()$/;"	f	class:CArrayTemplate	access:public	signature:()
+GetGoodCardData	GameLogic.cpp	/^void CGameLogic::GetGoodCardData(BYTE cbGoodCardData[NORMAL_COUNT])$/;"	f	class:CGameLogic	signature:(BYTE cbGoodCardData[NORMAL_COUNT])
+GetGoodCardData	GameLogic.h	/^	void GetGoodCardData(BYTE cbGoodCardData[NORMAL_COUNT]) ;$/;"	p	class:CGameLogic	access:public	signature:(BYTE cbGoodCardData[NORMAL_COUNT])
+GetNoShanThreeCardType	GameLogic.cpp	/^BYTE CGameLogic::GetNoShanThreeCardType(const BYTE cbCardData[], BYTE cbCardCount)$/;"	f	class:CGameLogic	signature:(const BYTE cbCardData[], BYTE cbCardCount)
+GetNoShanThreeCardType	GameLogic.h	/^	BYTE GetNoShanThreeCardType(const BYTE cbCardData[], BYTE cbCardCount);$/;"	p	class:CGameLogic	access:public	signature:(const BYTE cbCardData[], BYTE cbCardCount)
+GetRandomCard	GameLogic.cpp	/^BYTE CGameLogic::GetRandomCard(void)$/;"	f	class:CGameLogic	signature:(void)
+GetRandomCard	GameLogic.h	/^	BYTE GetRandomCard(void) ;$/;"	p	class:CGameLogic	access:public	signature:(void)
+GetShanCardType	GameLogic.cpp	/^bool CGameLogic::GetShanCardType( const BYTE cbCardData[], BYTE cbCardCount,BYTE byType[], BYTE &byCountType ,BYTE byThreeCardData[] )$/;"	f	class:CGameLogic	signature:( const BYTE cbCardData[], BYTE cbCardCount,BYTE byType[], BYTE &byCountType ,BYTE byThreeCardData[] )
+GetShanCardType	GameLogic.h	/^	bool GetShanCardType( const BYTE cbCardData[], BYTE cbCardCount,BYTE byType[], BYTE &byCountType,BYTE byThreeCardData[] );$/;"	p	class:CGameLogic	access:public	signature:( const BYTE cbCardData[], BYTE cbCardCount,BYTE byType[], BYTE &byCountType,BYTE byThreeCardData[] )
+GetTickCount	StdAfx.cpp	/^int GetTickCount()$/;"	f	signature:()
+GetTickCount	StdAfx.h	/^int GetTickCount();$/;"	p	signature:()
+GetTop	GameLogic.h	/^	void GetTop( tagHandCardInfo * & pHandCardInfo ) {$/;"	f	class:tagStackHandCardInfo	access:public	signature:( tagHandCardInfo * & pHandCardInfo )
+GetWeiZhiChangeThree	GameLogic.cpp	/^BYTE CGameLogic::GetWeiZhiChangeThree( const BYTE cbCardData[], BYTE cbCardCount)$/;"	f	class:CGameLogic	signature:( const BYTE cbCardData[], BYTE cbCardCount)
+GetWeiZhiChangeThree	GameLogic.h	/^	BYTE GetWeiZhiChangeThree( const BYTE cbCardData[], BYTE cbCardCount);$/;"	p	class:CGameLogic	access:public	signature:( const BYTE cbCardData[], BYTE cbCardCount)
+INT_PTR	StdAfx.h	12;"	d
+InitStack	GameLogic.h	/^	void InitStack() {$/;"	f	class:tagStackHandCardInfo	access:public	signature:()
+InsertAt	StdAfx.h	/^		void InsertAt(int n, T & val)$/;"	f	class:CArrayTemplate	access:public	signature:(int n, T & val)
+IsEmpty	GameLogic.h	/^	bool IsEmpty() {$/;"	f	class:tagStackHandCardInfo	access:public	signature:()
+IsEmpty	StdAfx.h	/^		bool IsEmpty()$/;"	f	class:CArrayTemplate	access:public	signature:()
+IsHaveChangeThree	GameLogic.cpp	/^bool CGameLogic::IsHaveChangeThree(const BYTE cbCardData[],BYTE cbCardCount)$/;"	f	class:CGameLogic	signature:(const BYTE cbCardData[],BYTE cbCardCount)
+IsHaveChangeThree	GameLogic.h	/^	bool IsHaveChangeThree(const BYTE cbCardData[],BYTE cbCardCount);$/;"	p	class:CGameLogic	access:public	signature:(const BYTE cbCardData[],BYTE cbCardCount)
+IsLargestCard	GameLogic.cpp	/^bool CGameLogic::IsLargestCard( WORD wTestUser, BYTE const cbWantOutCardData[], BYTE const cbWantOutCardCount ) {$/;"	f	class:CGameLogic	signature:( WORD wTestUser, BYTE const cbWantOutCardData[], BYTE const cbWantOutCardCount )
+IsLargestCard	GameLogic.h	/^	bool IsLargestCard( WORD wTestUser, BYTE const cbWantOutCardData[], BYTE const cbWantOutCardCount );$/;"	p	class:CGameLogic	access:protected	signature:( WORD wTestUser, BYTE const cbWantOutCardData[], BYTE const cbWantOutCardCount )
+IsValidCard	GameLogic.cpp	/^bool CGameLogic::IsValidCard(BYTE cbCardData)$/;"	f	class:CGameLogic	signature:(BYTE cbCardData)
+IsValidCard	GameLogic.h	/^	bool IsValidCard(BYTE cbCardData);$/;"	p	class:CGameLogic	access:public	signature:(BYTE cbCardData)
+LONG	StdAfx.h	17;"	d
+LandScore	GameLogic.cpp	/^BYTE CGameLogic::LandScore(WORD wMeChairID, BYTE cbCurrentLandScore)$/;"	f	class:CGameLogic	signature:(WORD wMeChairID, BYTE cbCurrentLandScore)
+LandScore	GameLogic.h	/^	BYTE LandScore(WORD wMeChairID, BYTE cbCurrentLandScore) ;$/;"	p	class:CGameLogic	access:public	signature:(WORD wMeChairID, BYTE cbCurrentLandScore)
+MASK_COLOR	GameLogic.h	25;"	d
+MASK_VALUE	GameLogic.h	26;"	d
+MAX_COUNT	GameLogic.h	16;"	d
+MAX_TYPE_COUNT	GameLogic.h	67;"	d
+NORMAL_COUNT	GameLogic.h	20;"	d
+Permutation	GameLogic.cpp	/^void CGameLogic::Permutation(BYTE *list, int m, int n, BYTE result[][4], BYTE &len)$/;"	f	class:CGameLogic	signature:(BYTE *list, int m, int n, BYTE result[][4], BYTE &len)
+Permutation	GameLogic.h	/^	void Permutation(BYTE *list, int m, int n, BYTE result[][4], BYTE &len) ;$/;"	p	class:CGameLogic	access:protected	signature:(BYTE *list, int m, int n, BYTE result[][4], BYTE &len)
+Pop	GameLogic.h	/^	void Pop() {$/;"	f	class:tagStackHandCardInfo	access:public	signature:()
+Push	GameLogic.h	/^	void Push( tagHandCardInfo * pHandCardInfo ) {$/;"	f	class:tagStackHandCardInfo	access:public	signature:( tagHandCardInfo * pHandCardInfo )
+RandCardList	GameLogic.cpp	/^void CGameLogic::RandCardList(BYTE cbCardBuffer[], BYTE cbBufferCount)$/;"	f	class:CGameLogic	signature:(BYTE cbCardBuffer[], BYTE cbBufferCount)
+RandCardList	GameLogic.h	/^	void RandCardList(BYTE cbCardBuffer[], BYTE cbBufferCount);$/;"	p	class:CGameLogic	access:public	signature:(BYTE cbCardBuffer[], BYTE cbBufferCount)
+RemoveAll	StdAfx.h	/^		void RemoveAll()$/;"	f	class:CArrayTemplate	access:public	signature:()
+RemoveAt	StdAfx.h	/^		void RemoveAt(int n)$/;"	f	class:CArrayTemplate	access:public	signature:(int n)
+RemoveCard	GameLogic.cpp	/^bool CGameLogic::RemoveCard(const BYTE cbRemoveCard[], BYTE cbRemoveCount, BYTE cbCardData[], BYTE cbCardCount)$/;"	f	class:CGameLogic	signature:(const BYTE cbRemoveCard[], BYTE cbRemoveCount, BYTE cbCardData[], BYTE cbCardCount)
+RemoveCard	GameLogic.h	/^	bool RemoveCard(const BYTE cbRemoveCard[], BYTE cbRemoveCount, BYTE cbCardData[], BYTE cbCardCount);$/;"	p	class:CGameLogic	access:public	signature:(const BYTE cbRemoveCard[], BYTE cbRemoveCount, BYTE cbCardData[], BYTE cbCardCount)
+RemoveGoodCardData	GameLogic.cpp	/^bool CGameLogic::RemoveGoodCardData(BYTE cbGoodcardData[NORMAL_COUNT], BYTE cbGoodCardCount, BYTE cbCardData[FULL_COUNT], BYTE cbCardCount) $/;"	f	class:CGameLogic	signature:(BYTE cbGoodcardData[NORMAL_COUNT], BYTE cbGoodCardCount, BYTE cbCardData[FULL_COUNT], BYTE cbCardCount)
+RemoveGoodCardData	GameLogic.h	/^	bool RemoveGoodCardData(BYTE cbGoodcardData[NORMAL_COUNT], BYTE cbGoodCardCount, BYTE cbCardData[FULL_COUNT], BYTE cbCardCount) ;$/;"	p	class:CGameLogic	access:public	signature:(BYTE cbGoodcardData[NORMAL_COUNT], BYTE cbGoodCardCount, BYTE cbCardData[FULL_COUNT], BYTE cbCardCount)
+RemoveUserCardData	GameLogic.cpp	/^void CGameLogic::RemoveUserCardData(WORD wChairID, BYTE cbRemoveCardData[], BYTE cbRemoveCardCount) $/;"	f	class:CGameLogic	signature:(WORD wChairID, BYTE cbRemoveCardData[], BYTE cbRemoveCardCount)
+RemoveUserCardData	GameLogic.h	/^	void RemoveUserCardData(WORD wChairID, BYTE cbRemoveCardData[], BYTE cbRemoveCardCount) ;$/;"	p	class:CGameLogic	access:public	signature:(WORD wChairID, BYTE cbRemoveCardData[], BYTE cbRemoveCardCount)
+ST_COUNT	GameLogic.h	11;"	d
+ST_ORDER	GameLogic.h	10;"	d
+SearchOutCard	GameLogic.cpp	/^bool CGameLogic::SearchOutCard(const BYTE cbHandCardData[], BYTE cbHandCardCount, const BYTE cbTurnCardData[], BYTE cbTurnCardCount, WORD wOutCardUser, WORD wMeChairID, tagOutCardResult & OutCardResult)$/;"	f	class:CGameLogic	signature:(const BYTE cbHandCardData[], BYTE cbHandCardCount, const BYTE cbTurnCardData[], BYTE cbTurnCardCount, WORD wOutCardUser, WORD wMeChairID, tagOutCardResult & OutCardResult)
+SearchOutCard	GameLogic.h	/^	bool SearchOutCard(const BYTE cbHandCardData[], BYTE cbHandCardCount, const BYTE cbTurnCardData[], BYTE cbTurnCardCount, WORD wOutCardUser, WORD wMeChairID, tagOutCardResult & OutCardResult);$/;"	p	class:CGameLogic	access:public	signature:(const BYTE cbHandCardData[], BYTE cbHandCardCount, const BYTE cbTurnCardData[], BYTE cbTurnCardCount, WORD wOutCardUser, WORD wMeChairID, tagOutCardResult & OutCardResult)
+SetBackCard	GameLogic.cpp	/^void CGameLogic::SetBackCard(WORD wChairID, BYTE cbBackCardData[], BYTE cbCardCount)$/;"	f	class:CGameLogic	signature:(WORD wChairID, BYTE cbBackCardData[], BYTE cbCardCount)
+SetBackCard	GameLogic.h	/^	void SetBackCard(WORD wChairID, BYTE cbBackCardData[], BYTE cbCardCount) ;$/;"	p	class:CGameLogic	access:public	signature:(WORD wChairID, BYTE cbBackCardData[], BYTE cbCardCount)
+SetBanker	GameLogic.cpp	/^void CGameLogic::SetBanker(WORD wBanker) $/;"	f	class:CGameLogic	signature:(WORD wBanker)
+SetBanker	GameLogic.h	/^	void SetBanker(WORD wBanker) ;$/;"	p	class:CGameLogic	access:public	signature:(WORD wBanker)
+SetLandScoreCardData	GameLogic.cpp	/^void CGameLogic::SetLandScoreCardData(BYTE cbCardData[], BYTE cbCardCount) $/;"	f	class:CGameLogic	signature:(BYTE cbCardData[], BYTE cbCardCount)
+SetLandScoreCardData	GameLogic.h	/^	void SetLandScoreCardData(BYTE cbCardData[], BYTE cbCardCount) ;$/;"	p	class:CGameLogic	access:public	signature:(BYTE cbCardData[], BYTE cbCardCount)
+SetUserCard	GameLogic.cpp	/^void CGameLogic::SetUserCard(WORD wChairID, BYTE cbCardData[], BYTE cbCardCount)$/;"	f	class:CGameLogic	signature:(WORD wChairID, BYTE cbCardData[], BYTE cbCardCount)
+SetUserCard	GameLogic.h	/^	void SetUserCard(WORD wChairID, BYTE cbCardData[], BYTE cbCardCount) ;$/;"	p	class:CGameLogic	access:public	signature:(WORD wChairID, BYTE cbCardData[], BYTE cbCardCount)
+SortCardList	GameLogic.cpp	/^void CGameLogic::SortCardList(BYTE cbCardData[], BYTE cbCardCount, BYTE cbSortType)$/;"	f	class:CGameLogic	signature:(BYTE cbCardData[], BYTE cbCardCount, BYTE cbSortType)
+SortCardList	GameLogic.h	/^	void SortCardList(BYTE cbCardData[], BYTE cbCardCount, BYTE cbSortType);$/;"	p	class:CGameLogic	access:public	signature:(BYTE cbCardData[], BYTE cbCardCount, BYTE cbSortType)
+TestOutAllCard	GameLogic.cpp	/^bool CGameLogic::TestOutAllCard( WORD wTestUser, BYTE cbWantOutCardData[], BYTE cbWantOutCardCount, bool bFirstOutCard ) {$/;"	f	class:CGameLogic	signature:( WORD wTestUser, BYTE cbWantOutCardData[], BYTE cbWantOutCardCount, bool bFirstOutCard )
+TestOutAllCard	GameLogic.h	/^	bool TestOutAllCard(WORD wTestUser, BYTE cbWantOutCardData[], BYTE cbWantOutCardCount, bool bFirstOutCard) ;$/;"	p	class:CGameLogic	access:protected	signature:(WORD wTestUser, BYTE cbWantOutCardData[], BYTE cbWantOutCardCount, bool bFirstOutCard)
+UndersideOfBankerOutCard	GameLogic.cpp	/^void CGameLogic::UndersideOfBankerOutCard(const BYTE cbHandCardData[], BYTE cbHandCardCount, WORD wMeChairID,tagOutCardResult & OutCardResult) $/;"	f	class:CGameLogic	signature:(const BYTE cbHandCardData[], BYTE cbHandCardCount, WORD wMeChairID,tagOutCardResult & OutCardResult)
+UndersideOfBankerOutCard	GameLogic.cpp	/^void CGameLogic::UndersideOfBankerOutCard(const BYTE cbHandCardData[], BYTE cbHandCardCount, WORD wOutCardUser, const BYTE cbTurnCardData[], BYTE cbTurnCardCount, tagOutCardResult & OutCardResult)$/;"	f	class:CGameLogic	signature:(const BYTE cbHandCardData[], BYTE cbHandCardCount, WORD wOutCardUser, const BYTE cbTurnCardData[], BYTE cbTurnCardCount, tagOutCardResult & OutCardResult)
+UndersideOfBankerOutCard	GameLogic.h	/^	void UndersideOfBankerOutCard(const BYTE cbHandCardData[], BYTE cbHandCardCount, WORD wMeChairID,tagOutCardResult & OutCardResult) ;$/;"	p	class:CGameLogic	access:public	signature:(const BYTE cbHandCardData[], BYTE cbHandCardCount, WORD wMeChairID,tagOutCardResult & OutCardResult)
+UndersideOfBankerOutCard	GameLogic.h	/^	void UndersideOfBankerOutCard(const BYTE cbHandCardData[], BYTE cbHandCardCount, WORD wOutCardUser, const BYTE cbTurnCardData[], BYTE cbTurnCardCount, tagOutCardResult & OutCardResult) ;$/;"	p	class:CGameLogic	access:public	signature:(const BYTE cbHandCardData[], BYTE cbHandCardCount, WORD wOutCardUser, const BYTE cbTurnCardData[], BYTE cbTurnCardCount, tagOutCardResult & OutCardResult)
+UpsideOfBankerOutCard	GameLogic.cpp	/^void CGameLogic::UpsideOfBankerOutCard(const BYTE cbHandCardData[], BYTE cbHandCardCount, WORD wMeChairID, tagOutCardResult & OutCardResult)$/;"	f	class:CGameLogic	signature:(const BYTE cbHandCardData[], BYTE cbHandCardCount, WORD wMeChairID, tagOutCardResult & OutCardResult)
+UpsideOfBankerOutCard	GameLogic.cpp	/^void CGameLogic::UpsideOfBankerOutCard(const BYTE cbHandCardData[], BYTE cbHandCardCount, WORD wOutCardUser, const BYTE cbTurnCardData[], BYTE cbTurnCardCount, tagOutCardResult & OutCardResult) $/;"	f	class:CGameLogic	signature:(const BYTE cbHandCardData[], BYTE cbHandCardCount, WORD wOutCardUser, const BYTE cbTurnCardData[], BYTE cbTurnCardCount, tagOutCardResult & OutCardResult)
+UpsideOfBankerOutCard	GameLogic.h	/^	void UpsideOfBankerOutCard(const BYTE cbHandCardData[], BYTE cbHandCardCount, WORD wMeChairID,tagOutCardResult & OutCardResult) ;$/;"	p	class:CGameLogic	access:public	signature:(const BYTE cbHandCardData[], BYTE cbHandCardCount, WORD wMeChairID,tagOutCardResult & OutCardResult)
+UpsideOfBankerOutCard	GameLogic.h	/^	void UpsideOfBankerOutCard(const BYTE cbHandCardData[], BYTE cbHandCardCount, WORD wOutCardUser,  const BYTE cbTurnCardData[], BYTE cbTurnCardCount, tagOutCardResult & OutCardResult) ;$/;"	p	class:CGameLogic	access:public	signature:(const BYTE cbHandCardData[], BYTE cbHandCardCount, WORD wOutCardUser, const BYTE cbTurnCardData[], BYTE cbTurnCardCount, tagOutCardResult & OutCardResult)
+VerifyOutCard	GameLogic.cpp	/^bool CGameLogic::VerifyOutCard( WORD wTestUser, BYTE const cbWantOutCardData[], BYTE const cbWantOutCardCount, BYTE const cbCurHandCardData[ MAX_COUNT ], BYTE const cbCurHandCardCount, bool bFirstOutCard ) {$/;"	f	class:CGameLogic	signature:( WORD wTestUser, BYTE const cbWantOutCardData[], BYTE const cbWantOutCardCount, BYTE const cbCurHandCardData[ MAX_COUNT ], BYTE const cbCurHandCardCount, bool bFirstOutCard )
+VerifyOutCard	GameLogic.h	/^	bool VerifyOutCard( WORD wTestUser, BYTE const cbWantOutCardData[], BYTE const cbWantOutCardCount, BYTE const cbCurHandCardData[ MAX_COUNT ], BYTE const cbCurHandCardCount, bool bFirstOutCard ) ;$/;"	p	class:CGameLogic	access:protected	signature:( WORD wTestUser, BYTE const cbWantOutCardData[], BYTE const cbWantOutCardCount, BYTE const cbCurHandCardData[ MAX_COUNT ], BYTE const cbCurHandCardCount, bool bFirstOutCard )
+WORD	StdAfx.h	16;"	d
+ZeroMemory	StdAfx.cpp	/^void ZeroMemory(void * data, int n)$/;"	f	signature:(void * data, int n)
+ZeroMemory	StdAfx.h	/^void ZeroMemory(void * data, int n);$/;"	p	signature:(void * data, int n)
+_TestOutAllCard	GameLogic.cpp	/^bool CGameLogic::_TestOutAllCard(WORD wTestUser, BYTE cbWantOutCardData[], BYTE cbWantOutCardCount, BYTE	cbAllCardData[GAME_PLAYER][MAX_COUNT], BYTE cbUserCardCount[GAME_PLAYER], bool bFirstOutCard)$/;"	f	class:CGameLogic	signature:(WORD wTestUser, BYTE cbWantOutCardData[], BYTE cbWantOutCardCount, BYTE cbAllCardData[GAME_PLAYER][MAX_COUNT], BYTE cbUserCardCount[GAME_PLAYER], bool bFirstOutCard)
+_TestOutAllCard	GameLogic.h	/^	bool _TestOutAllCard(WORD wTestUser, BYTE cbWantOutCardData[], BYTE cbWantOutCardCount, BYTE	cbAllCardData[GAME_PLAYER][MAX_COUNT], BYTE cbUserCardCount[GAME_PLAYER], bool bFirstOutCard) ;$/;"	p	class:CGameLogic	access:protected	signature:(WORD wTestUser, BYTE cbWantOutCardData[], BYTE cbWantOutCardCount, BYTE cbAllCardData[GAME_PLAYER][MAX_COUNT], BYTE cbUserCardCount[GAME_PLAYER], bool bFirstOutCard)
+__STDAFX_H__	StdAfx.h	2;"	d
+cbCardCount	GameLogic.h	/^	BYTE							cbCardCount;						\/\/扑克数目$/;"	m	struct:tagOutCardResult	access:public
+cbCardData	GameLogic.h	/^	BYTE							cbCardData[MAX_TYPE_COUNT][MAX_COUNT];\/\/扑克数据$/;"	m	struct:tagOutCardTypeResult	access:public
+cbCardType	GameLogic.h	/^	BYTE							cbCardType;							\/\/扑克类型$/;"	m	struct:tagOutCardTypeResult	access:public
+cbCardTypeCount	GameLogic.h	/^	BYTE							cbCardTypeCount;					\/\/牌型数目$/;"	m	struct:tagOutCardTypeResult	access:public
+cbDoubleCardData	GameLogic.h	/^	BYTE							cbDoubleCardData[MAX_COUNT];		\/\/两张扑克$/;"	m	struct:tagAnalyseResult	access:public
+cbDoubleCount	GameLogic.h	/^	BYTE 							cbDoubleCount;						\/\/两张数目$/;"	m	struct:tagAnalyseResult	access:public
+cbEachHandCardCount	GameLogic.h	/^	BYTE							cbEachHandCardCount[MAX_TYPE_COUNT];\/\/每手个数$/;"	m	struct:tagOutCardTypeResult	access:public
+cbFourCardData	GameLogic.h	/^	BYTE							cbFourCardData[MAX_COUNT];			\/\/四张扑克$/;"	m	struct:tagAnalyseResult	access:public
+cbFourCount	GameLogic.h	/^	BYTE 							cbFourCount;						\/\/四张数目$/;"	m	struct:tagAnalyseResult	access:public
+cbHandCardCount	GameLogic.h	/^	BYTE						cbHandCardCount;							\/\/扑克数目$/;"	m	struct:tagHandCardInfo	access:public
+cbHandCardData	GameLogic.h	/^	BYTE						cbHandCardData[ MAX_COUNT ];				\/\/扑克数据$/;"	m	struct:tagHandCardInfo	access:public
+cbResultCard	GameLogic.h	/^	BYTE							cbResultCard[MAX_COUNT];			\/\/结果扑克$/;"	m	struct:tagOutCardResult	access:public
+cbSignedCardData	GameLogic.h	/^	BYTE							cbSignedCardData[MAX_COUNT];		\/\/单张扑克$/;"	m	struct:tagAnalyseResult	access:public
+cbSignedCount	GameLogic.h	/^	BYTE							cbSignedCount;						\/\/单张数目$/;"	m	struct:tagAnalyseResult	access:public
+cbThreeCardData	GameLogic.h	/^	BYTE							cbThreeCardData[MAX_COUNT];			\/\/三张扑克$/;"	m	struct:tagAnalyseResult	access:public
+cbThreeCount	GameLogic.h	/^	BYTE 							cbThreeCount;						\/\/三张数目$/;"	m	struct:tagAnalyseResult	access:public
+m_HandCardInfoArray	GameLogic.h	/^	tagHandCardInfoArray			m_HandCardInfoArray;						\/\/扑克信息$/;"	m	class:tagStackHandCardInfo	access:private
+m_HandCardInfoFreeArray	GameLogic.h	/^	tagHandCardInfoArray			m_HandCardInfoFreeArray;					\/\/扑克信息$/;"	m	class:tagStackHandCardInfo	access:private
+m_StackHandCardInfo	GameLogic.h	/^	tagStackHandCardInfo			m_StackHandCardInfo;				\/\/栈变量$/;"	m	class:CGameLogic	access:public
+m_cbAllCardData	GameLogic.h	/^	BYTE							m_cbAllCardData[GAME_PLAYER][MAX_COUNT];\/\/所有扑克$/;"	m	class:CGameLogic	access:public
+m_cbCardData	GameLogic.cpp	/^const BYTE	CGameLogic::m_cbCardData[FULL_COUNT]=$/;"	m	class:CGameLogic	file:
+m_cbCardData	GameLogic.h	/^	static const BYTE				m_cbCardData[FULL_COUNT];			\/\/扑克数据$/;"	m	class:CGameLogic	access:protected
+m_cbGoodcardData	GameLogic.cpp	/^const BYTE	CGameLogic::m_cbGoodcardData[GOOD_CARD_COUTN]=$/;"	m	class:CGameLogic	file:
+m_cbGoodcardData	GameLogic.h	/^	static const BYTE				m_cbGoodcardData[GOOD_CARD_COUTN];	\/\/好牌数据$/;"	m	class:CGameLogic	access:protected
+m_cbHpCardData	GameLogic.cpp	/^const BYTE	CGameLogic::m_cbHpCardData[FULL_COUNT]=$/;"	m	class:CGameLogic	file:
+m_cbHpCardData	GameLogic.h	/^	static const BYTE				m_cbHpCardData[FULL_COUNT];			\/\/扑克数据$/;"	m	class:CGameLogic	access:protected
+m_cbLandScoreCardData	GameLogic.h	/^	BYTE							m_cbLandScoreCardData[MAX_COUNT];	\/\/叫牌扑克$/;"	m	class:CGameLogic	access:public
+m_cbUserCardCount	GameLogic.h	/^	BYTE							m_cbUserCardCount[GAME_PLAYER];		\/\/扑克数目$/;"	m	class:CGameLogic	access:public
+m_lBankerOutCardCount	GameLogic.h	/^	LONG							m_lBankerOutCardCount ;				\/\/出牌次数$/;"	m	class:CGameLogic	access:public
+m_wBankerUser	GameLogic.h	/^	WORD							m_wBankerUser;						\/\/地主玩家$/;"	m	class:CGameLogic	access:public
+main	main.cpp	/^int main()$/;"	f	signature:()
+tagAnalyseResult	GameLogic.h	/^struct tagAnalyseResult$/;"	s
+tagAnalyseResult::cbDoubleCardData	GameLogic.h	/^	BYTE							cbDoubleCardData[MAX_COUNT];		\/\/两张扑克$/;"	m	struct:tagAnalyseResult	access:public
+tagAnalyseResult::cbDoubleCount	GameLogic.h	/^	BYTE 							cbDoubleCount;						\/\/两张数目$/;"	m	struct:tagAnalyseResult	access:public
+tagAnalyseResult::cbFourCardData	GameLogic.h	/^	BYTE							cbFourCardData[MAX_COUNT];			\/\/四张扑克$/;"	m	struct:tagAnalyseResult	access:public
+tagAnalyseResult::cbFourCount	GameLogic.h	/^	BYTE 							cbFourCount;						\/\/四张数目$/;"	m	struct:tagAnalyseResult	access:public
+tagAnalyseResult::cbSignedCardData	GameLogic.h	/^	BYTE							cbSignedCardData[MAX_COUNT];		\/\/单张扑克$/;"	m	struct:tagAnalyseResult	access:public
+tagAnalyseResult::cbSignedCount	GameLogic.h	/^	BYTE							cbSignedCount;						\/\/单张数目$/;"	m	struct:tagAnalyseResult	access:public
+tagAnalyseResult::cbThreeCardData	GameLogic.h	/^	BYTE							cbThreeCardData[MAX_COUNT];			\/\/三张扑克$/;"	m	struct:tagAnalyseResult	access:public
+tagAnalyseResult::cbThreeCount	GameLogic.h	/^	BYTE 							cbThreeCount;						\/\/三张数目$/;"	m	struct:tagAnalyseResult	access:public
+tagHandCardInfo	GameLogic.h	/^	tagHandCardInfo( void ) {$/;"	f	struct:tagHandCardInfo	access:public	signature:( void )
+tagHandCardInfo	GameLogic.h	/^struct tagHandCardInfo {$/;"	s
+tagHandCardInfo::CardTypeResult	GameLogic.h	/^	tagOutCardTypeResult		CardTypeResult[ 12 + 1 ] ;					\/\/分析数据$/;"	m	struct:tagHandCardInfo	access:public
+tagHandCardInfo::cbHandCardCount	GameLogic.h	/^	BYTE						cbHandCardCount;							\/\/扑克数目$/;"	m	struct:tagHandCardInfo	access:public
+tagHandCardInfo::cbHandCardData	GameLogic.h	/^	BYTE						cbHandCardData[ MAX_COUNT ];				\/\/扑克数据$/;"	m	struct:tagHandCardInfo	access:public
+tagHandCardInfo::tagHandCardInfo	GameLogic.h	/^	tagHandCardInfo( void ) {$/;"	f	struct:tagHandCardInfo	access:public	signature:( void )
+tagHandCardInfoArray	GameLogic.h	/^typedef CArrayTemplate< tagHandCardInfo * > tagHandCardInfoArray;$/;"	t
+tagOutCardResult	GameLogic.h	/^struct tagOutCardResult$/;"	s
+tagOutCardResult::cbCardCount	GameLogic.h	/^	BYTE							cbCardCount;						\/\/扑克数目$/;"	m	struct:tagOutCardResult	access:public
+tagOutCardResult::cbResultCard	GameLogic.h	/^	BYTE							cbResultCard[MAX_COUNT];			\/\/结果扑克$/;"	m	struct:tagOutCardResult	access:public
+tagOutCardTypeResult	GameLogic.h	/^struct tagOutCardTypeResult $/;"	s
+tagOutCardTypeResult::cbCardData	GameLogic.h	/^	BYTE							cbCardData[MAX_TYPE_COUNT][MAX_COUNT];\/\/扑克数据$/;"	m	struct:tagOutCardTypeResult	access:public
+tagOutCardTypeResult::cbCardType	GameLogic.h	/^	BYTE							cbCardType;							\/\/扑克类型$/;"	m	struct:tagOutCardTypeResult	access:public
+tagOutCardTypeResult::cbCardTypeCount	GameLogic.h	/^	BYTE							cbCardTypeCount;					\/\/牌型数目$/;"	m	struct:tagOutCardTypeResult	access:public
+tagOutCardTypeResult::cbEachHandCardCount	GameLogic.h	/^	BYTE							cbEachHandCardCount[MAX_TYPE_COUNT];\/\/每手个数$/;"	m	struct:tagOutCardTypeResult	access:public
+tagStackHandCardInfo	GameLogic.h	/^	tagStackHandCardInfo( void ) { $/;"	f	class:tagStackHandCardInfo	access:public	signature:( void )
+tagStackHandCardInfo	GameLogic.h	/^class tagStackHandCardInfo {$/;"	c
+tagStackHandCardInfo::ClearAll	GameLogic.h	/^	void ClearAll() {$/;"	f	class:tagStackHandCardInfo	access:public	signature:()
+tagStackHandCardInfo::GetTop	GameLogic.h	/^	void GetTop( tagHandCardInfo * & pHandCardInfo ) {$/;"	f	class:tagStackHandCardInfo	access:public	signature:( tagHandCardInfo * & pHandCardInfo )
+tagStackHandCardInfo::InitStack	GameLogic.h	/^	void InitStack() {$/;"	f	class:tagStackHandCardInfo	access:public	signature:()
+tagStackHandCardInfo::IsEmpty	GameLogic.h	/^	bool IsEmpty() {$/;"	f	class:tagStackHandCardInfo	access:public	signature:()
+tagStackHandCardInfo::Pop	GameLogic.h	/^	void Pop() {$/;"	f	class:tagStackHandCardInfo	access:public	signature:()
+tagStackHandCardInfo::Push	GameLogic.h	/^	void Push( tagHandCardInfo * pHandCardInfo ) {$/;"	f	class:tagStackHandCardInfo	access:public	signature:( tagHandCardInfo * pHandCardInfo )
+tagStackHandCardInfo::m_HandCardInfoArray	GameLogic.h	/^	tagHandCardInfoArray			m_HandCardInfoArray;						\/\/扑克信息$/;"	m	class:tagStackHandCardInfo	access:private
+tagStackHandCardInfo::m_HandCardInfoFreeArray	GameLogic.h	/^	tagHandCardInfoArray			m_HandCardInfoFreeArray;					\/\/扑克信息$/;"	m	class:tagStackHandCardInfo	access:private
+tagStackHandCardInfo::tagStackHandCardInfo	GameLogic.h	/^	tagStackHandCardInfo( void ) { $/;"	f	class:tagStackHandCardInfo	access:public	signature:( void )
+tagStackHandCardInfo::~tagStackHandCardInfo	GameLogic.h	/^	~tagStackHandCardInfo( void ) {$/;"	f	class:tagStackHandCardInfo	access:public	signature:( void )
+~CGameLogic	GameLogic.cpp	/^CGameLogic::~CGameLogic()$/;"	f	class:CGameLogic	signature:()
+~CGameLogic	GameLogic.h	/^	virtual ~CGameLogic();$/;"	p	class:CGameLogic	access:public	signature:()
+~tagStackHandCardInfo	GameLogic.h	/^	~tagStackHandCardInfo( void ) {$/;"	f	class:tagStackHandCardInfo	access:public	signature:( void )

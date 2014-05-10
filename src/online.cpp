@@ -38,6 +38,7 @@ int main(int argc, char ** argv)
 		{
 			for(int i = 0; i < fids.size() - 1; i++)
 			{
+				//system("clear"); // don't clear here, it is very flashing
 				infile = DDZ_ONLINE_PATH"screen" + num2str(fids[i]) + ".png";
 				ana.process(infile);
 				if(argc == 2)
