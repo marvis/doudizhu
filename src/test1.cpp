@@ -46,8 +46,20 @@ int main(int argc, char ** argv)
 		cout<<"======  play  ======"<<endl;
 		if(isImagePatchSame(image, "ddz_patch_left_clock.png")) cout<<"It is left turn"<<endl;
 		else if(isImagePatchSame(image, "ddz_patch_left_has_not_play.png")) cout<<"Left doesn't play"<<endl;
-		else if(isImagePatchSame(image, "ddz_patch_left_liandui.png")) cout<<"Left played liandui"<<endl;
-		else if(isImagePatchSame(image, "ddz_patch_left_shunzi.png")) cout<<"Left played shunzi"<<endl;
+		else if(isImagePatchSame(image, "ddz_patch_left_liandui.png"))
+		{
+			cout<<"Left played liandui: "<<endl;
+			RecogPlay lplay("play", "left");
+			cards = lplay.recog_cards_liandui(image);
+			disp_cards(cards);
+		}
+		else if(isImagePatchSame(image, "ddz_patch_left_shunzi.png"))
+		{
+			cout<<"Left played shunzi"<<endl;
+			RecogPlay lplay("play", "left");
+			cards = lplay.recog_cards_shunzi(image);
+			disp_cards(cards);
+		}
 		else
 		{
 			cout<<"Left played : "<<endl;;
@@ -64,7 +76,7 @@ int main(int argc, char ** argv)
 		else
 		{
 			cout<<"I played "<<endl;
-			RecogPlay mplay("play", "myself");
+			RecogPlay mplay("play", "me");
 			cards = mplay.recog_cards(image);
 			mplay.drawResult(drawImage);
 			disp_cards(cards);
@@ -72,8 +84,20 @@ int main(int argc, char ** argv)
 
 		if(isImagePatchSame(image, "ddz_patch_right_clock.png")) cout<<"It is right turn"<<endl;
 		else if(isImagePatchSame(image, "ddz_patch_right_has_not_play.png")) cout<<"Right doesn't play"<<endl;
-		else if(isImagePatchSame(image, "ddz_patch_right_liandui.png")) cout<<"Right played liandui"<<endl;
-		else if(isImagePatchSame(image, "ddz_patch_right_shunzi.png")) cout<<"Right played shunzi"<<endl;
+		else if(isImagePatchSame(image, "ddz_patch_right_liandui.png"))
+		{
+			cout<<"Right played liandui: "<<endl;
+			RecogPlay rplay("play", "right");
+			cards = rplay.recog_cards_liandui(image);
+			disp_cards(cards);
+		}
+		else if(isImagePatchSame(image, "ddz_patch_right_shunzi.png"))
+		{
+			cout<<"Right played shunzi"<<endl;
+			RecogPlay rplay("play", "right");
+			cards = rplay.recog_cards_shunzi(image);
+			disp_cards(cards);
+		}		
 		else
 		{
 			cout<<"Right played : "<<endl;
@@ -121,7 +145,6 @@ int main(int argc, char ** argv)
 
 void recog_cardnum(IplImage * image, int &nlcards, int &nrcards)
 {
-	/*
 	if(isImagePatchSame(image, "ddz_patch_cardnum_left_l2.png", 40)) nlcards = 20;
 	else if(isImagePatchSame(image, "ddz_patch_cardnum_left_l1.png", 40))
 	{
@@ -160,7 +183,6 @@ void recog_cardnum(IplImage * image, int &nlcards, int &nrcards)
 	{
 		cerr<<"unknown card number"<<endl;
 	}
-	*/
 
 	if(isImagePatchSame(image, "ddz_patch_cardnum_right_l2.png", 60)) nrcards = 20;
 	else if(isImagePatchSame(image, "ddz_patch_cardnum_right_l1.png", 60))

@@ -1,8 +1,8 @@
 #include "recog_play.h"
 #include "common.h"
 
-//extern string infile;
-SearchPara myself_para = {
+extern string infile;
+SearchPara me_para = {
 	270, 994, 258, 336, 
 	40, 68,
 	2, 305, 27, 32,
@@ -52,6 +52,254 @@ RecogPlay::RecogPlay(string _prefix, string _direction) : Recog(_prefix)
 	second_thresh = 55;
 	shiftnum = 2;
 	direction = _direction;
+}
+
+vector<Card> RecogPlay::recog_cards_shunzi(IplImage * _image)
+{
+	image = _image;
+	if(direction == "left")
+	{
+		SearchPara _para = left_para_mid;
+		int bot = -1;
+		int i0 = (_para.check_left + _para.check_right)/2;
+		for(int j = _para.bot_most-1; j >= _para.top_most; j--)
+		{
+			int R = CV_IMAGE_ELEM(image, unsigned char, j, 3*i0+2);
+			int G = CV_IMAGE_ELEM(image, unsigned char, j, 3*i0+1);
+			int B = CV_IMAGE_ELEM(image, unsigned char, j, 3*i0+0);
+			double dist = sqrt((R - 239)*(R-239) + (G-239)*(G-239) + (B-239)*(B-239));
+			if(dist < 30) 
+			{
+				double sumR = 0.0, sumG = 0.0, sumB = 0.0;
+				for(int i = _para.check_left; i < _para.check_right; i++)
+				{
+					sumR += CV_IMAGE_ELEM(image, unsigned char, j, 3*i+2);
+					sumG += CV_IMAGE_ELEM(image, unsigned char, j, 3*i+1);
+					sumB += CV_IMAGE_ELEM(image, unsigned char, j, 3*i);
+				}
+				double avgR = sumR/(_para.check_right - _para.check_left);
+				double avgG = sumG/(_para.check_right - _para.check_left);
+				double avgB = sumB/(_para.check_right - _para.check_left);
+				double dist2 = sqrt((avgR - 239)*(avgR-239) + (avgG-239)*(avgG-239) + (avgB-239)*(avgB-239));
+				if(dist2 < 30)
+				{
+					bot = j;
+					break;
+				}
+			}
+		}
+		int top = 2*458 - bot;
+		double step = _para.step;
+		int ncards = (int)((bot - top - _para.card_height)/step + 1 + 0.5);
+
+		for(int n = 0; n < ncards; n++)
+		{
+			int x1 = _para.num_leftx;//438;
+			int y1 = top + n * step + _para.num_gap;
+			int width1 = _para.num_width;//27;
+			int height1 = _para.num_height;//34;
+			numBBox.push_back(cvRect(x1, y1, width1, height1));
+			int x2 = _para.type_leftx;//418;
+			int y2 = top + n * step + _para.type_gap;
+			int width2 = _para.type_width;//19;
+			int height2 = _para.type_height;//23;
+			typeBBox.push_back(cvRect(x2, y2, width2, height2));
+		}
+
+		cards.resize(ncards);
+		recog_card_types();
+		recog_card_nums();
+		Card last_card = cards[ncards-1];
+		for(int i = 0; i < ncards; i++)
+		{
+			cards[i].num = last_card.num + (ncards - 1 - i);
+		}
+	}
+	else if(direction == "right")
+	{
+		SearchPara _para = right_para_mid;
+		int top = -1;
+		int i0 = (_para.check_left + _para.check_right)/2;
+		for(int j = _para.top_most; j < _para.bot_most; j++)
+		{
+			int R = CV_IMAGE_ELEM(image, unsigned char, j, 3*i0+2);
+			int G = CV_IMAGE_ELEM(image, unsigned char, j, 3*i0+1);
+			int B = CV_IMAGE_ELEM(image, unsigned char, j, 3*i0+0);
+			double dist = sqrt((R - 239)*(R-239) + (G-239)*(G-239) + (B-239)*(B-239));
+			if(dist < 30) 
+			{
+				double sumR = 0.0, sumG = 0.0, sumB = 0.0;
+				for(int i = _para.check_left; i < _para.check_right; i++)
+				{
+					sumR += CV_IMAGE_ELEM(image, unsigned char, j, 3*i+2);
+					sumG += CV_IMAGE_ELEM(image, unsigned char, j, 3*i+1);
+					sumB += CV_IMAGE_ELEM(image, unsigned char, j, 3*i);
+				}
+				double avgR = sumR/(_para.check_right - _para.check_left);
+				double avgG = sumG/(_para.check_right - _para.check_left);
+				double avgB = sumB/(_para.check_right - _para.check_left);
+				double dist2 = sqrt((avgR - 239)*(avgR-239) + (avgG-239)*(avgG-239) + (avgB-239)*(avgB-239));
+				if(dist2 < 30)
+				{
+					top = j;
+					break;
+				}
+			}
+		}
+		int bot = 2*821 - top;
+		double step = _para.step;
+		int ncards = (int)((bot - top - _para.card_height)/step + 1 + 0.5);
+
+		for(int n = 0; n < ncards; n++)
+		{
+			int x1 = _para.num_leftx;//438;
+			int y1 = top + n * step + _para.num_gap;
+			int width1 = _para.num_width;//27;
+			int height1 = _para.num_height;//34;
+			numBBox.push_back(cvRect(x1, y1, width1, height1));
+			int x2 = _para.type_leftx;//418;
+			int y2 = top + n * step + _para.type_gap;
+			int width2 = _para.type_width;//19;
+			int height2 = _para.type_height;//23;
+			typeBBox.push_back(cvRect(x2, y2, width2, height2));
+		}
+
+		cards.resize(ncards);
+		recog_card_types();
+		recog_card_nums();
+		Card first_card = cards[0];
+		for(int i = 0; i < ncards; i++)
+		{
+			cards[i].num = first_card.num - i;
+		}
+	}
+	return cards;
+}
+vector<Card> RecogPlay::recog_cards_liandui(IplImage * _image)
+{
+	image = _image;
+	if(direction == "left")
+	{
+		SearchPara _para = left_para_mid;
+		int bot = -1;
+		int i0 = (_para.check_left + _para.check_right)/2;
+		for(int j = _para.bot_most-1; j >= _para.top_most; j--)
+		{
+			int R = CV_IMAGE_ELEM(image, unsigned char, j, 3*i0+2);
+			int G = CV_IMAGE_ELEM(image, unsigned char, j, 3*i0+1);
+			int B = CV_IMAGE_ELEM(image, unsigned char, j, 3*i0+0);
+			double dist = sqrt((R - 239)*(R-239) + (G-239)*(G-239) + (B-239)*(B-239));
+			if(dist < 30) 
+			{
+				double sumR = 0.0, sumG = 0.0, sumB = 0.0;
+				for(int i = _para.check_left; i < _para.check_right; i++)
+				{
+					sumR += CV_IMAGE_ELEM(image, unsigned char, j, 3*i+2);
+					sumG += CV_IMAGE_ELEM(image, unsigned char, j, 3*i+1);
+					sumB += CV_IMAGE_ELEM(image, unsigned char, j, 3*i);
+				}
+				double avgR = sumR/(_para.check_right - _para.check_left);
+				double avgG = sumG/(_para.check_right - _para.check_left);
+				double avgB = sumB/(_para.check_right - _para.check_left);
+				double dist2 = sqrt((avgR - 239)*(avgR-239) + (avgG-239)*(avgG-239) + (avgB-239)*(avgB-239));
+				if(dist2 < 30)
+				{
+					bot = j;
+					break;
+				}
+			}
+		}
+		int top = 2*458 - bot;
+		double step = _para.step;
+		int ncards = (int)((bot - top - _para.card_height)/step + 1 + 0.5);
+		if(ncards % 2 != 0) return vector<Card>();
+
+		for(int n = 0; n < ncards; n++)
+		{
+			int x1 = _para.num_leftx;//438;
+			int y1 = top + n * step + _para.num_gap;
+			int width1 = _para.num_width;//27;
+			int height1 = _para.num_height;//34;
+			numBBox.push_back(cvRect(x1, y1, width1, height1));
+			int x2 = _para.type_leftx;//418;
+			int y2 = top + n * step + _para.type_gap;
+			int width2 = _para.type_width;//19;
+			int height2 = _para.type_height;//23;
+			typeBBox.push_back(cvRect(x2, y2, width2, height2));
+		}
+
+		cards.resize(ncards);
+		recog_card_types();
+		recog_card_nums();
+		Card last_card = cards[ncards-1];
+		for(int i = 0; i < ncards/2; i++)
+		{
+			cards[2*i].num = last_card.num - ncards/2 + 1 + i;
+			cards[2*i+1].num = cards[2*i].num;
+		}
+	}
+	else if(direction == "right")
+	{
+		SearchPara _para = right_para_mid;
+		int top = -1;
+		int i0 = (_para.check_left + _para.check_right)/2;
+		for(int j = _para.top_most; j < _para.bot_most; j++)
+		{
+			int R = CV_IMAGE_ELEM(image, unsigned char, j, 3*i0+2);
+			int G = CV_IMAGE_ELEM(image, unsigned char, j, 3*i0+1);
+			int B = CV_IMAGE_ELEM(image, unsigned char, j, 3*i0+0);
+			double dist = sqrt((R - 239)*(R-239) + (G-239)*(G-239) + (B-239)*(B-239));
+			if(dist < 30) 
+			{
+				double sumR = 0.0, sumG = 0.0, sumB = 0.0;
+				for(int i = _para.check_left; i < _para.check_right; i++)
+				{
+					sumR += CV_IMAGE_ELEM(image, unsigned char, j, 3*i+2);
+					sumG += CV_IMAGE_ELEM(image, unsigned char, j, 3*i+1);
+					sumB += CV_IMAGE_ELEM(image, unsigned char, j, 3*i);
+				}
+				double avgR = sumR/(_para.check_right - _para.check_left);
+				double avgG = sumG/(_para.check_right - _para.check_left);
+				double avgB = sumB/(_para.check_right - _para.check_left);
+				double dist2 = sqrt((avgR - 239)*(avgR-239) + (avgG-239)*(avgG-239) + (avgB-239)*(avgB-239));
+				if(dist2 < 30)
+				{
+					top = j;
+					break;
+				}
+			}
+		}
+		int bot = 2*821 - top;
+		double step = _para.step;
+		int ncards = (int)((bot - top - _para.card_height)/step + 1 + 0.5);
+		if(ncards % 2 != 0) return vector<Card>();
+
+		for(int n = 0; n < ncards; n++)
+		{
+			int x1 = _para.num_leftx;//438;
+			int y1 = top + n * step + _para.num_gap;
+			int width1 = _para.num_width;//27;
+			int height1 = _para.num_height;//34;
+			numBBox.push_back(cvRect(x1, y1, width1, height1));
+			int x2 = _para.type_leftx;//418;
+			int y2 = top + n * step + _para.type_gap;
+			int width2 = _para.type_width;//19;
+			int height2 = _para.type_height;//23;
+			typeBBox.push_back(cvRect(x2, y2, width2, height2));
+		}
+
+		cards.resize(ncards);
+		recog_card_types();
+		recog_card_nums();
+		Card first_card = cards[0];
+		for(int i = 0; i < ncards/2; i++)
+		{
+			cards[2*i].num = first_card.num + i;
+			cards[2*i+1].num = cards[2*i].num;
+		}
+	}
+
+	return cards;
 }
 
 int RecogPlay::numCards(SearchPara _para)
@@ -122,7 +370,7 @@ int RecogPlay::numCards(SearchPara _para)
 
 void RecogPlay::recog_bbox()
 {
-	if(direction == "myself") return recog_bbox(myself_para);
+	if(direction == "me") return recog_bbox(me_para);
 	else if(direction == "left") 
 	{
 		if(numCards(left_para_down) > 0) 
@@ -204,6 +452,7 @@ void RecogPlay::recog_bbox(SearchPara para)
 	int ncards = (bot - top - para.card_height + 2)/step + 1;// : 0;
 	//cout<<"ncards = "<<ncards<<endl;
 	if(bot > top && ncards == 0) ncards = 1;
+	//cout<<"(bot + top)/2 = "<<(bot+top)/2.0<<endl;
 	for(int n = 0; n < ncards; n++)
 	{
 		int x1 = para.num_leftx;//438;

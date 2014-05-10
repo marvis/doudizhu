@@ -33,5 +33,8 @@ class RecogPlay :public Recog
 		int numCards(SearchPara para);
 		void recog_bbox();
 		void recog_bbox(SearchPara para);
+
+		vector<Card> recog_cards_liandui(IplImage * image);
+		vector<Card> recog_cards_shunzi(IplImage * image);
 		//void recog_card_nums();
 };

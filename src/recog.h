@@ -27,6 +27,7 @@ class Card
 			num = NUM_UNKNOWN;
 			type = TYPE_UNKNOWN;
 		}
+		Card(int _num, int _type): num(_num), type(_type){}
 		bool operator!=(const Card & other) const
 		{
 			return (this->num != other.num || this->type != other.type);
