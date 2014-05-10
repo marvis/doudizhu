@@ -178,6 +178,12 @@ class OnePlay
 			}
 			return true;
 		}
+		void refresh_card_type()
+		{
+			card_type = compute_card_type();
+		}
+
+	private:
 		int compute_card_type()
 		{
 			if(cards.empty()) return CT_ERROR;
@@ -322,25 +328,25 @@ class Analysis
 		vector<Card> cur_lshowed_cards;
 		vector<Card> cur_rshowed_cards;
 		vector<Card> cur_last3_cards;
-		OnePlay cur_lplay;
-		OnePlay cur_rplay;
-		OnePlay cur_iplay;
 
 		vector<Card> prev_handcards;
 		vector<Card> prev_lshowed_cards;
 		vector<Card> prev_rshowed_cards;
 		vector<Card> prev_last3_cards;
+
+		OnePlay cur_lplay;
+		OnePlay cur_rplay;
+		OnePlay cur_iplay;
+
 		OnePlay prev_lplay;
 		OnePlay prev_rplay;
 		OnePlay prev_iplay;
 
-		set<Card> allplayed_cards;
-		set<Card> allIplayed_cards;
-		set<Card> allLplayed_cards;
-		set<Card> allRplayed_cards;
-
 		vector<OnePlay> history;
-		int hist_top;
+		int last_lplay_id; // To avoid duplicated adding 
+		int last_iplay_id; // to history
+		int last_rplay_id; // it is the last id in history
+
 
 		string boss;
 		int nlcards;
@@ -374,7 +380,16 @@ class Analysis
 			}
 			return false;
 		}
-		int unknownCardNum(vector<Card> & cards)
+		int numberOfUnknownTypes(vector<Card> & cards)
+		{
+			int n = 0;
+			for(int i = 0; i < cards.size(); i++)
+			{
+				if(cards[i].type == TYPE_UNKNOWN) n++;
+			}
+			return n;
+		}
+		int numberOfUnknownCards(vector<Card> & cards)
 		{
 			int n = 0;
 			for(int i = 0; i < cards.size(); i++)
@@ -394,6 +409,27 @@ class Analysis
 				}
 			}
 			return false;
+		}
+		bool isConsistCards(vector<Card> & cards1, vector<Card> & cards2)
+		{
+			if(isExistEqualCard(cards1, cards2)) return true;
+			int card_num1[14] = {0};
+			int card_num2[14] = {0};
+			for(int i = 0; i < cards1.size(); i++)
+			{
+				Card & card = cards1[i];
+				if(card.num != NUM_UNKNOWN) card_num1[card.num]++;
+			}
+			for(int i = 0; i < cards2.size(); i++)
+			{
+				Card & card = cards2[i];
+				if(card.num != NUM_UNKNOWN) card_num1[card.num]++;
+			}
+			for(int i = 0; i < 14; i++)
+			{
+				if(card_num1[i] != card_num2[i]) return false;
+			}
+			return true;
 		}
 		// cards1 and cards2 is assumed to be ordered
 		bool isEqualCards(vector<Card> &cards1, vector<Card> &cards2)
@@ -454,11 +490,10 @@ class Analysis
 			prev_iplay.init("me");
 			prev_rplay.init("right");
 
-			allplayed_cards.clear();
-			allIplayed_cards.clear();
-			allLplayed_cards.clear();
-			allRplayed_cards.clear();
 			history.clear();
+			last_lplay_id = -1;
+			last_iplay_id = -1;
+			last_rplay_id = -1;
 
 			boss = "";
 			nlcards = 0;
@@ -479,25 +514,88 @@ class Analysis
 		{
 			assert(play.card_type != CT_UNKNOWN);
 			if(play.cards.empty()) return;
-			if(isExistUnknownCard(play.cards)) return;
+			if(isExistUnknownNumCard(play.cards)) return;
 
 			if(play.card_type == CT_ERROR)
 			{
 				cerr<<"不能添加错误的牌"<<endl;
 				return;
 			}
-			for(int i = 0; i < play.cards.size(); i++)
-				if(allplayed_cards.find(play.cards[i]) != allplayed_cards.end()) return; // alread add
 
-			if(!history.empty())
+			if(history.empty())
 			{
+				history.push_back(play);
+				if(play.who == "left") last_lplay_id = history.size() - 1;
+				else if(play.who == "me") last_iplay_id = history.size() - 1;
+				else if(play.who == "right") last_rplay_id = history.size() - 1;
+				return;
+			}
+
+			// 如果是重复识别的牌, 更新history记录
+			if(play.who == "left" && last_lplay_id >= 0)
+			{
+				OnePlay & last_play = history[last_lplay_id];
+				if(isEqualCards(last_play.cards, play.cards)) return;
+				// 如果是重复识别的牌, 更新识别更好的结果
+				else if(isConsistCards(last_play.cards, play.cards))
+				{
+					if(play.cards.size() < last_play.cards.size()) return;
+					else if(numberOfUnknownTypes(play.cards) < numberOfUnknownTypes(last_play.cards))
+					{
+						last_play = play;
+						return;
+					}
+				}
+			}
+			if(play.who == "me" && last_iplay_id >= 0)
+			{
+				OnePlay & last_play = history[last_iplay_id];
+				if(isEqualCards(last_play.cards, play.cards)) return;
+				// 如果是重复识别的牌, 更新识别更好的结果
+				else if(isConsistCards(last_play.cards, play.cards))
+				{
+					if(play.cards.size() < last_play.cards.size()) return;
+					else if(numberOfUnknownTypes(play.cards) < numberOfUnknownTypes(last_play.cards))
+					{
+						last_play = play;
+						return;
+					}
+				}
+			}
+			if(play.who == "right" && last_rplay_id >= 0)
+			{
+				OnePlay & last_play = history[last_rplay_id];
+				if(isEqualCards(last_play.cards, play.cards)) return;
+				else if(isConsistCards(last_play.cards, play.cards))
+				{
+					if(play.cards.size() < last_play.cards.size()) return;
+					// 如果是重复识别的牌, 更新识别更好的结果
+					else if(numberOfUnknownTypes(play.cards) < numberOfUnknownTypes(last_play.cards))
+					{
+						last_play = play;
+						return;
+					}
+				}
+			}
+
+			// 如果是新打出的牌, 与上次加入的牌比较大小
+			if(1)
+			{
+				// 比较与上家牌的大小
 				OnePlay & last_play = history[history.size() - 1];
-				if(play.who == last_play.who || play.is_larger_than(last_play)) history.push_back(play); 
+				if(play.who == last_play.who || play.is_larger_than(last_play))
+				{
+					history.push_back(play); 
+					if(play.who == "left") last_lplay_id = history.size() - 1;
+					else if(play.who == "me") last_iplay_id = history.size() - 1;
+					else if(play.who == "right") last_rplay_id = history.size() - 1;
+				}
 				else
 				{
 					cerr<<"Can not add play to history:"<<endl;
 					cout<<play.who<<"'s play "<<play.str()<<" is not larger than "<<last_play.who<<"'s "<<last_play.str()<<endl;
 					play.disp();
+					// 注意这里会改变play的内容
 					if(play.cards[0].num == NUM_JOKER)
 					{
 						cerr<<"添加丢失的王"<<endl;
@@ -505,103 +603,107 @@ class Analysis
 						cards.push_back(Card(NUM_JOKER, TYPE_RED_JOKER));
 						cards.push_back(Card(NUM_JOKER, TYPE_BLACK_JOKER));
 						play.cards = cards;
+						play.refresh_card_type();
+
+						history.push_back(play); 
+						if(play.who == "left") last_lplay_id = history.size() - 1;
+						else if(play.who == "me") last_iplay_id = history.size() - 1;
+						else if(play.who == "right") last_rplay_id = history.size() - 1;
 					}
 				}
 			}
-			else
-			{
-				history.push_back(play);
-			}
-			for(int i = 0; i < play.cards.size(); i++) allplayed_cards.insert(play.cards[i]);
-			if(play.who == "left") for(int i = 0; i < play.cards.size(); i++) allLplayed_cards.insert(play.cards[i]);
-			else if(play.who == "me") for(int i = 0; i < play.cards.size(); i++) allIplayed_cards.insert(play.cards[i]);
-			else if(play.who == "right") for(int i = 0; i < play.cards.size(); i++) allRplayed_cards.insert(play.cards[i]);
 		}
+		/*
 		void remove_from_history(OnePlay & play)
 		{
 			if(play.cards.empty()) return;
 			if(isExistUnknownCard(play.cards)) return;
 			cerr<<"remove play "<<play.str()<<" from history"<<endl;
-			for(int i = 0; i < play.cards.size(); i++)
-			{
-				Card card = play.cards[i];
-				set<Card>::iterator it = allplayed_cards.find(card);
-				if(it == allplayed_cards.end())
-				{
-					cerr<<"can't remove card "<<card.str()<<" from allplayed_cards"<<endl;
-				}
-				else allplayed_cards.erase(it);
-			}
-			if(isEqualCards((*history.rbegin()).cards, play.cards))
-			{
-				history.erase(history.begin() + (history.size() - 1));
-			}
+			
+			if(play.who == "left" && isEqualCards(history[last_lplay_id].cards, play.cards)) history.erase(history.begin() + last_lplay_id);
+			else if(play.who == "me" && isEqualCards(history[last_iplay_id].cards, play.cards)) history.erase(history.begin() + last_iplay_id);
+			else if(play.who == "right" && isEqualCards(history[last_rplay_id].cards, play.cards)) history.erase(history.begin() + last_rplay_id);
 			else
-			{
 				cerr<<"can't remove play "<<play.str()<<" from history"<<endl;
-			}
-			if(play.who == "me")
-			{
-				for(int i = 0; i < play.cards.size(); i++)
-				{
-					Card card = play.cards[i];
-					set<Card>::iterator it = allIplayed_cards.find(card);
-					if(it == allIplayed_cards.end())
-					{
-						cerr<<"can't remove card "<<card.str()<<" from allIplayed_cards"<<endl;
-					}
-					else allIplayed_cards.erase(it);
-				}
-			}
-			else if(play.who == "left")
-			{
-				for(int i = 0; i < play.cards.size(); i++)
-				{
-					Card card = play.cards[i];
-					set<Card>::iterator it = allLplayed_cards.find(card);
-					if(it == allLplayed_cards.end())
-					{
-						cerr<<"can't remove card "<<card.str()<<" from allLplayed_cards"<<endl;
-					}
-					else allLplayed_cards.erase(it);
-				}
-			}
-			else if(play.who == "right")
-			{
-				for(int i = 0; i < play.cards.size(); i++)
-				{
-					Card card = play.cards[i];
-					set<Card>::iterator it = allRplayed_cards.find(card);
-					if(it == allRplayed_cards.end())
-					{
-						cerr<<"can't remove card "<<card.str()<<" from allRplayed_cards"<<endl;
-					}
-					else allRplayed_cards.erase(it);
-				}
-			}
 		}
+		*/
+
 		vector<Card> get_hidden_cards()
 		{
-			set<Card> known_cards = allplayed_cards;
-			for(int i = 0; i < cur_handcards.size(); i++) known_cards.insert(cur_handcards[i]);
-			for(int i = 0; i < cur_lshowed_cards.size(); i++) known_cards.insert(cur_lshowed_cards[i]);
-			for(int i = 0; i < cur_rshowed_cards.size(); i++) known_cards.insert(cur_rshowed_cards[i]);
-			vector<Card> hidden_cards;
-			Card card;
-			card.num = NUM_JOKER;
-			card.type = TYPE_RED_JOKER;
-			if(known_cards.find(card) == known_cards.end()) hidden_cards.push_back(card);
-			card.type = TYPE_BLACK_JOKER;
-			if(known_cards.find(card) == known_cards.end()) hidden_cards.push_back(card);
-			for(int num = NUM_2; num >= NUM_3; num--)
+			int card_num[14] = {0};
+			vector<set<int> > card_types(14, set<int>());
+			bool is_unknown_type[14] = {false};
+			for(int j = 0; j < history.size(); j++)
 			{
-				for(int type = TYPE_SPADE; type <= TYPE_DIAMOND; type++)
+				OnePlay & play = history[j];
+				vector<Card> & cards = play.cards;
+				for(int i = 0; i < cards.size(); i++)
 				{
-					card.num = num;
-					card.type = type;
-					if(known_cards.find(card) == known_cards.end()) hidden_cards.push_back(card);
+					if(cards[i].num == NUM_UNKNOWN) continue;
+					int num = cards[i].num;
+					int type = cards[i].type;
+					card_num[num]++;
+					card_types[num].insert(type);
+					if(type == TYPE_UNKNOWN) is_unknown_type[num] = true;
 				}
 			}
+			for(int i = 0; i < cur_handcards.size(); i++)
+			{
+				if(cur_handcards[i].num == NUM_UNKNOWN) continue;
+				int num = cur_handcards[i].num;
+				int type = cur_handcards[i].type;
+				card_num[num]++;
+				card_types[num].insert(type);
+				if(type == TYPE_UNKNOWN) is_unknown_type[num] = true;
+			}
+			for(int i = 0; i < cur_lshowed_cards.size(); i++)
+			{
+				if(cur_lshowed_cards[i].num == NUM_UNKNOWN) continue;
+				int num = cur_lshowed_cards[i].num;
+				int type = cur_lshowed_cards[i].type;
+				card_num[num]++;
+				card_types[num].insert(type);
+				if(type == TYPE_UNKNOWN) is_unknown_type[num] = true;
+			}
+			for(int i = 0; i < cur_rshowed_cards.size(); i++)
+			{
+				if(cur_rshowed_cards[i].num == NUM_UNKNOWN) continue;
+				int num = cur_rshowed_cards[i].num;
+				int type = cur_rshowed_cards[i].type;
+				card_num[num]++;
+				card_types[num].insert(type);
+				if(type == TYPE_UNKNOWN) is_unknown_type[num] = true;
+			}
+
+			vector<Card> hidden_cards;
+			if(card_num[13] == 0)
+			{
+				hidden_cards.push_back(Card(NUM_JOKER, TYPE_RED_JOKER));
+				hidden_cards.push_back(Card(NUM_JOKER, TYPE_BLACK_JOKER));
+			}
+			else if(card_num[13] == 1)
+			{
+				int exist_type = *card_types[13].begin();
+				if(exist_type == TYPE_BLACK_JOKER) hidden_cards.push_back(Card(NUM_JOKER, TYPE_RED_JOKER));
+				else hidden_cards.push_back(Card(NUM_JOKER, TYPE_BLACK_JOKER));
+			}
+			for(int i = 12; i >= 0; i--)
+			{
+				if(card_num[i] == 4) continue;
+				if(is_unknown_type[i])
+				{
+					int n = 4 - card_num[i];
+					for(int j = 0; j < n; j++) hidden_cards.push_back(Card(i, TYPE_UNKNOWN));
+				}
+				else
+				{
+					for(int type = TYPE_SPADE; type <= TYPE_DIAMOND; type++)
+					{
+						if(card_types[i].find(type) == card_types[i].end()) hidden_cards.push_back(Card(i, type));
+					}
+				}
+			}
+			
 			return hidden_cards;
 		}
 		void disp_hidden_cards()
@@ -727,11 +829,13 @@ class Analysis
 					cur_lplay.cards.clear();
 				else if(isImagePatchSame(image, "ddz_patch_left_liandui.png"))
 				{
-					cur_lplay.cards.clear();// = RecogPlay("play", "left").recog_cards_liandui(image);
+					cerr<<"left is liandui"<<endl;
+					cur_lplay.cards = RecogPlay("play", "left").recog_cards_liandui(image);
 				}
 				else if(isImagePatchSame(image, "ddz_patch_left_shunzi.png"))
 				{
-					cur_lplay.cards.clear();// = RecogPlay("play", "left").recog_cards_shunzi(image);
+					cerr<<"left is shunzi"<<endl;
+					cur_lplay.cards = RecogPlay("play", "left").recog_cards_shunzi(image);
 				}
 				else
 					cur_lplay.cards = RecogPlay("play", "left").recog_cards(image);
@@ -753,11 +857,13 @@ class Analysis
 					cur_rplay.cards.clear();
 				else if(isImagePatchSame(image, "ddz_patch_right_liandui.png"))
 				{
-					cur_rplay.cards.clear();// = RecogPlay("play", "right").recog_cards_liandui(image);
+					cerr<<"right is liandui"<<endl;
+					cur_rplay.cards = RecogPlay("play", "right").recog_cards_liandui(image);
 				}
 				else if(isImagePatchSame(image, "ddz_patch_right_shunzi.png"))
 				{
-					cur_rplay.cards.clear();// = RecogPlay("play", "right").recog_cards_shunzi(image);
+					cerr<<"right is shunzi"<<endl;
+					cur_rplay.cards = RecogPlay("play", "right").recog_cards_shunzi(image);
 				}
 				else
 					cur_rplay.cards = RecogPlay("play", "right").recog_cards(image);
@@ -770,9 +876,10 @@ class Analysis
 			if(cur_stage == STAGE_PLAYING)
 			{
 				// 手牌出错时用之前的状态
-				if(!isExistUnknownCard(prev_handcards) && !prev_handcards.empty() && cur_handcards.size() > prev_handcards.size())
-					cur_handcards = prev_handcards;
-				else if(!isExistUnknownCard(prev_handcards) && unknownCardNum(cur_handcards) >= 3)
+				//if(!isExistUnknownCard(prev_handcards) && !prev_handcards.empty() && cur_handcards.size() > prev_handcards.size())
+				//	cur_handcards = prev_handcards;
+				//else 
+				if(!isExistUnknownCard(prev_handcards) && numberOfUnknownCards(cur_handcards) >= 3)
 					cur_handcards = prev_handcards;
 			}
 		}
@@ -935,9 +1042,9 @@ class Analysis
 			recog_lshowed();
 			recog_rshowed();
 
-			recog_lplay(); cur_lplay.card_type = cur_lplay.compute_card_type();
-			recog_iplay(); cur_iplay.card_type = cur_iplay.compute_card_type();
-			recog_rplay(); cur_rplay.card_type = cur_rplay.compute_card_type();
+			recog_lplay(); cur_lplay.refresh_card_type();
+			recog_iplay(); cur_iplay.refresh_card_type();
+			recog_rplay(); cur_rplay.refresh_card_type();
 
 			verify_cards();
 
